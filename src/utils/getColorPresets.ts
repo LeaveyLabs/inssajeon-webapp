@@ -1,7 +1,5 @@
 // theme
 import palette from '../theme/palette';
-// @type
-import { ThemeColorPresets } from '../components/settings/type';
 
 // ----------------------------------------------------------------------
 
@@ -69,14 +67,3 @@ export const cyanPreset = colorPresets[2];
 export const bluePreset = colorPresets[3];
 export const orangePreset = colorPresets[4];
 export const redPreset = colorPresets[5];
-
-export default function getColorPresets(presetsKey: ThemeColorPresets) {
-  return {
-    purple: purplePreset,
-    cyan: cyanPreset,
-    blue: bluePreset,
-    orange: orangePreset,
-    red: redPreset,
-    default: defaultPreset,
-  }[presetsKey];
-}

@@ -1,5 +1,3 @@
-import { SettingsValueProps } from './components/settings/type';
-
 // LAYOUT
 // ----------------------------------------------------------------------
 
@@ -19,10 +17,3 @@ export const MAIN_HEADER_MOBILE = 64;
 
 // SETTINGS
 // ----------------------------------------------------------------------
-
-export const defaultSettings: SettingsValueProps = {
-  themeMode: 'light',
-  themeDirection: 'ltr',
-  themeColorPresets: 'purple',
-  themeStretch: false,
-};

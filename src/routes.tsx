@@ -3,11 +3,19 @@ import { Navigate, useRoutes } from 'react-router-dom';
 import DashboardLayout from './layouts/dashboard';
 import LogoOnlyLayout from './layouts/LogoOnlyLayout';
 // components
-import PageOne from './pages/PageOne';
-import Page404 from './pages/Page404';
+import HomePage from './pages/Feeds/HomePage';
+import PageNotFound from './pages/Misc/PageNotFound';
+import UserPage from './pages/Feeds/UserPage';
+import SignupPage from './pages/Registration/SignupPage';
+import ForgotPasswordPage from './pages/Registration/ForgotPasswordPage';
+import LoginPage from './pages/Registration/LoginPage';
+import SettingsPage from './pages/Account/SettingsPage';
+import ExplorePage from './pages/Feeds/ExplorePage';
+import ResultsPage from './pages/Feeds/ResultsPage';
 
 // ----------------------------------------------------------------------
 
+ //TODO: create private pages
  //currentUser ? <Component {...props} /> : <Redirect to="/login" />
 
 //notes:
@@ -19,19 +27,19 @@ export default function Router() {
     //(mostly) registeredUser and guestUser routes
     { path: '/', element: <DashboardLayout />, children: [
         { path: "*", element: <Navigate to="" replace />, index:true },
-        { path: '', element: <PageOne /> },
-        { path: 'tags', children: [
-            { path: '', element: <PageOne /> },
-            { path: ':id', element: <PageOne /> },
+        { path: '', element: <HomePage /> },
+        { path: 'categories', children: [
+            { path: '', element: <ExplorePage /> },
+            { path: ':id', element: <ResultsPage /> },
           ]
         },
         { path: 'users', children: [
-            { path: ':id', element: <PageOne /> },
-            { path: 'me', element: <PageOne /> },
+            { path: ':id', element: <UserPage /> },
+            { path: 'me', element: <UserPage /> },
           ]
         },
         { path: 'search', children: [
-            { path: ':id', element: <PageOne /> },
+            { path: ':id', element: <ResultsPage /> },
           ]
         },
       ],
@@ -39,9 +47,9 @@ export default function Router() {
     //guestUser only routes
     { path: 'registration', element: <LogoOnlyLayout />, children: [
         { path: "*", element: <Navigate to="signup" replace />, index:true },
-        { path: 'signup', element: <PageOne /> },
-        { path: 'login', element: <PageOne/> },
-        { path: 'forgot-password', element: <PageOne/> },
+        { path: 'signup', element: <SignupPage /> },
+        { path: 'login', element: <LoginPage/> },
+        { path: 'forgot-password', element: <ForgotPasswordPage/> },
       ],
     },
     //registeredUser only routes
@@ -49,7 +57,7 @@ export default function Router() {
         { path: "*", element: <Navigate to="settings" replace />, index:true },
         { path: 'settings', element: <LogoOnlyLayout/>, children: [
           { path: "*", element: <Navigate to="" replace />, index:true },
-          { path: '', element: <PageOne /> },
+          { path: '', element: <SettingsPage /> },
         ]}
       ]
     },
@@ -58,8 +66,8 @@ export default function Router() {
       path: '*',
       element: <LogoOnlyLayout />,
       children: [
-        { path: '404', element: <Page404 /> },
         { path: '*', element: <Navigate to="/404" replace />, index:true },
+        { path: '404', element: <PageNotFound /> },
       ],
     },
   ]);
