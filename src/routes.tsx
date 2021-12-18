@@ -1,62 +1,66 @@
-import { Suspense, lazy, ElementType } from 'react';
-import { Navigate, useRoutes, useLocation } from 'react-router-dom';
+import { Navigate, useRoutes } from 'react-router-dom';
 // layouts
 import DashboardLayout from './layouts/dashboard';
 import LogoOnlyLayout from './layouts/LogoOnlyLayout';
 // components
-import LoadingScreen from './components/LoadingScreen';
+import PageOne from './pages/PageOne';
+import Page404 from './pages/Page404';
 
 // ----------------------------------------------------------------------
 
-const Loadable = (Component: ElementType) => (props: any) => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { pathname } = useLocation();
+ //currentUser ? <Component {...props} /> : <Redirect to="/login" />
 
-  return (
-    <Suspense fallback={<LoadingScreen isDashboard={pathname.includes('/dashboard')} />}>
-      <Component {...props} />
-    </Suspense>
-  );
-};
+//notes:
+// A route object has the same properties as a <Route> element. 
+// The `children` is just an array of child routes
 
 export default function Router() {
   return useRoutes([
-    {
-      path: '/',
-      element: <DashboardLayout />,
-      children: [
-        { element: <Navigate to="/dashboard/one" replace />, index: true },
-        { path: '/dashboard/one', element: <PageOne /> },
-        { path: '/dashboard/two', element: <PageTwo /> },
-        { path: '/dashboard/three', element: <PageThree /> },
-        {
-          path: '/dashboard/user',
-          children: [
-            { element: <Navigate to="/dashboard/user/four" replace />, index: true },
-            { path: '/dashboard/user/four', element: <PageFour /> },
-            { path: '/dashboard/user/five', element: <PageFive /> },
-            { path: '/dashboard/user/six', element: <PageSix /> },
-          ],
+    //(mostly) registeredUser and guestUser routes
+    { path: '/', element: <DashboardLayout />, children: [
+        { path: "*", element: <Navigate to="" replace />, index:true },
+        { path: '', element: <PageOne /> },
+        { path: 'tags', children: [
+            { path: '', element: <PageOne /> },
+            { path: ':id', element: <PageOne /> },
+          ]
+        },
+        { path: 'users', children: [
+            { path: ':id', element: <PageOne /> },
+            { path: 'me', element: <PageOne /> },
+          ]
+        },
+        { path: 'search', children: [
+            { path: ':id', element: <PageOne /> },
+          ]
         },
       ],
     },
+    //guestUser only routes
+    { path: 'registration', element: <LogoOnlyLayout />, children: [
+        { path: "*", element: <Navigate to="signup" replace />, index:true },
+        { path: 'signup', element: <PageOne /> },
+        { path: 'login', element: <PageOne/> },
+        { path: 'forgot-password', element: <PageOne/> },
+      ],
+    },
+    //registeredUser only routes
+    { path: 'myaccount', children: [
+        { path: "*", element: <Navigate to="settings" replace />, index:true },
+        { path: 'settings', element: <LogoOnlyLayout/>, children: [
+          { path: "*", element: <Navigate to="" replace />, index:true },
+          { path: '', element: <PageOne /> },
+        ]}
+      ]
+    },
+    //404
     {
       path: '*',
       element: <LogoOnlyLayout />,
       children: [
-        { path: '404', element: <NotFound /> },
-        { path: '*', element: <Navigate to="/404" replace /> },
+        { path: '404', element: <Page404 /> },
+        { path: '*', element: <Navigate to="/404" replace />, index:true },
       ],
     },
-    { path: '*', element: <Navigate to="/404" replace /> },
   ]);
 }
-
-// Dashboard
-const PageOne = Loadable(lazy(() => import('./pages/PageOne')));
-const PageTwo = Loadable(lazy(() => import('./pages/PageTwo')));
-const PageThree = Loadable(lazy(() => import('./pages/PageThree')));
-const PageFour = Loadable(lazy(() => import('./pages/PageFour')));
-const PageFive = Loadable(lazy(() => import('./pages/PageFive')));
-const PageSix = Loadable(lazy(() => import('./pages/PageSix')));
-const NotFound = Loadable(lazy(() => import('./pages/Page404')));

@@ -41,6 +41,7 @@
     "@mui/material": "^5.2.3",
     "change-case": "^4.1.2",
     "date-fns": "^2.27.0",
+    "firebase": "^9.6.1",
     "framer-motion": "^4.1.17",
     "history": "^5.1.0",
     "nprogress": "^0.2.0",
