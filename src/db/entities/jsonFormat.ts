@@ -60,10 +60,10 @@ export interface EntityFactory {
 /**
  * @param  {Set<Entity>} entitySet - set of entities (i.e. Set<User>)
  * @param  {Factory} factory - entity creation factory (e.g. AccountFactory)
- * @returns IndexedEntitySet - json object with indexed entities (e.g. {0: User, 1: User})
- * @description converts an entity set into a json object with indexed entities
+ * @returns Object - json object with indexed database-exportable entities (e.g. {0: UserJson, 1: UserJson})
+ * @description converts an entity set into a json object with indexed json entities
  */
-export const entitySetToJson = (entitySet:Set<Entity>, factory:EntityFactory) : IndexedEntitySet => {
+export const entitySetToJson = (entitySet:Set<Entity>, factory:EntityFactory) : Object => {
     let json:IndexedEntitySet = {}
     let i = 0; 
     /*
@@ -75,12 +75,12 @@ export const entitySetToJson = (entitySet:Set<Entity>, factory:EntityFactory) : 
 };
 
 /**
- * @param  {IndexedEntitySet} json - json object with indexed entities (e.g. {0: User, 1: User})
+ * @param  {any} json - json object with indexed database-exportable entities (e.g. {0: UserJson, 1: UserJson})
  * @param  {Factory} factory - entity creation factory (e.g. AccountFactory)
  * @returns Set<Entity> - set of entities (i.e. Set<User>)
- * @description converts a JSON object with indexed entities into an entity set
+ * @description converts a json object with indexed json entities into an entity set
  */
- export const jsonToEntitySet = (json:IndexedEntitySet, factory:EntityFactory) : Set<Entity> => {
+ export const jsonToEntitySet = (json:any, factory:EntityFactory) : Set<Entity> => {
     let entitySet = new Set<Entity>();
     let keySet = new Set(Object.keys(json));
     /*
@@ -91,3 +91,12 @@ export const entitySetToJson = (entitySet:Set<Entity>, factory:EntityFactory) : 
     keySet.forEach((key) => { entitySet.add(factory.fromExportJson(json[Number(key)])); });
     return entitySet;
 };
+/**
+ * @param  {any} o - any indexed json object
+ * @returns boolean
+ * @description will check if any propery of the object is null or undefined at runtime
+ */
+export const hasNullProperties = (o:any) : boolean => {
+    let valueList = Object.values(o);
+    return !valueList.every((value) => { return value !== null });
+}
