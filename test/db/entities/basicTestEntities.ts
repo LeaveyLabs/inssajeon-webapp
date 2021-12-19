@@ -36,15 +36,17 @@ export const jsonAccount:Object = {
 
 export const standardActivity:Activity = {
     upvotes: standardPostIDSet,
+    downvotes: standardPostIDSet,
     favorites: standardPostIDSet,
     submissions: standardPostIDSet,
     lastLogin: new Date(),
 };
 
 export const jsonActivity:Object = {
-    upvotes: jsonTagSet,
-    favorites: jsonTagSet,
-    submissions: jsonTagSet,
+    upvotes: jsonPostIDSet,
+    downvotes: jsonPostIDSet,
+    favorites: jsonPostIDSet,
+    submissions: jsonPostIDSet,
     lastLogin: new Date(),
 };
 
@@ -72,10 +74,10 @@ export const standardPost:Post = {
     tags: standardTagSet,
     userProfile: standardProfile,
     trendscore: 10,
-    upvotes: standardUserIDSet,
-    downvotes: standardUserIDSet, 
-    shares: standardUserIDSet, 
-    flags: standardUserIDSet, 
+    upvoteCount: 0,
+    downvoteCount: 0, 
+    shareCount: 0, 
+    flagCount: 0, 
 };
 
 export const jsonPost = {
@@ -88,10 +90,10 @@ export const jsonPost = {
     tags: jsonTagSet,
     userProfile: jsonProfile,
     trendscore: 10,
-    upvotes: jsonUserIDSet,
-    downvotes: jsonUserIDSet,
-    shares: jsonUserIDSet,
-    flags: jsonUserIDSet,
+    upvoteCount: 0,
+    downvoteCount: 0, 
+    shareCount: 0, 
+    flagCount: 0, 
 };
 
 export const standardUser:User = {

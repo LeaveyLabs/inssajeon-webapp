@@ -4,7 +4,7 @@ import {Profile, ProfileFactory} from './Profile';
 import {Activity, ActivityFactory} from './Activity';
 import {Account, AccountFactory} from './Account';
 import {UserID} from "./UserID"
-import { EntityFactory } from "../jsonFormat";
+import { EntityFactory, validatedObject } from "../jsonFormat";
 
 /* Holds all data owned by an 인싸전 User */
 export interface User {
@@ -27,12 +27,13 @@ UserFactory.toExportJson = (user:User) : Object => {
     Parse the JSON string representation of these parameters
     to acquire the JSON representation of these parameters
     */
-    return {
+    const o:User = {
         id: user.id, 
         info: ProfileFactory.toExportJson(user.info),
         activity: ActivityFactory.toExportJson(user.activity), 
         account: AccountFactory.toExportJson(user.account),
     };
+    return validatedObject(o, USER_TYPE_ERROR);
 };
 
 /**
@@ -40,25 +41,16 @@ UserFactory.toExportJson = (user:User) : Object => {
  * @returns User
  * @description converts a json object into user
  */
-UserFactory.fromExportJson = (json:any) : User|null => {
-    try {
-        /*
-        Use the factories to produce the correct type 
-        from the approrpriate json properies
-        */
-        return {
-            id: json.id, 
-            info: ProfileFactory.fromExportJson(json.info),
-            activity: ActivityFactory.fromExportJson(json.activity),
-            account: AccountFactory.fromExportJson(json.account),
-        }
+UserFactory.fromExportJson = (json:any) : User => {
+    /*
+    Use the factories to produce the correct type 
+    from the approrpriate json properies
+    */
+    const user:User = {
+        id: json.id, 
+        info: ProfileFactory.fromExportJson(json.info),
+        activity: ActivityFactory.fromExportJson(json.activity),
+        account: AccountFactory.fromExportJson(json.account),
     }
-    catch (e) {
-        /* 
-        If failure, then type conversion error. 
-        */
-        console.log(TypeError(USER_TYPE_ERROR));
-        console.log(e.stack);
-    }
-    return null;
+    return validatedObject(user, USER_TYPE_ERROR) as User;
 };

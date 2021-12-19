@@ -1,5 +1,5 @@
 import { WORD_TYPE_ERROR } from "../../strings/apiStringLibrary";
-import { EntityFactory } from "../jsonFormat";
+import { EntityFactory, validatedObject } from "../jsonFormat";
 import { PostIDSet, PostIDSetFactory } from "../posts/PostID";
 
 export interface Word {
@@ -15,31 +15,23 @@ export const WordFactory:EntityFactory = function () {};
  * @returns Object
  */
 WordFactory.toExportJson = (word:Word) : Object => {
-    return {
+    const o:Word = {
         wordString: word.wordString,
         wordPosts: PostIDSetFactory.toExportJson(word.wordPosts),
         trendscore: word.trendscore,
     };
+    return validatedObject(o, WORD_TYPE_ERROR);
 };
 
 /**
  * @param  {any} json
  * @returns Word
  */
-WordFactory.fromExportJson = (json:any) : Word | null => {
-    try {
-        return {
-            wordString: json.wordString,
-            wordPosts: PostIDSetFactory.fromExportJson(json.wordPosts),
-            trendscore: json.trendscore,
-        };
-    }
-    catch (e) {
-        /* 
-        If conversion fails, then type error!
-        */
-        console.log(TypeError(WORD_TYPE_ERROR));
-        console.log(e.stack);
-    }
-    return null;
+WordFactory.fromExportJson = (json:any) : Word => {
+    const word:Word = {
+        wordString: json.wordString,
+        wordPosts: PostIDSetFactory.fromExportJson(json.wordPosts),
+        trendscore: json.trendscore,
+    };
+    return validatedObject(word, WORD_TYPE_ERROR) as Word;
 }

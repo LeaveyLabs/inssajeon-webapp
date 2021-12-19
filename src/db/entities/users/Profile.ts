@@ -1,5 +1,5 @@
 import { PROFILE_TYPE_ERROR } from "../../strings/apiStringLibrary";
-import { EntityFactory } from "../jsonFormat";
+import { EntityFactory, validatedObject } from "../jsonFormat";
 
 /* Holds user's personal profile information */
 export interface Profile {
@@ -17,31 +17,24 @@ export const ProfileFactory:EntityFactory = function () {};
  * @returns Object
  * @description converts a profile into a database-exportable json object
  */
-ProfileFactory.toExportJson = (profile:Profile) : Object => { return profile; };
+ProfileFactory.toExportJson = (profile:Profile) : Object => { 
+    return validatedObject(profile, PROFILE_TYPE_ERROR); 
+};
 
 /**
  * @param  {any} json
  * @returns Profile
  * @description converts a json string into a profile
  */
-ProfileFactory.fromExportJson = (json:any) : Profile|null => {
-    try {
-        /* 
-        Ensure username, bio, picPath, and inssajeom are present.
-        */
-        return {
-            username: json.username, 
-            bio: json.bio,
-            picPath: json.picPath,
-            inssajeom: json.inssajeom,
-        };
-    }
-    catch (e) {
-        /* 
-        If conversion fails, then type error!
-        */
-        console.log(TypeError(PROFILE_TYPE_ERROR));
-        console.log(e.stack);
-    }        
-    return null;
+ProfileFactory.fromExportJson = (json:any) : Profile => {
+    /* 
+    Ensure username, bio, picPath, and inssajeom are present.
+    */
+    const profile:Profile =  {
+        username: json.username, 
+        bio: json.bio,
+        picPath: json.picPath,
+        inssajeom: json.inssajeom,
+    };
+    return validatedObject(profile, PROFILE_TYPE_ERROR) as Profile;
 };

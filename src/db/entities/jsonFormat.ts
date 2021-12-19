@@ -100,3 +100,16 @@ export const hasNullProperties = (o:any) : boolean => {
     let valueList = Object.values(o);
     return !valueList.every((value) => { return value !== null });
 }
+
+/**
+ * @param  {any} o - any indexed json object
+ * @returns Object | null
+ * @description will check if any propery of the object is null or undefined at runtime
+ */
+ export const validatedObject = (o:Object, msg:string) : Object => {
+    /*
+    See if every parameter exists. If so, return the desired object.
+    */
+    if(hasNullProperties(o)) throw new TypeError(msg);
+    else return o;
+}

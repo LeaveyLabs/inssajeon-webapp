@@ -1,9 +1,9 @@
 import { POST_TYPE_ERROR } from '../../strings/apiStringLibrary';
-import { EntityFactory } from '../jsonFormat';
+import { EntityFactory, validatedObject } from '../jsonFormat';
 import { Profile, ProfileFactory } from '../users/Profile';
-import { UserID, UserIDSet, UserIDSetFactory } from '../users/UserID';
+import { UserID } from '../users/UserID';
 import { PostID } from './PostID';
-import { TagSet } from './Tag';
+import { TagSet, TagSetFactory } from './Tag';
 
 export interface Post {
     readonly postID: PostID;
@@ -15,10 +15,10 @@ export interface Post {
     readonly tags: TagSet;
     userProfile: Profile;
     trendscore: number;
-    upvotes: UserIDSet;
-    downvotes: UserIDSet;
-    shares: UserIDSet;
-    flags: UserIDSet;
+    upvoteCount: number;
+    downvoteCount: number;
+    shareCount: number;
+    flagCount: number;
 }
 
 export const PostFactory:EntityFactory = function () {};
@@ -32,56 +32,48 @@ PostFactory.toExportJson = (post:Post) : Object => {
     Primitives are copied over. 
     Entities are funnelled through. 
     */
-    return {
+    const o:Post = {
         postID: post.postID,
         userID: post.userID,
         word: post.word,
         definition: post.definition,
         quote: post.quote,
         timestamp: post.timestamp, 
-        tags: post.tags, 
+        tags: TagSetFactory.toExportJson(post.tags), 
         userProfile: ProfileFactory.toExportJson(post.userProfile),
         trendscore: post.trendscore,
-        upvotes: UserIDSetFactory.toExportJson(post.upvotes),
-        downvotes: UserIDSetFactory.toExportJson(post.downvotes),
-        shares: UserIDSetFactory.toExportJson(post.shares),
-        flags: UserIDSetFactory.toExportJson(post.flags),
-    };
+        upvoteCount: post.upvoteCount,
+        downvoteCount: post.downvoteCount,
+        shareCount: post.shareCount,
+        flagCount: post.flagCount,
+    }
+    return validatedObject(o, POST_TYPE_ERROR);
 };
 
 /**
  * @param  {any} json
  * @returns Post
  */
-PostFactory.fromExportJson = (json:any) : Post | null => {
-    try {
-        /* 
-        Ensure all data members are in the correct format. 
-        Primitives are copied over. 
-        Entities are funnelled through. 
-        */
-        return {
-            postID: json.postID,
-            userID: json.userID,
-            word: json.word,
-            definition: json.definition,
-            quote: json.quote,
-            timestamp: json.timestamp, 
-            tags: json.tags, 
-            userProfile: ProfileFactory.fromExportJson(json.userProfile),
-            trendscore: json.trendscore,
-            upvotes: UserIDSetFactory.fromExportJson(json.upvotes),
-            downvotes: UserIDSetFactory.fromExportJson(json.downvotes),
-            shares: UserIDSetFactory.fromExportJson(json.shares),
-            flags: UserIDSetFactory.fromExportJson(json.flags),
-        }
+PostFactory.fromExportJson = (json:any) : Post => {
+    /* 
+    Ensure all data members are in the correct format. 
+    Primitives are copied over. 
+    Entities are funnelled through. 
+    */
+    const post:Post = {
+        postID: json.postID,
+        userID: json.userID,
+        word: json.word,
+        definition: json.definition,
+        quote: json.quote,
+        timestamp: json.timestamp, 
+        tags: TagSetFactory.fromExportJson(json.tags), 
+        userProfile: ProfileFactory.fromExportJson(json.userProfile),
+        trendscore: json.trendscore,
+        upvoteCount: json.upvoteCount,
+        downvoteCount: json.downvoteCount,
+        shareCount: json.shareCount,
+        flagCount: json.flagCount,
     }
-    catch (e) {
-        /* 
-        If conversion fails, then type error!
-        */
-        console.log(TypeError(POST_TYPE_ERROR));
-        console.log(e.stack);
-    }
-    return null;
+    return validatedObject(post, POST_TYPE_ERROR) as Post;
 };
