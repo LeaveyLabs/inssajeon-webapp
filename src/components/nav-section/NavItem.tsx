@@ -13,9 +13,9 @@ import {
 } from '@mui/material';
 // config
 import {
-  DASHBOARD_NAVBAR_ROOT_ITEM_HEIGHT,
-  DASHBOARD_NAVBAR_SUB_ITEM_HEIGHT,
-  DASHBOARD_NAVBAR_ICON_ITEM_SIZE,
+  SIDEBAR_ROOT_ITEM_HEIGHT,
+  SIDEBAR_SUB_ITEM_HEIGHT,
+  SIDEBAR_ICON_ITEM_SIZE,
 } from '../../config';
 //
 import Iconify from '../Iconify';
@@ -39,7 +39,7 @@ const ListItemStyle = styled(ListItemButton, {
 })<ListItemStyleProps>(({ activeRoot, activeSub, subItem, theme }) => ({
   ...theme.typography.body2,
   position: 'relative',
-  height: DASHBOARD_NAVBAR_ROOT_ITEM_HEIGHT,
+  height: SIDEBAR_ROOT_ITEM_HEIGHT,
   textTransform: 'capitalize',
   paddingLeft: theme.spacing(2),
   paddingRight: theme.spacing(1.5),
@@ -59,7 +59,7 @@ const ListItemStyle = styled(ListItemButton, {
   }),
   // subItem
   ...(subItem && {
-    height: DASHBOARD_NAVBAR_SUB_ITEM_HEIGHT,
+    height: SIDEBAR_SUB_ITEM_HEIGHT,
   }),
 }));
 
@@ -81,8 +81,8 @@ const ListItemTextStyle = styled(ListItemText, {
 }));
 
 const ListItemIconStyle = styled(ListItemIcon)({
-  width: DASHBOARD_NAVBAR_ICON_ITEM_SIZE,
-  height: DASHBOARD_NAVBAR_ICON_ITEM_SIZE,
+  width: SIDEBAR_ICON_ITEM_SIZE,
+  height: SIDEBAR_ICON_ITEM_SIZE,
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',

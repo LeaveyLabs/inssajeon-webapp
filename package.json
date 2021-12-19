@@ -38,6 +38,7 @@
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
     "@iconify/react": "^3.1.0",
+    "@mui/icons-material": "^5.2.4",
     "@mui/material": "^5.2.3",
     "change-case": "^4.1.2",
     "date-fns": "^2.27.0",

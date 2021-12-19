@@ -12,6 +12,7 @@ import LoginPage from './pages/Registration/LoginPage';
 import SettingsPage from './pages/Account/SettingsPage';
 import ExplorePage from './pages/Feeds/ExplorePage';
 import ResultsPage from './pages/Feeds/ResultsPage';
+import ChartsPage from './pages/Charts/ChartsPage';
 
 // ----------------------------------------------------------------------
 
@@ -61,6 +62,10 @@ export default function Router() {
         ]}
       ]
     },
+    { path: 'charts', element: <DashboardLayout />, children: [
+      { path: "*", element: <Navigate to="" replace />, index:true },
+      { path: '', element: <ChartsPage /> },
+    ]},
     //404
     {
       path: '*',

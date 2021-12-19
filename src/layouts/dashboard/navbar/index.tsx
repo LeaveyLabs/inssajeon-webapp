@@ -1,145 +1,93 @@
-import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 // @mui
-import { styled, useTheme } from '@mui/material/styles';
-import { Box, Stack, Drawer } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import { Box, Stack, AppBar, Toolbar, Badge } from '@mui/material';
 // hooks
+import useOffSetTop from '../../../hooks/useOffSetTop';
 import useResponsive from '../../../hooks/useResponsive';
 import useCollapseDrawer from '../../../hooks/useCollapseDrawer';
 // utils
 import cssStyles from '../../../utils/cssStyles';
 // config
-import { DASHBOARD_NAVBAR_WIDTH, DASHBOARD_NAVBAR_COLLAPSE_WIDTH } from '../../../config';
+import {
+  SIDEBAR_WIDTH,
+  NAVBAR_MOBILE,
+  NAVBAR_DESKTOP,
+  SIDEBAR_COLLAPSE_WIDTH,
+} from '../../../config';
 // components
-import Logo from '../../../components/Logo';
-import Scrollbar from '../../../components/Scrollbar';
-import NavSection from '../../../components/nav-section';
+import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
+import { IconButtonAnimate } from '../../../components/animate';
 //
-import NavbarAccount from './NavbarAccount';
-import NavbarDocs from './NavbarDocs';
-import CollapseButton from './CollapseButton';
-import navConfig from './NavConfig';
+import Searchbar from './Searchbar';
+import ClickwableWideLogo from '../../../components/ClickableWideLogo';
 
 // ----------------------------------------------------------------------
 
-const RootStyle = styled('div')(({ theme }) => ({
+type RootStyleProps = {
+  isCollapse: boolean | undefined;
+};
+
+const RootStyle = styled(AppBar, {
+  shouldForwardProp: (prop) => prop !== 'isCollapse',
+})<RootStyleProps>(({ isCollapse, theme }) => ({
+  boxShadow: 'none',
+  ...cssStyles(theme).bgBlur(),
+  transition: theme.transitions.create('width', {
+    duration: theme.transitions.duration.shorter,
+  }),
   [theme.breakpoints.up('lg')]: {
-    flexShrink: 0,
-    transition: theme.transitions.create('width', {
-      duration: theme.transitions.duration.shorter,
+    width: `calc(100% - ${SIDEBAR_WIDTH + 1}px)`,
+    ...(isCollapse && {
+      width: `calc(100% - ${SIDEBAR_COLLAPSE_WIDTH}px)`,
     }),
+  },
+}));
+
+const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
+  minHeight: NAVBAR_MOBILE,
+  transition: theme.transitions.create('min-height', {
+    easing: theme.transitions.easing.easeInOut,
+    duration: theme.transitions.duration.shorter,
+  }),
+  [theme.breakpoints.up('lg')]: {
+    padding: theme.spacing(0, 5),
+    minHeight: NAVBAR_DESKTOP,
   },
 }));
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  isOpenSidebar: boolean;
-  onCloseSidebar: VoidFunction;
+  onOpenSidebar: VoidFunction;
 };
 
-export default function DashboardNavbar({ isOpenSidebar, onCloseSidebar }: Props) {
-  const theme = useTheme();
+export default function Navbar({ onOpenSidebar }: Props) {
+  const { isCollapse } = useCollapseDrawer();
 
-  const { pathname } = useLocation();
+  const isOffset = useOffSetTop(NAVBAR_DESKTOP);
 
   const isDesktop = useResponsive('up', 'lg');
 
-  const { isCollapse, collapseClick, collapseHover, onToggleCollapse, onHoverEnter, onHoverLeave } =
-    useCollapseDrawer();
-
-  useEffect(() => {
-    if (isOpenSidebar) {
-      onCloseSidebar();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname]);
-
-  const renderContent = (
-    <Scrollbar
-      sx={{
-        height: 1,
-        '& .simplebar-content': { height: 1, display: 'flex', flexDirection: 'column' },
-      }}
-    >
-      <Stack
-        spacing={3}
+  return (
+    <RootStyle isCollapse={isCollapse}>
+      <ToolbarStyle
         sx={{
-          pt: 3,
-          pb: 2,
-          px: 2.5,
-          flexShrink: 0,
-          ...(isCollapse && { alignItems: 'center' }),
+          ...(isOffset && {
+            minHeight: { md: NAVBAR_DESKTOP - 16 },
+          }),
         }}
       >
-        <Stack direction="row" alignItems="center" justifyContent="space-between">
-          <Logo />
-
-          {isDesktop && !isCollapse && (
-            <CollapseButton onToggleCollapse={onToggleCollapse} collapseClick={collapseClick} />
-          )}
-        </Stack>
-
-        <NavbarAccount isCollapse={isCollapse} />
-      </Stack>
-
-      <NavSection navConfig={navConfig} isCollapse={isCollapse} />
-
-      <Box sx={{ flexGrow: 1 }} />
-
-      {!isCollapse && <NavbarDocs />}
-    </Scrollbar>
-  );
-
-  return (
-    <RootStyle
-      sx={{
-        width: {
-          lg: isCollapse ? DASHBOARD_NAVBAR_COLLAPSE_WIDTH : DASHBOARD_NAVBAR_WIDTH,
-        },
-        ...(collapseClick && {
-          position: 'absolute',
-        }),
-      }}
-    >
-      {!isDesktop && (
-        <Drawer
-          open={isOpenSidebar}
-          onClose={onCloseSidebar}
-          PaperProps={{ sx: { width: DASHBOARD_NAVBAR_WIDTH } }}
-        >
-          {renderContent}
-        </Drawer>
-      )}
-
-      {isDesktop && (
-        <Drawer
-          open
-          variant="persistent"
-          onMouseEnter={onHoverEnter}
-          onMouseLeave={onHoverLeave}
-          PaperProps={{
-            sx: {
-              width: DASHBOARD_NAVBAR_WIDTH,
-              borderRightStyle: 'dashed',
-              bgcolor: 'background.default',
-              transition: (theme) =>
-                theme.transitions.create('width', {
-                  duration: theme.transitions.duration.standard,
-                }),
-              ...(isCollapse && {
-                width: DASHBOARD_NAVBAR_COLLAPSE_WIDTH,
-              }),
-              ...(collapseHover && {
-                ...cssStyles(theme).bgBlur(),
-                boxShadow: (theme) => theme.customShadows.z24,
-              }),
-            },
-          }}
-        >
-          {renderContent}
-        </Drawer>
-      )}
+        <ClickwableWideLogo />
+        <Box sx={{ flexGrow: 1 }} />
+        <Searchbar />
+        {!isDesktop && (
+          <IconButtonAnimate onClick={onOpenSidebar} sx={{ mr: 1, color: 'text.primary' }}>
+            <Badge badgeContent={2} color="error">
+              <MenuRoundedIcon fontSize='large' />
+            </Badge>
+          </IconButtonAnimate>
+        )}
+      </ToolbarStyle>
     </RootStyle>
   );
 }

@@ -1,6 +1,6 @@
 // @mui
 import { styled } from '@mui/material/styles';
-import { Box, Link, Typography, Avatar } from '@mui/material';
+import { Box, Link, Typography, Avatar, Badge } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -21,7 +21,7 @@ type Props = {
   isCollapse: boolean | undefined;
 };
 
-export default function NavbarAccount({ isCollapse }: Props) {
+export default function SidebarAccount({ isCollapse }: Props) {
   return (
     <Link underline="none" color="inherit">
       <RootStyle
@@ -31,11 +31,12 @@ export default function NavbarAccount({ isCollapse }: Props) {
           }),
         }}
       >
-        <Avatar
-          src="https://minimal-assets-api.vercel.app/assets/images/avatars/avatar_5.jpg"
-          alt="Rayan Moran"
-        />
-
+        <Badge badgeContent={2} color="error">
+          <Avatar
+            src=""
+            alt="Rayan Moran"
+          />
+        </Badge>
         <Box
           sx={{
             ml: 2,
@@ -50,10 +51,10 @@ export default function NavbarAccount({ isCollapse }: Props) {
           }}
         >
           <Typography variant="subtitle2" noWrap>
-            Kiley Barker
+            username
           </Typography>
           <Typography variant="body2" noWrap sx={{ color: 'text.secondary' }}>
-            role
+            extra text
           </Typography>
         </Box>
       </RootStyle>

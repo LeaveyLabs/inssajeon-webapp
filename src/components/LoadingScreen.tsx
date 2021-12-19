@@ -3,7 +3,7 @@ import { m } from 'framer-motion';
 import { alpha, styled } from '@mui/material/styles';
 import { Box, SxProps } from '@mui/material';
 //
-import Logo from './Logo';
+import ClickwableWideLogo from './ClickableWideLogo';
 import ProgressBar from './ProgressBar';
 
 // ----------------------------------------------------------------------
@@ -45,7 +45,7 @@ export default function LoadingScreen({ isDashboard, ...other }: Props) {
               repeat: Infinity,
             }}
           >
-            <Logo disabledLink sx={{ width: 64, height: 64 }} />
+            <ClickwableWideLogo disabledLink sx={{ width: 64, height: 64 }} />
           </m.div>
 
           <Box
