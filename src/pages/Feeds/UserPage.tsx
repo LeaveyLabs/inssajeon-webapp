@@ -11,7 +11,7 @@ export default function UserPage() {
 
   return (
     <Page title="홈">
-      <Container maxWidth={'xl'}>
+      <Container maxWidth={'fullscreen'}>
         <Typography variant="h3" component="h1" paragraph>
           word
         </Typography>

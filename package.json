@@ -45,6 +45,7 @@
     "firebase": "^9.6.1",
     "framer-motion": "^4.1.17",
     "history": "^5.1.0",
+    "material-ui-popup-state": "^2.0.0",
     "nprogress": "^0.2.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",

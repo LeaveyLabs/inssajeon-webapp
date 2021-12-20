@@ -2,14 +2,16 @@ import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 // @mui
 import { styled } from '@mui/material/styles';
-import { Box } from '@mui/material';
+import { Box, DialogTitle, FormGroup, Fab } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
 // hooks
-import useCollapseDrawer from '../../hooks/useCollapseDrawer';
+import useCollapseSidebar from '../../hooks/useCollapseSidebar';
+//components
+import DialogAnimate from 'src/components/animate/DialogAnimate'
 // config
 import {
   SIDEBAR_WIDTH,
-  NAVBAR_MOBILE,
-  NAVBAR_DESKTOP,
+  NAVBAR_HEIGHT,
   SIDEBAR_COLLAPSE_WIDTH,
 } from '../../config';
 //
@@ -19,50 +21,57 @@ import Sidebar from './sidebar';
 // ----------------------------------------------------------------------
 
 const RootStyle = styled('div')(({ theme }) => ({
-  [theme.breakpoints.up('lg')]: {
+  [theme.breakpoints.up('desktop')]: {
     display: 'flex',
     minHeight: '100%',
   },
 }));
 
 type MainStyleProps = {
-  collapseClick: boolean;
+  isCollapse: boolean | undefined;
 };
 
 const MainStyle = styled('main', {
   shouldForwardProp: (prop) => prop !== 'collapseClick',
-})<MainStyleProps>(({ collapseClick, theme }) => ({
+})<MainStyleProps>(({ isCollapse: collapseClick, theme }) => ({
   flexGrow: 1,
-  paddingTop: NAVBAR_MOBILE + 24,
-  paddingBottom: NAVBAR_MOBILE + 24,
-  [theme.breakpoints.up('lg')]: {
-    paddingLeft: 16,
-    paddingRight: 16,
-    paddingTop: NAVBAR_DESKTOP + 24,
-    paddingBottom: NAVBAR_DESKTOP + 24,
-    width: `calc(100% - ${SIDEBAR_WIDTH}px)`,
-    transition: theme.transitions.create('margin-left', {
-      duration: theme.transitions.duration.shorter,
-    }),
-    ...(collapseClick && {
-      marginLeft: SIDEBAR_COLLAPSE_WIDTH,
-    }),
-  },
+  paddingTop: NAVBAR_HEIGHT + 24,
+  paddingBottom: NAVBAR_HEIGHT + 24,
 }));
 
 // ----------------------------------------------------------------------
 
-export default function DashboardLayout() {
-  const { collapseClick } = useCollapseDrawer();
+// ----------------------------------------------------------------------
 
+
+export default function DashboardLayout() {
+  const { isCollapse } = useCollapseSidebar();
+  const [isOpenModal, setIsOpenModal] = useState(false);
   const [open, setOpen] = useState(false);
+
+  const handleAddPost = () => {
+    setIsOpenModal(true)
+  };
+  
+  const handleCloseModal = () => {
+    setIsOpenModal(false)
+  };
 
   return (
     <RootStyle>
       <Navbar onOpenSidebar={() => setOpen(true)} />
       <Sidebar isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} />
-      <MainStyle collapseClick={collapseClick}>
+      <DialogAnimate open={isOpenModal} onClose={handleCloseModal}>
+        <DialogTitle>{'Add Post'}</DialogTitle>
+        <FormGroup
+        />
+      </DialogAnimate>
+      <MainStyle isCollapse={isCollapse}>
         <Outlet />
+        <Fab variant="extended" size="large" color="primary" aria-label="add" onClick={handleAddPost}>
+          <EditIcon />
+          단어 정의하기
+        </Fab>
       </MainStyle>
     </RootStyle>
   );

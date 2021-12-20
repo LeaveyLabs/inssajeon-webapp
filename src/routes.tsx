@@ -27,7 +27,7 @@ export default function Router() {
   return useRoutes([
     //(mostly) registeredUser and guestUser routes
     { path: '/', element: <DashboardLayout />, children: [
-        { path: "*", element: <Navigate to="" replace />, index:true },
+        { path: ':id', element: <ResultsPage /> },
         { path: '', element: <HomePage /> },
         { path: 'categories', children: [
             { path: '', element: <ExplorePage /> },
@@ -37,10 +37,6 @@ export default function Router() {
         { path: 'users', children: [
             { path: ':id', element: <UserPage /> },
             { path: 'me', element: <UserPage /> },
-          ]
-        },
-        { path: 'search', children: [
-            { path: ':id', element: <ResultsPage /> },
           ]
         },
       ],

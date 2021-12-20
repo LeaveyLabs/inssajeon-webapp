@@ -5,7 +5,7 @@ import { styled, useTheme } from '@mui/material/styles';
 import { Box, Stack, Drawer, IconButton } from '@mui/material';
 // hooks
 import useResponsive from '../../../hooks/useResponsive';
-import useCollapseDrawer from '../../../hooks/useCollapseDrawer';
+import useCollapseSidebar from '../../../hooks/useCollapseSidebar';
 // utils
 import cssStyles from '../../../utils/cssStyles';
 // config
@@ -16,18 +16,17 @@ import NavSection from '../../../components/nav-section';
 //
 import SidebarAccount from './SidebarAccount';
 import SidebarFooter from './SidebarFooter';
-import CollapseButton from './CollapseButton';
 import sidebarConfig from './SidebarConfig';
 
 // ----------------------------------------------------------------------
 
 const RootStyle = styled('div')(({ theme }) => ({
-  [theme.breakpoints.up('lg')]: {
-    flexShrink: 0,
-    transition: theme.transitions.create('width', {
-      duration: theme.transitions.duration.shorter,
-    }),
-  }, 
+  // [theme.breakpoints.up('desktop')]: {
+  //   flexShrink: 0,
+  //   transition: theme.transitions.create('width', {
+  //     duration: theme.transitions.duration.shorter,
+  //   }),
+  // }, 
 }));
 
 // ----------------------------------------------------------------------
@@ -39,13 +38,9 @@ type Props = {
 
 export default function Sidebar({ isOpenSidebar, onCloseSidebar }: Props) {
   const theme = useTheme();
-
   const { pathname } = useLocation();
-
-  const isDesktop = useResponsive('up', 'lg');
-
-  const { isCollapse, collapseClick, collapseHover, onToggleCollapse, onHoverEnter, onHoverLeave } =
-    useCollapseDrawer();
+  const isDesktop = useResponsive('up', 'desktop');
+  const { isCollapse, onToggleCollapse } = useCollapseSidebar();
 
   useEffect(() => {
     if (isOpenSidebar) {
@@ -83,11 +78,8 @@ export default function Sidebar({ isOpenSidebar, onCloseSidebar }: Props) {
     <RootStyle
       sx={{
         width: {
-          lg: isCollapse ? SIDEBAR_COLLAPSE_WIDTH : SIDEBAR_WIDTH,
+          desktop: isCollapse ? SIDEBAR_COLLAPSE_WIDTH : SIDEBAR_WIDTH,
         },
-        ...(collapseClick && {
-          position: 'absolute',
-        }),
       }}
     >
       {!isDesktop && (
@@ -106,8 +98,6 @@ export default function Sidebar({ isOpenSidebar, onCloseSidebar }: Props) {
           anchor={'right'}
           open
           variant="persistent"
-          // onMouseEnter={onHoverEnter} TODO : TURN OFF HOVER FEATURE LATER ON
-          // onMouseLeave={onHoverLeave}
           PaperProps={{
             sx: {
               width: SIDEBAR_WIDTH,
@@ -119,10 +109,6 @@ export default function Sidebar({ isOpenSidebar, onCloseSidebar }: Props) {
                 }),
               ...(isCollapse && {
                 width: SIDEBAR_COLLAPSE_WIDTH,
-              }),
-              ...(collapseHover && {
-                ...cssStyles(theme).bgBlur(),
-                boxShadow: (theme) => theme.customShadows.z24,
               }),
             },
           }}
