@@ -14,6 +14,11 @@ export interface IndexedStringSet {
     [key:number]:string;
 };
 
+/* Permits indexing by keys */
+export interface IDictionary<T> {
+    [key:string]:T;
+};
+
 /**
  * @param  {Set<string>} set
  * @returns IndexedStringSet

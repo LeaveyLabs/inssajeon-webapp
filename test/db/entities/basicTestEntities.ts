@@ -41,7 +41,7 @@ export const standardActivity:Activity = {
     downvotes: standardPostIDSet,
     favorites: standardPostIDSet,
     submissions: standardPostIDSet,
-    lastLogin: new Date(),
+    lastLogin: time,
 };
 
 export const jsonActivity:Object = {
@@ -49,7 +49,7 @@ export const jsonActivity:Object = {
     downvotes: jsonPostIDSet,
     favorites: jsonPostIDSet,
     submissions: jsonPostIDSet,
-    lastLogin: new Date(),
+    lastLogin: time,
 };
 
 export const standardProfile:Profile = {

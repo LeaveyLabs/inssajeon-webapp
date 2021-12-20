@@ -1,8 +1,8 @@
 import { ACCOUNT_TYPE_ERROR } from "../../strings/apiStringLibrary";
-import { EntityFactory, validatedObject } from "../jsonFormat";
+import { EntityFactory, IDictionary, validatedObject } from "../jsonFormat";
 
 /* Holds all of one user's profile settings for 인싸전 */
-export interface Account {
+export interface Account extends IDictionary<Object> {
     signInMethod: Number;
     emailFrequency: Number;
 }

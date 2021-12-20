@@ -1,11 +1,11 @@
 import { POST_TYPE_ERROR } from '../../strings/apiStringLibrary';
-import { EntityFactory, validatedObject } from '../jsonFormat';
+import { EntityFactory, IDictionary, validatedObject } from '../jsonFormat';
 import { Profile, ProfileFactory } from '../users/Profile';
 import { UserID } from '../users/UserID';
 import { PostID } from './PostID';
 import { TagSet, TagSetFactory } from './Tag';
 
-export interface Post {
+export interface Post extends IDictionary<Object> {
     readonly postID: PostID;
     readonly userID: UserID;
     readonly word: string;

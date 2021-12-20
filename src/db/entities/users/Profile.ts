@@ -1,8 +1,8 @@
 import { PROFILE_TYPE_ERROR } from "../../strings/apiStringLibrary";
-import { EntityFactory, validatedObject } from "../jsonFormat";
+import { EntityFactory, IDictionary, validatedObject } from "../jsonFormat";
 
 /* Holds user's personal profile information */
-export interface Profile {
+export interface Profile extends IDictionary<Object> {
     username: string;
     bio: string;
     picPath: string;

@@ -1,9 +1,9 @@
 import {ACTIVITY_TYPE_ERROR} from "../../strings/apiStringLibrary";
-import {EntityFactory, validatedObject} from '../jsonFormat';
+import {EntityFactory, IDictionary, validatedObject} from '../jsonFormat';
 import {PostIDSet, PostIDSetFactory} from '../posts/PostID';
 
 /* Holds all of one user's interactions with 인싸전 posts */
-export interface Activity {
+export interface Activity extends IDictionary<Object> {
     upvotes: PostIDSet;
     downvotes: PostIDSet;
     favorites: PostIDSet;

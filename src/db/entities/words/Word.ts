@@ -1,8 +1,8 @@
 import { WORD_TYPE_ERROR } from "../../strings/apiStringLibrary";
-import { EntityFactory, validatedObject } from "../jsonFormat";
+import { EntityFactory, IDictionary, validatedObject } from "../jsonFormat";
 import { PostIDSet, PostIDSetFactory } from "../posts/PostID";
 
-export interface Word {
+export interface Word extends IDictionary<Object> {
     readonly wordString: string;
     wordPosts: PostIDSet;
     trendscore: number;

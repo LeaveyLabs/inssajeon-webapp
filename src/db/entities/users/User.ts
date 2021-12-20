@@ -4,10 +4,10 @@ import {Profile, ProfileFactory} from './Profile';
 import {Activity, ActivityFactory} from './Activity';
 import {Account, AccountFactory} from './Account';
 import {UserID} from "./UserID"
-import { EntityFactory, validatedObject } from "../jsonFormat";
+import { EntityFactory, IDictionary, validatedObject } from "../jsonFormat";
 
 /* Holds all data owned by an 인싸전 User */
-export interface User {
+export interface User extends IDictionary<Object> {
     readonly id: UserID;
     info: Profile;
     activity: Activity;
