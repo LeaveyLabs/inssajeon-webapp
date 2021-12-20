@@ -4,6 +4,8 @@ export const USER_ACTIVITY_HEADER = "activity";
 export const USER_PROFILE_HEADER = "info";
 export const USER_TYPE_ERROR = "Incorrect formatting of User data.";
 
+export const USERIDSET_TYPE_ERROR = "Incorrect formatting of UserIDSet data.";
+
 export const ACCOUNT_SIGNINMETHOD_HEADER = "activity";
 export const ACCOUNT_EMAILFREQUENCY_HEADER = "emailFrequency";
 export const ACCOUNT_TYPE_ERROR = "Incorrect formatting of Account data.";
@@ -17,7 +19,7 @@ export const PROFILE_USERNAME_HEADER = "username";
 export const PROFILE_BIO_HEADER = "bio";
 export const PROFILE_PIC_PATH_HEADER = "picPath";
 export const PROFILE_INSSAJEOM_HEADER = "innsajeom";
-export const PROFILE_TYPE_ERROR = "Inssajeom not a number.";
+export const PROFILE_TYPE_ERROR = "Incorrect formatting of Profile data.";
 
 export const WORD_HEADER = "word";
 export const WORD_WORDSTRING_HEADER = "wordSring";
@@ -42,7 +44,9 @@ export const POST_SHARES_HEADER = "shares";
 export const POST_FLAGS_HEADER = "flags";
 export const POST_TYPE_ERROR = "Incorrect formatting of Post data.";
 
+export const POSTIDSET_TYPE_ERROR = "Incorrect formatting of PostIDSet data.";
 
+export const TAGSET_TYPE_ERROR = "Incorrect formatting of TagSet data.";
 
 
 

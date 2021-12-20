@@ -1,22 +1,18 @@
-/* User */
-describe("testing User", () => {
-    // Try to write to readonly member
-});
+import { UserFactory } from "../../../../src/db/entities/users/User";
+import { jsonUser, standardPostID, standardPostIDSet, standardUser } from "../basicTestEntities";
+import { generateFromExportJsonTest, generateToExportJsonTest } from "../entityTest";
 
-/* toExportJson */
-describe("testing toExportJson", () => {
-    // Empty Set
-    // Default Case
-    // Missing Parameters
-    // Export -> Modify User -> Export
-    // toExportJson inverts fromExportJson
-});
+let modifiedUser = JSON.parse(JSON.stringify(standardUser));
+modifiedUser.activity = {
+    upvotes: standardPostIDSet,
+    downvotes: standardPostIDSet,
+    favorites: [standardPostID],
+    submissions: standardPostIDSet,
+    lastLogin: modifiedUser.activity.lastLogin,
+};
 
 /* fromExportJson */
-describe("testing fromExportJson", () => {
-    // Empty Object
-    // Missing Parameters
-    // Object with Other Parameters
-    // Export -> Modify Object -> Export
-    // fromExportJson inverts toExportJson 
-});
+describe("testing fromExportJson", generateFromExportJsonTest(UserFactory, standardUser, jsonUser, modifiedUser));
+
+/* toExportJson */
+describe("testing toExportJson", generateToExportJsonTest(UserFactory, standardUser, jsonUser, modifiedUser));

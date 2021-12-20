@@ -1,15 +1,12 @@
-/* toExportJson */
-describe("testing toExportJson", () => {
-    // Empty Set
-    // Default Case
-    // Missing Parameters
-    // toExportJson inverts fromExportJson
-});
+import { ActivityFactory } from "../../../../src/db/entities/users/Activity";
+import { jsonActivity, standardActivity } from "../basicTestEntities";
+import { generateFromExportJsonTest, generateToExportJsonTest } from "../entityTest";
+
+let modifiedActivity = JSON.parse(JSON.stringify(jsonActivity));
+modifiedActivity.upvotes = ["5"];
 
 /* fromExportJson */
-describe("testing fromExportJson", () => {
-    // Empty Object
-    // Missing Parameters
-    // Object with Other Parameters
-    // fromExportJson inverts toExportJson 
-});
+describe("testing fromExportJson", generateFromExportJsonTest(ActivityFactory, standardActivity, jsonActivity, modifiedActivity));
+
+/* toExportJson */
+describe("testing toExportJson", generateToExportJsonTest(ActivityFactory, standardActivity, jsonActivity, modifiedActivity));

@@ -1,15 +1,12 @@
-/* toExportJson */
-describe("testing toExportJson", () => {
-    // Empty Set
-    // Default Case
-    // Missing Parameters
-    // toExportJson inverts fromExportJson
-});
+import { ProfileFactory } from "../../../../src/db/entities/users/Profile";
+import { jsonProfile, standardProfile } from "../basicTestEntities";
+import { generateFromExportJsonTest, generateToExportJsonTest } from "../entityTest";
+
+let modifiedProfile = JSON.parse(JSON.stringify(standardProfile));
+modifiedProfile.inssajeom += 1;
 
 /* fromExportJson */
-describe("testing fromExportJson", () => {
-    // Empty Object
-    // Missing Parameters
-    // Object with Other Parameters
-    // fromExportJson inverts toExportJson 
-});
+describe("testing jsonExportJson", generateFromExportJsonTest(ProfileFactory, standardProfile, jsonProfile, modifiedProfile));
+
+/* toExportJson */
+describe("testing toExportJson", generateToExportJsonTest(ProfileFactory, standardProfile, jsonProfile, modifiedProfile));

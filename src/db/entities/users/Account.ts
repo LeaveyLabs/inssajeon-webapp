@@ -16,7 +16,9 @@ export const AccountFactory:EntityFactory = function () {}
  * @description converts an account into a database-exportable json object
  */
 AccountFactory.toExportJson = (acc:Account) : Object => { 
-    return validatedObject(acc, ACCOUNT_TYPE_ERROR)
+    const json:Account = {signInMethod: acc.signInMethod,
+        emailFrequency: acc.emailFrequency};
+    return validatedObject(json, ACCOUNT_TYPE_ERROR)
 };
 
 /**

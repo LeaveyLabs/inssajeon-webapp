@@ -1,7 +1,8 @@
-import { EntityFactory, jsonToStringSet, stringSetToJson } from "../jsonFormat";
+import { TAGSET_TYPE_ERROR } from "../../strings/apiStringLibrary";
+import { EntityFactory, IndexedStringSet, jsonToStringSet, stringSetToJson, validatedObject } from "../jsonFormat";
 
 export type Tag = string;
-export type TagSet = Set<Tag>;
+export type TagSet = Array<Tag>;
 
 export const TagSetFactory:EntityFactory = function () {};
 
@@ -10,7 +11,8 @@ export const TagSetFactory:EntityFactory = function () {};
  * @returns Object
  */
  TagSetFactory.toExportJson = (tagSet:TagSet) : Object => {
-    return stringSetToJson(tagSet);
+    if(Array.isArray(tagSet)) return tagSet;
+    else throw new TypeError(TAGSET_TYPE_ERROR);
 }
 
 /**
@@ -18,5 +20,6 @@ export const TagSetFactory:EntityFactory = function () {};
  * @returns TagSet
  */
  TagSetFactory.fromExportJson = (json:any) : TagSet => {
-    return jsonToStringSet(json);
+    if(Array.isArray(json)) return json as TagSet;
+    throw new TypeError(TAGSET_TYPE_ERROR);
 }

@@ -77,20 +77,13 @@ describe("testing entitySetToJson", () => {
     it("account: {acc1, acc2} -> {0:acc1, 1:acc2}", () => {
         /* Initialize a set of regular Account objects*/
         let acc1 = standardAccount;
-        let acc2 = {
-            signInMethod: 10,
-            emailFrequency: 30,
-        };
+        let acc2 = JSON.parse(JSON.stringify(standardAccount));
+        acc2.emailFrequency = 30;
         let accSet = new Set<Account>([acc1, acc2]);
         /* Initialize a set of json Account objects */
-        let jsonAcc1 = {
-            signInMethod: 10,
-            emailFrequency: 5,
-        };
-        let jsonAcc2 = {
-            signInMethod: 10,
-            emailFrequency: 30,
-        };
+        let jsonAcc1 = jsonAccount;
+        let jsonAcc2 = JSON.parse(JSON.stringify(jsonAccount));
+        jsonAcc2.emailFrequency = 30;
         let jsonAccs = {
             0: jsonAcc1,
             1: jsonAcc2,
@@ -100,23 +93,13 @@ describe("testing entitySetToJson", () => {
     it("activity: {act1, act2} -> {0:act1, 1:act2}", () => {
         /* Initialize a set of regular Activity objects */
         let act1 = standardActivity;
-        let act2 = {
-            upvotes: standardPostIDSet,
-            downvotes: standardPostIDSet,
-            favorites: new Set<PostID>([standardPostID]),
-            submissions: standardPostIDSet,
-            lastLogin: act1.lastLogin,
-        };
+        let act2 = ActivityFactory.fromExportJson(JSON.parse(JSON.stringify(standardActivity)));
+        act2.favorites = [standardPostID];
         let actSet = new Set<Activity>([act1, act2]);
         /* Initialize a set of json Activity objects */
         let jsonAct1 = jsonActivity;
-        let jsonAct2 = {
-            upvotes: jsonPostIDSet,
-            downvotes: jsonPostIDSet,
-            favorites: {0: standardPostID},
-            submissions: jsonPostIDSet,
-            lastLogin: act1.lastLogin,
-        };
+        let jsonAct2 = JSON.parse(JSON.stringify(jsonActivity));
+        jsonAct2.favorites = [standardPostID];
         let jsonActs = {
             0: jsonAct1, 
             1: jsonAct2,
@@ -126,37 +109,24 @@ describe("testing entitySetToJson", () => {
     it("user: {act1, act2} -> {0:act1, 1:act2}", () => {
         /* Initialize a set of regular User objects */
         let user1 = standardUser;
-        let user2 = {
-            id: standardUserID,
-            info: standardProfile,
-            activity: {
-                upvotes: standardPostIDSet,
-                downvotes: standardPostIDSet,
-                favorites: new Set<PostID>([standardPostID]),
-                submissions: standardPostIDSet,
-                lastLogin: user1.activity.lastLogin,
-            },
-            account: standardAccount,
+        let user2 = JSON.parse(JSON.stringify(standardUser));
+        user2.activity = {
+            upvotes: standardPostIDSet,
+            downvotes: standardPostIDSet,
+            favorites: [standardPostID],
+            submissions: standardPostIDSet,
+            lastLogin: user1.activity.lastLogin,
         };
         let userSet = new Set<User>([user1, user2]);
         /* Initialize a set of json User objects */
-        let jsonUser1 = {
-            id: standardUserID,
-            info: jsonProfile,
-            activity: jsonActivity,
-            account: jsonAccount,
-        };
-        let jsonUser2 = {
-            id: standardUserID,
-            info: jsonProfile,
-            activity: {
-                upvotes: jsonPostIDSet,
-                downvotes: jsonPostIDSet,
-                favorites: {0: standardPostID},
-                submissions: jsonPostIDSet,
-                lastLogin: user1.activity.lastLogin,
-            },
-            account: jsonAccount,
+        let jsonUser1 = jsonUser;
+        let jsonUser2 = JSON.parse(JSON.stringify(jsonUser1));
+        jsonUser2.activity = {
+            upvotes: jsonPostIDSet,
+            downvotes: jsonPostIDSet,
+            favorites: [standardPostID],
+            submissions: jsonPostIDSet,
+            lastLogin: user1.activity.lastLogin,
         };
         let jsonUsers = {
             0: jsonUser1,
@@ -167,41 +137,14 @@ describe("testing entitySetToJson", () => {
     });
     it("post: {post1, post2} -> {0:post1, 1:post2}", () => {
         /* Initialize a set of regular Post objects */
-        /* Initialize a set of regular User objects */
         let post1 = standardPost;
-        let post2 = {
-            postID: "1",
-            userID:"2",
-            word:"3",
-            definition:"4",
-            quote:"5",
-            timestamp: post1.timestamp,
-            tags: new Set<Tag>(["a", "b"]),
-            userProfile: standardProfile,
-            trendscore: 15,
-            upvoteCount: 0,
-            downvoteCount: 0,
-            shareCount: 0,
-            flagCount: 0,
-        };
+        let post2 = JSON.parse(JSON.stringify(post1));
+        post2.trendscore = 15;
         let postSet = new Set<Post>([post1, post2]);
         /* Initialize a set of JSON Post objects */
         let jsonPost1 = jsonPost;
-        let jsonPost2 = {
-            postID: "1",
-            userID:"2",
-            word:"3",
-            definition:"4",
-            quote:"5",
-            timestamp: post1.timestamp,
-            tags: {0: "a", 1:"b"},
-            userProfile: jsonProfile,
-            trendscore: 15,
-            upvoteCount: 0,
-            downvoteCount: 0,
-            shareCount: 0,
-            flagCount: 0,
-        };
+        let jsonPost2 = JSON.parse(JSON.stringify(jsonPost));
+        jsonPost2.trendscore = 15;
         let jsonPosts = {
             0: jsonPost1,
             1: jsonPost2,
@@ -212,21 +155,13 @@ describe("testing entitySetToJson", () => {
     it("profile: {profile1, profile2} -> {0:profile1, 1:profile2}", () => {
         /* Initialize a set of standard Profile objects */
         let profile1 = standardProfile;
-        let profile2 = {
-            username: "a",
-            bio: "b",
-            picPath: "c",
-            inssajeom: 15,
-        };
+        let profile2 = JSON.parse(JSON.stringify(standardProfile));
+        profile2.inssajeom = 15;
         let profileSet = new Set<Profile>([profile1, profile2]);
         /* Initialize a set of json Profile objects */
         let jsonProfile1 = jsonProfile;
-        let jsonProfile2 = {
-            username: "a",
-            bio: "b",
-            picPath: "c",
-            inssajeom: 15,
-        };
+        let jsonProfile2 = JSON.parse(JSON.stringify(jsonProfile));
+        jsonProfile2.inssajeom = 15;
         let jsonProfiles = {
             0: jsonProfile1,
             1: jsonProfile2,
@@ -236,19 +171,13 @@ describe("testing entitySetToJson", () => {
     it("word: {word1, word2} -> {0:word1, 1:word2}", () => {
         /* Initialize a set of standard Word objects */
         let word1 = standardWord;
-        let word2 = {
-            wordString: "견박",
-            wordPosts: standardPostIDSet,
-            trendscore: 15,
-        };
+        let word2 = JSON.parse(JSON.stringify(standardWord));
+        word2.trendscore = 15; 
         let wordSet = new Set<Word>([word1, word2]);
         /* Initialize a set of json Word objects */
         let jsonWord1 = jsonWord;
-        let jsonWord2 = {
-            wordString: "견박",
-            wordPosts: jsonPostIDSet,
-            trendscore: 15,
-        };
+        let jsonWord2 = JSON.parse(JSON.stringify(jsonWord1));
+        jsonWord2.trendscore = 15; 
         let jsonWords = {
             0: jsonWord1,
             1: jsonWord2,
@@ -268,20 +197,13 @@ describe("testing jsonToEntitySet", () => {
     it("account: {acc1, acc2} <- {0:acc1, 1:acc2}", () => {
         /* Initialize a set of regular Account objects*/
         let acc1 = standardAccount;
-        let acc2 = {
-            signInMethod: 10,
-            emailFrequency: 30,
-        };
+        let acc2 = JSON.parse(JSON.stringify(standardAccount));
+        acc2.emailFrequency = 30;
         let accSet = new Set<Account>([acc1, acc2]);
         /* Initialize a set of json Account objects */
-        let jsonAcc1 = {
-            signInMethod: 10,
-            emailFrequency: 5,
-        };
-        let jsonAcc2 = {
-            signInMethod: 10,
-            emailFrequency: 30,
-        };
+        let jsonAcc1 = jsonAccount;
+        let jsonAcc2 = JSON.parse(JSON.stringify(jsonAccount));
+        jsonAcc2.emailFrequency = 30;
         let jsonAccs = {
             0: jsonAcc1,
             1: jsonAcc2,
@@ -291,23 +213,13 @@ describe("testing jsonToEntitySet", () => {
     it("activity: {act1, act2} -> {0:act1, 1:act2}", () => {
         /* Initialize a set of regular Activity objects */
         let act1 = standardActivity;
-        let act2 = {
-            upvotes: standardPostIDSet,
-            downvotes: standardPostIDSet,
-            favorites: new Set<PostID>([standardPostID]),
-            submissions: standardPostIDSet,
-            lastLogin: act1.lastLogin,
-        };
+        let act2 = ActivityFactory.fromExportJson(JSON.parse(JSON.stringify(standardActivity)));
+        act2.favorites = [standardPostID];
         let actSet = new Set<Activity>([act1, act2]);
         /* Initialize a set of json Activity objects */
         let jsonAct1 = jsonActivity;
-        let jsonAct2 = {
-            upvotes: jsonPostIDSet,
-            downvotes: jsonPostIDSet,
-            favorites: {0: standardPostID},
-            submissions: jsonPostIDSet,
-            lastLogin: act1.lastLogin,
-        };
+        let jsonAct2 = JSON.parse(JSON.stringify(jsonActivity));
+        jsonAct2.favorites = [standardPostID];
         let jsonActs = {
             0: jsonAct1, 
             1: jsonAct2,
@@ -317,37 +229,24 @@ describe("testing jsonToEntitySet", () => {
     it("user: {act1, act2} -> {0:act1, 1:act2}", () => {
         /* Initialize a set of regular User objects */
         let user1 = standardUser;
-        let user2 = {
-            id: standardUserID,
-            info: standardProfile,
-            activity: {
-                upvotes: standardPostIDSet,
-                downvotes: standardPostIDSet,
-                favorites: new Set<PostID>([standardPostID]),
-                submissions: standardPostIDSet,
-                lastLogin: user1.activity.lastLogin,
-            },
-            account: standardAccount,
+        let user2 = JSON.parse(JSON.stringify(standardUser));
+        user2.activity = {
+            upvotes: standardPostIDSet,
+            downvotes: standardPostIDSet,
+            favorites: [standardPostID],
+            submissions: standardPostIDSet,
+            lastLogin: user1.activity.lastLogin,
         };
         let userSet = new Set<User>([user1, user2]);
         /* Initialize a set of json User objects */
-        let jsonUser1 = {
-            id: standardUserID,
-            info: jsonProfile,
-            activity: jsonActivity,
-            account: jsonAccount,
-        };
-        let jsonUser2 = {
-            id: standardUserID,
-            info: jsonProfile,
-            activity: {
-                upvotes: jsonPostIDSet,
-                downvotes: jsonPostIDSet,
-                favorites: {0: standardPostID},
-                submissions: jsonPostIDSet,
-                lastLogin: user1.activity.lastLogin,
-            },
-            account: jsonAccount,
+        let jsonUser1 = jsonUser;
+        let jsonUser2 = JSON.parse(JSON.stringify(jsonUser1));
+        jsonUser2.activity = {
+            upvotes: jsonPostIDSet,
+            downvotes: jsonPostIDSet,
+            favorites: [standardPostID],
+            submissions: jsonPostIDSet,
+            lastLogin: user1.activity.lastLogin,
         };
         let jsonUsers = {
             0: jsonUser1,
@@ -358,41 +257,14 @@ describe("testing jsonToEntitySet", () => {
     });
     it("post: {post1, post2} -> {0:post1, 1:post2}", () => {
         /* Initialize a set of regular Post objects */
-        /* Initialize a set of regular User objects */
         let post1 = standardPost;
-        let post2 = {
-            postID: "1",
-            userID:"2",
-            word:"3",
-            definition:"4",
-            quote:"5",
-            timestamp: post1.timestamp,
-            tags: new Set<Tag>(["a", "b"]),
-            userProfile: standardProfile,
-            trendscore: 15,
-            upvoteCount: 0,
-            downvoteCount: 0,
-            shareCount: 0,
-            flagCount: 0,
-        };
+        let post2 = JSON.parse(JSON.stringify(post1));
+        post2.trendscore = 15;
         let postSet = new Set<Post>([post1, post2]);
         /* Initialize a set of JSON Post objects */
         let jsonPost1 = jsonPost;
-        let jsonPost2 = {
-            postID: "1",
-            userID:"2",
-            word:"3",
-            definition:"4",
-            quote:"5",
-            timestamp: post1.timestamp,
-            tags: {0: "a", 1:"b"},
-            userProfile: jsonProfile,
-            trendscore: 15,
-            upvoteCount: 0,
-            downvoteCount: 0,
-            shareCount: 0,
-            flagCount: 0,
-        };
+        let jsonPost2 = JSON.parse(JSON.stringify(jsonPost));
+        jsonPost2.trendscore = 15;
         let jsonPosts = {
             0: jsonPost1,
             1: jsonPost2,
@@ -403,21 +275,13 @@ describe("testing jsonToEntitySet", () => {
     it("profile: {profile1, profile2} -> {0:profile1, 1:profile2}", () => {
         /* Initialize a set of standard Profile objects */
         let profile1 = standardProfile;
-        let profile2 = {
-            username: "a",
-            bio: "b",
-            picPath: "c",
-            inssajeom: 15,
-        };
+        let profile2 = JSON.parse(JSON.stringify(standardProfile));
+        profile2.inssajeom = 15;
         let profileSet = new Set<Profile>([profile1, profile2]);
         /* Initialize a set of json Profile objects */
         let jsonProfile1 = jsonProfile;
-        let jsonProfile2 = {
-            username: "a",
-            bio: "b",
-            picPath: "c",
-            inssajeom: 15,
-        };
+        let jsonProfile2 = JSON.parse(JSON.stringify(jsonProfile));
+        jsonProfile2.inssajeom = 15;
         let jsonProfiles = {
             0: jsonProfile1,
             1: jsonProfile2,
@@ -427,19 +291,13 @@ describe("testing jsonToEntitySet", () => {
     it("word: {word1, word2} -> {0:word1, 1:word2}", () => {
         /* Initialize a set of standard Word objects */
         let word1 = standardWord;
-        let word2 = {
-            wordString: "견박",
-            wordPosts: standardPostIDSet,
-            trendscore: 15,
-        };
+        let word2 = JSON.parse(JSON.stringify(standardWord));
+        word2.trendscore = 15; 
         let wordSet = new Set<Word>([word1, word2]);
         /* Initialize a set of json Word objects */
         let jsonWord1 = jsonWord;
-        let jsonWord2 = {
-            wordString: "견박",
-            wordPosts: jsonPostIDSet,
-            trendscore: 15,
-        };
+        let jsonWord2 = JSON.parse(JSON.stringify(jsonWord1));
+        jsonWord2.trendscore = 15; 
         let jsonWords = {
             0: jsonWord1,
             1: jsonWord2,

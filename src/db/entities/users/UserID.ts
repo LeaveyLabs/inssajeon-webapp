@@ -1,8 +1,9 @@
-import { EntityFactory, jsonToStringSet, stringSetToJson } from "../jsonFormat";
+import { USERIDSET_TYPE_ERROR } from "../../strings/apiStringLibrary";
+import { EntityFactory, IndexedStringSet, jsonToStringSet, stringSetToJson, validatedObject } from "../jsonFormat";
 
 /* Defines the database type of UserID */
 export type UserID = string;
-export type UserIDSet = Set<UserID>;
+export type UserIDSet = Array<UserID>;
 
 export const UserIDSetFactory:EntityFactory = function () {};
 
@@ -11,7 +12,8 @@ export const UserIDSetFactory:EntityFactory = function () {};
  * @returns Object
  */
 UserIDSetFactory.toExportJson = (userIDSet:UserIDSet) : Object => {
-    return stringSetToJson(userIDSet);
+    if(Array.isArray(userIDSet)) return userIDSet as UserIDSet;
+    throw new TypeError(USERIDSET_TYPE_ERROR);
 }
 
 /**
@@ -19,5 +21,6 @@ UserIDSetFactory.toExportJson = (userIDSet:UserIDSet) : Object => {
  * @returns UserIDSet
  */
 UserIDSetFactory.fromExportJson = (json:any) : UserIDSet => {
-    return jsonToStringSet(json);
+    if(Array.isArray(json)) return json as UserIDSet;
+    throw new TypeError(USERIDSET_TYPE_ERROR);
 }

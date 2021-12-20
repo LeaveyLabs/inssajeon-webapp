@@ -20,8 +20,8 @@ export const ActivityFactory:EntityFactory = function () {};
  */
 ActivityFactory.toExportJson = (e:Activity) : Object => {
     /* 
-    Ensure the Activity JSON object has three keys 
-    (upvotes, favorites, submissions) each with 
+    Ensure the Activity JSON object has four keys 
+    (upvotes, downvotes, favorites, submissions) each with 
     indexed sets. 
     */
     const act:Activity = {
@@ -41,8 +41,8 @@ ActivityFactory.toExportJson = (e:Activity) : Object => {
 ActivityFactory.fromExportJson = (json:any) : Activity  => {
     const act:Activity = {
         /* 
-        Ensure the Activity Object has three PostIDSets
-        */
+        Ensure the Activity Object has four PostIDSets
+        */        
         upvotes: PostIDSetFactory.fromExportJson(json.upvotes),
         downvotes: PostIDSetFactory.fromExportJson(json.downvotes),
         favorites: PostIDSetFactory.fromExportJson(json.favorites),

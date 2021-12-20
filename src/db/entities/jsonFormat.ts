@@ -21,12 +21,15 @@ export interface IndexedStringSet {
  * {o0, o1, o2} -> {0:o0, 1:o1, 2:o2}
  */
 export const stringSetToJson = (set:Set<string>) : IndexedStringSet => {
+    // let entries:Array<string> = []
+    // set.forEach((value) => {entries.push(value)})
+    // return entries;
     let json:IndexedStringSet = {};
     let i = 0;
     /*
     For each string element, store it in an object with an index. 
     */
-    set.forEach((value) => {json[i++] = value;});
+    set.forEach((value) => { json[i++] = value} );
     return json;
 };
 
@@ -36,14 +39,14 @@ export const stringSetToJson = (set:Set<string>) : IndexedStringSet => {
  * @description Converts an indexed string set into a Set<string>
  * {0:o0, 1:o1, 2:o2} -> {o0, o1, o2}
  */
-export const jsonToStringSet = (json:IndexedStringSet) : Set<string> => {
+export const jsonToStringSet = (json:IndexedStringSet) : Set<string> => {    
     let stringSet = new Set<string>();
     let keySet = new Set(Object.keys(json));
     /*
     For each string in an indexed set, store it a set.
     */
-   keySet.forEach((key) => { stringSet.add(json[Number(key)]); });
-   return stringSet;
+    keySet.forEach((key) => { stringSet.add(json[Number(key)]); });
+    return stringSet;
 };
 
 /* Represents a sorted set indexed by order */
@@ -80,7 +83,7 @@ export const entitySetToJson = (entitySet:Set<Entity>, factory:EntityFactory) : 
  * @returns Set<Entity> - set of entities (i.e. Set<User>)
  * @description converts a json object with indexed json entities into an entity set
  */
- export const jsonToEntitySet = (json:any, factory:EntityFactory) : Set<Entity> => {
+ export const jsonToEntitySet = (json:any, factory:EntityFactory) : Set<Entity> => {    
     let entitySet = new Set<Entity>();
     let keySet = new Set(Object.keys(json));
     /*
@@ -98,13 +101,13 @@ export const entitySetToJson = (entitySet:Set<Entity>, factory:EntityFactory) : 
  */
 export const hasNullProperties = (o:any) : boolean => {
     let valueList = Object.values(o);
-    return !valueList.every((value) => { return value !== null });
+    return !valueList.every((value) => { return value !== null && value !== undefined });
 }
 
 /**
  * @param  {any} o - any indexed json object
  * @returns Object | null
- * @description will check if any propery of the object is null or undefined at runtime
+ * @description will check if any property of the object is null or undefined at runtime
  */
  export const validatedObject = (o:Object, msg:string) : Object => {
     /*

@@ -10,18 +10,20 @@ import { Word } from "../../../src/db/entities/words/Word";
 
 export const standardUserID:UserID = "aaaaabbyzhs12345";
 
-export const standardUserIDSet:UserIDSet = new Set<UserID>();
-export const jsonUserIDSet:Object = {}
+export const standardUserIDSet:UserIDSet = [];
+export const jsonUserIDSet:Object = [];
 
 export const standardPostID:PostID = "aaaaabbyzhs12345";
 
-export const standardPostIDSet:PostIDSet = new Set<PostID>();
-export const jsonPostIDSet:Object = {}
+export const standardPostIDSet:PostIDSet = [];
+export const jsonPostIDSet:Object = [];
 
 export const standardTag:Tag = "#yolodude"
 
-export const standardTagSet:TagSet = new Set<Tag>();
-export const jsonTagSet:Object = {}
+export const standardTagSet:TagSet = [];
+export const jsonTagSet:Object = [];
+
+export const time = new Date();
 
 /* Account */
 export const standardAccount:Account = {
@@ -70,7 +72,7 @@ export const standardPost:Post = {
     word:"3",
     definition:"4",
     quote:"5",
-    timestamp: new Date(),
+    timestamp: time,
     tags: standardTagSet,
     userProfile: standardProfile,
     trendscore: 10,
@@ -86,7 +88,7 @@ export const jsonPost = {
     word:"3",
     definition:"4",
     quote:"5",
-    timestamp: new Date(),
+    timestamp: time,
     tags: jsonTagSet,
     userProfile: jsonProfile,
     trendscore: 10,

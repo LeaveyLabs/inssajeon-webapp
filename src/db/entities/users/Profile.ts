@@ -18,7 +18,13 @@ export const ProfileFactory:EntityFactory = function () {};
  * @description converts a profile into a database-exportable json object
  */
 ProfileFactory.toExportJson = (profile:Profile) : Object => { 
-    return validatedObject(profile, PROFILE_TYPE_ERROR); 
+    const json:Profile =  {
+        username: profile.username, 
+        bio: profile.bio,
+        picPath: profile.picPath,
+        inssajeom: profile.inssajeom,
+    };
+    return validatedObject(json, PROFILE_TYPE_ERROR); 
 };
 
 /**
