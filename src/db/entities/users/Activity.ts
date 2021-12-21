@@ -1,3 +1,4 @@
+import { Timestamp } from "firebase/firestore";
 import {ACTIVITY_TYPE_ERROR} from "../../strings/apiStringLibrary";
 import {EntityFactory, IDictionary, validatedObject} from '../jsonFormat';
 import {PostIDSet, PostIDSetFactory} from '../posts/PostID';
@@ -8,7 +9,7 @@ export interface Activity extends IDictionary<Object> {
     downvotes: PostIDSet;
     favorites: PostIDSet;
     submissions: PostIDSet;
-    lastLogin: Date;
+    lastLogin: Timestamp;
 };
 
 /* Converts between JSON strings and Activity Objects */
@@ -29,7 +30,7 @@ ActivityFactory.toExportJson = (e:Activity) : Object => {
         downvotes: PostIDSetFactory.toExportJson(e.downvotes),
         favorites: PostIDSetFactory.toExportJson(e.favorites),
         submissions: PostIDSetFactory.toExportJson(e.submissions),
-        lastLogin: e.lastLogin, 
+        lastLogin: e.lastLogin,
     }
     return validatedObject(act, ACTIVITY_TYPE_ERROR);
 };

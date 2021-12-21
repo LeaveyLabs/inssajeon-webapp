@@ -1,3 +1,4 @@
+import { Timestamp } from 'firebase/firestore';
 import { POST_TYPE_ERROR } from '../../strings/apiStringLibrary';
 import { EntityFactory, IDictionary, validatedObject } from '../jsonFormat';
 import { Profile, ProfileFactory } from '../users/Profile';
@@ -11,7 +12,7 @@ export interface Post extends IDictionary<Object> {
     readonly word: string;
     readonly definition: string;
     readonly quote: string;
-    readonly timestamp: Date;
+    readonly timestamp: Timestamp;
     readonly tags: TagSet;
     userProfile: Profile;
     trendscore: number;
@@ -32,13 +33,13 @@ PostFactory.toExportJson = (post:Post) : Object => {
     Primitives are copied over. 
     Entities are funnelled through. 
     */
-    const o:Post = {
+    const o = {
         postID: post.postID,
         userID: post.userID,
         word: post.word,
         definition: post.definition,
         quote: post.quote,
-        timestamp: post.timestamp, 
+        timestamp: post.timestamp,
         tags: TagSetFactory.toExportJson(post.tags), 
         userProfile: ProfileFactory.toExportJson(post.userProfile),
         trendscore: post.trendscore,
@@ -66,7 +67,7 @@ PostFactory.fromExportJson = (json:any) : Post => {
         word: json.word,
         definition: json.definition,
         quote: json.quote,
-        timestamp: json.timestamp, 
+        timestamp: json.timestamp,
         tags: TagSetFactory.fromExportJson(json.tags), 
         userProfile: ProfileFactory.fromExportJson(json.userProfile),
         trendscore: json.trendscore,

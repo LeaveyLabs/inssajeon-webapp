@@ -1,17 +1,25 @@
 import { collection, doc, getDocs, getFirestore, setDoc } from "firebase/firestore"; 
-import { userDatabase } from "../../../src/db/apis/dbRefs";
-import dotenv from "dotenv";
-import firebaseApp from "../../../src/firebase";
+import { postDatabase, userDatabase, wordDatabase } from "../../../src/db/apis/dbRefs";
 import { DataQuery } from "../../../src/db/apis/DataQuery";
-
-dotenv.config({path: '.env.local'});
+import { executeInDatabase, Verifier } from "./dbTestEnv";
+import { UserFactory } from "../../../src/db/entities/users/User";
 
 /* Query.searchUserProfile */
 describe("testing firebase", () => {
-    it.only("checking if firebase is initialized", async () => {
-        const docs = await getDocs(userDatabase);
+    it("checking if firebase is initialized", async () => {
+        await getDocs(userDatabase);
     });
-    it.only("running with empty profile", async () => {
-        await DataQuery.searchUserProfile({});
+    it.only("every profile uploaded should exist", async () : Promise<void> => {
+        await executeInDatabase(async (verifier:Verifier) : Promise<void> => {
+            const userList = Array.from(verifier.users);
+            /*
+            For each user uploaded, search their profile in the database. 
+            If they exist, then expect their result to be equal to the one on the database.
+            */
+            for(const user of userList) {
+                const queryResult = await DataQuery.searchUserProfile(user.info);
+                queryResult.forEach((result) => expect(result).toStrictEqual(user));
+            }
+        });
     });
 });

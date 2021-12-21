@@ -1,7 +1,7 @@
 // export const USER_USERID_HEADER = "id";
 // export const USER_ACCOUNT_HEADER = "account";
 // export const USER_ACTIVITY_HEADER = "activity";
-// export const USER_PROFILE_HEADER = "info";
+export const USER_PROFILE_HEADER = "info";
 export const USER_TYPE_ERROR = "Incorrect formatting of User data.";
 
 export const USERIDSET_TYPE_ERROR = "Incorrect formatting of UserIDSet data.";
