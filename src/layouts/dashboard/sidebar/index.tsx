@@ -9,7 +9,7 @@ import useCollapseSidebar from '../../../hooks/useCollapseSidebar';
 // utils
 import cssStyles from '../../../utils/cssStyles';
 // config
-import { SIDEBAR_WIDTH } from '../../../config';
+import { SIDEBAR_WIDTH_DESKTOP, SIDEBAR_WIDTH_MOBILE } from '../../../config';
 // components
 import Scrollbar from '../../../components/Scrollbar';
 import NavSection from '../../../components/nav-section';
@@ -77,7 +77,7 @@ export default function Sidebar({ isOpenSidebar, onCloseSidebar }: Props) {
     <RootStyle
       sx={{
         width: {
-          desktop: SIDEBAR_WIDTH,
+          desktop: SIDEBAR_WIDTH_DESKTOP,
         },
       }}
     >
@@ -86,7 +86,7 @@ export default function Sidebar({ isOpenSidebar, onCloseSidebar }: Props) {
           anchor={'right'}
           open={isOpenSidebar}
           onClose={onCloseSidebar}
-          PaperProps={{ sx: { width: SIDEBAR_WIDTH } }}
+          PaperProps={{ sx: { width: SIDEBAR_WIDTH_MOBILE } }}
         >
           {renderContent}
         </Drawer>
@@ -99,7 +99,7 @@ export default function Sidebar({ isOpenSidebar, onCloseSidebar }: Props) {
           variant="persistent"
           PaperProps={{
             sx: {
-              width: SIDEBAR_WIDTH,
+              width: SIDEBAR_WIDTH_DESKTOP,
               borderLeftStyle: 'dashed',
               bgcolor: 'background.default',
             },
