@@ -4,7 +4,7 @@ import { Container, Typography, Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
 // components
 import Page from '../../components/Page';
-import PostCard from 'src/components/post/PostCard';
+import Feed from 'src/components/feed/Feed';
 //firebase
 import firebaseApp from 'src/firebase';
 import { query, orderBy, limit, collection, getFirestore, getDocs, where } from "firebase/firestore";
@@ -12,41 +12,6 @@ const database = getFirestore(firebaseApp)
 
 // ----------------------------------------------------------------------
 
-// type Post = {
-//   ID: string,
-//   userID: string,
-//   word: string,
-//   description: string,
-//   quote: string,
-//   tags: string[],
-//   upvotes: string[],
-//   downvotes: string[],
-//   shares: string[],
-//   flags: string[],
-//   //Profile: posterProfile;
-//   timestamp: Date,
-//   trendscore: number; //should we store firebase "number" as int or double or what
-// };
-
-// type User = {
-//   ID: string,
-//   userID: string,
-//   word: string,
-//   description: string,
-//   quote: string,
-//   tags: string[],
-//   upvotes: string[],
-//   downvotes: string[],
-//   shares: string[],
-//   flags: string[],
-//   //Profile: posterProfile;
-//   timestamp: Date,
-//   trendscore: number; //should we store firebase "number" as int or double or what
-// };
-
-// Post post = new Post()
-// User user = new User()
-// User poster = new User()
 
 export default function HomePage() {
 
@@ -80,20 +45,10 @@ export default function HomePage() {
 
   return (
     <Page title="홈">
-      <Container maxWidth='tablet'>
-        <Stack spacing={3}>
-          <PostCard/>
-          <PostCard/>
-          <PostCard/>
-          <PostCard/>
-          {/* {posts.map((post) => (
-            <PostCard 
-              key={post.id} 
-              post={post} 
-              />
-          ))} */}
-        </Stack>
-      </Container>
+      {/* pass the posts from firebase into the feed below */}
+      {/* pass a function like "onRequestMorePosts" */}
+      {/* also pass a function like onUpvote, onDownvote, etc? */}
+      <Feed/>
     </Page>
   );
 }

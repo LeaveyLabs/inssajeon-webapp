@@ -1,15 +1,13 @@
 import { useState, useRef } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 // @mui
+import { styled } from '@mui/material/styles';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import IosShareIcon from '@mui/icons-material/IosShare';
-import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
-import ArrowCircleUpTwoToneIcon from '@mui/icons-material/ArrowCircleUpTwoTone';
-import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
-import ArrowCircleDownTwoToneIcon from '@mui/icons-material/ArrowCircleDownTwoTone';
 import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
+import CircleIcon from '@mui/icons-material/Circle';
 import {
   Box,
   Link,
@@ -18,6 +16,7 @@ import {
   Paper,
   Avatar,
   Checkbox,
+  Divider,
   TextField,
   Typography,
   CardHeader,
@@ -28,20 +27,58 @@ import {
   Radio,
   Button,
 } from '@mui/material';
-import { green, pink } from '@mui/material/colors';
+import { green, pink, red } from '@mui/material/colors';
 
 // utils
 // import { fDate } from '../../../../utils/formatTime';
 // import { fShortenNumber } from '../../../../utils/formatNumber';
 // // components
 import PostMoreMenu from 'src/components/post/PostMoreMenu'
-import VoteButtonAnimate from '../animate/VoteButtonAnimate';
+import VotePanel from './VotePanel';
 // import Image from '../../../../components/Image';
 // import Iconify from '../../../../components/Iconify';
 // import MyAvatar from '../../../../components/MyAvatar';
 // import EmojiPicker from '../../../../components/EmojiPicker';
 
+
 // ----------------------------------------------------------------------
+
+
+// type Post = {
+//   ID: string,
+//   userID: string,
+//   word: string,
+//   description: string,
+//   quote: string,
+//   tags: string[],
+//   upvotes: string[],
+//   downvotes: string[],
+//   shares: string[],
+//   flags: string[],
+//   //Profile: posterProfile;
+//   timestamp: Date,
+//   trendscore: number; //should we store firebase "number" as int or double or what
+// };
+
+// type User = {
+//   ID: string,
+//   userID: string,
+//   word: string,
+//   description: string,
+//   quote: string,
+//   tags: string[],
+//   upvotes: string[],
+//   downvotes: string[],
+//   shares: string[],
+//   flags: string[],
+//   //Profile: posterProfile;
+//   timestamp: Date,
+//   trendscore: number; //should we store firebase "number" as int or double or what
+// };
+
+// Post post = new Post()
+// User user = new User()
+// User poster = new User()
 
 // interface Props {
 //   post: Post;
@@ -101,44 +138,36 @@ export default function PostCard(/*{ post }: Props*/) {
   //https://github.com/jcoreio/material-ui-popup-state
   return (
     <Card>
-      <CardHeader
-        disableTypography //allows you to use custom typography
-        avatar={<AccountCircleIcon />}
-        title={
-          <Link to={`/users/102984019284091`} variant="subtitle2" color="text.primary" component={RouterLink}>
+      <Box sx={{ px:2, height:60, display:'flex', flexDirection: "row", alignItems:"center", justifyContent:"center", }}>
+        <AccountCircleIcon sx={{mx:1}} />
+        <Link to={`/users/102984019284091`} variant="subtitle1" color="text.primary" component={RouterLink}>
             김아담 {/*post.userID*/}
           </Link>
-        }
-        subheader={
-          <Typography variant="caption" sx={{ display: 'block', color: 'text.secondary' }}>
-            2일 전에{/*fDate(post.createdAt)*/}
-          </Typography>
-        }
-        action={<PostMoreMenu/>}
-      />
-
+        <CircleIcon sx={{ fontSize: 5, ml:2 }}/>
+        <Typography variant="caption" sx={{ mx:2,color: 'text.secondary' }}>
+          2일 전에{/*fDate(post.createdAt)*/}
+        </Typography>
+        <LocalFireDepartmentIcon sx={{ color: red[500] }}/>
+        <Box sx={{ flexGrow: 1 }} />
+        <PostMoreMenu/>
+      </Box>
+      <Divider variant="middle" />
       <Stack spacing={3} sx={{ p: 3 }}>
         <Typography variant="h1">단어</Typography>
         <Typography variant="body1">ㅁㄴㅇㄹㅁㄴㅇㄹ</Typography>
         <Typography variant="body3">ㅋㅋㅋㅋㅋㅋㅋ</Typography>
-        <Stack direction="row" alignItems="center">
-          <IconButton onClick={handleToggleUpvote}>
-            {isUpvoted ? <ArrowCircleUpTwoToneIcon sx={{ fontSize:40, color: green[500] }}/> : <ArrowCircleUpIcon fontSize="medium" /> }
-          </IconButton>
-          {upvotes-downvotes+".3천"  /*fShortenNumber(likes)*/}
-          <VoteButtonAnimate onClick={handleToggleDownvote}>
-            {isDownvoted ? <ArrowCircleDownTwoToneIcon sx={{ fontSize:40, color: pink[500] }} /> : <ArrowCircleDownIcon fontSize="medium" /> }
-          </VoteButtonAnimate>
-          <Box sx={{ flexGrow: 1 }} />
-          <IconButton onClick={handleToggleFavorited}>
-            {isFavorited ? <BookmarkIcon /> : <BookmarkBorderIcon/>}
-          </IconButton>
-          <IconButton onClick={handleShare}>
-            <IosShareIcon />
-          </IconButton>
-        </Stack>
-
       </Stack>
+      <Divider variant="middle" />
+      <Box sx={{ p:2, height:60, display:'flex', flexDirection: "row", alignItems:"center", justifyContent:"center", }}>
+        <VotePanel/>
+        <Box sx={{ flexGrow: 1 }} />
+        <IconButton onClick={handleToggleFavorited}>
+          {isFavorited ? <BookmarkIcon /> : <BookmarkBorderIcon/>}
+        </IconButton>
+        <IconButton onClick={handleShare}>
+          <IosShareIcon />
+        </IconButton>
+      </Box>
     </Card>
   );
 }

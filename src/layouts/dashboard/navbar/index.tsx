@@ -11,7 +11,6 @@ import cssStyles from '../../../utils/cssStyles';
 import {
   SIDEBAR_WIDTH,
   NAVBAR_HEIGHT,
-  SIDEBAR_COLLAPSE_WIDTH,
 } from '../../../config';
 // components
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
@@ -25,6 +24,9 @@ import ClickwableWideLogo from '../../../components/ClickableWideLogo';
 const RootStyle = styled(AppBar)(({ theme }) => ({
   boxShadow: 'none',
   ...cssStyles(theme).bgBlur(),
+  [theme.breakpoints.up('desktop')]: {
+    marginRight: SIDEBAR_WIDTH/2, //this divide by 2 quirk works because .. the containing div above is also restricted to SIDEBAR_WIDTH.. i think
+  },
 }));
 
 const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
@@ -43,17 +45,17 @@ export default function Navbar({ onOpenSidebar }: Props) {
   return (
       <RootStyle >
         <ToolbarStyle>
-          <Container maxWidth={'tablet'} sx={{height:40,}}>
+          <Container  maxWidth={'tablet'}>
             {/* alignItems can be adjusted to move the things in the search bar up/down relative to one another*/}
-            <Box sx={{display:'flex',  flexDirection: 'row', alignItems: 'flex-start'}}>
+            <Box sx={{display:'flex',  flexDirection: 'row', alignItems: 'center'}}>
               <ClickwableWideLogo />
               <Box sx={{ flexGrow: 1 }} />
               <Searchbar />
               {!isDesktop && (
-                <IconButtonAnimate onClick={onOpenSidebar} sx={{ mr: 1, color: 'text.primary' }}>
+                <IconButtonAnimate onClick={onOpenSidebar} sx={{ mr: 0,mt:0, color: 'text.primary' }}>
                   <Badge badgeContent={2} color="error">
                     <MenuRoundedIcon fontSize='large' />
-                  </Badge>
+                  </Badge> 
                 </IconButtonAnimate>
               )}
             </Box>

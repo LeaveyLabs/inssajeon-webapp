@@ -62,9 +62,9 @@ declare module '@mui/material' {
 
 // SETUP COLORS
 const PRIMARY = {
-  lighter: '#C8FACD',
+  lighter: '#C8FACD', //LIGHT/DARK IS INCORRECT. NEED TO DO A FULL PALLETTE UPDATE LATER
   light: '#5BE584',
-  main: '#00AB55',
+  main: '#629AA2',
   dark: '#007B55',
   darker: '#005249',
 };

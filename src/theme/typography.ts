@@ -30,7 +30,7 @@ const typography = {
     // ...responsiveFontSizes({ mobile: 26, desktop: 32 }),
   },
   h4: {
-    fontWeight: 700,
+    fontWeight: 500,
     lineHeight: 1.5,
     fontSize: pxToRem(20),
     // ...responsiveFontSizes({ mobile: 20, desktop: 24 }),
@@ -50,7 +50,7 @@ const typography = {
   subtitle1: {
     fontWeight: 600,
     lineHeight: 1.5,
-    fontSize: pxToRem(16),
+    fontSize: pxToRem(18),
   },
   subtitle2: {
     fontWeight: 600,

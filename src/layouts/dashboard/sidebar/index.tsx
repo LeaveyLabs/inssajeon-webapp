@@ -9,7 +9,7 @@ import useCollapseSidebar from '../../../hooks/useCollapseSidebar';
 // utils
 import cssStyles from '../../../utils/cssStyles';
 // config
-import { SIDEBAR_WIDTH, SIDEBAR_COLLAPSE_WIDTH } from '../../../config';
+import { SIDEBAR_WIDTH } from '../../../config';
 // components
 import Scrollbar from '../../../components/Scrollbar';
 import NavSection from '../../../components/nav-section';
@@ -63,14 +63,13 @@ export default function Sidebar({ isOpenSidebar, onCloseSidebar }: Props) {
           pb: 2,
           px: 2.5,
           flexShrink: 0,
-          ...(isCollapse && { alignItems: 'center' }),
         }}
       >
         <SidebarAccount isCollapse={isCollapse} />
       </Stack>
       <NavSection navConfig={sidebarConfig} isCollapse={isCollapse} />
       <Box sx={{ flexGrow: 1 }} />
-      {!isCollapse && <SidebarFooter />}
+      <SidebarFooter />
     </Scrollbar>
   );
 
@@ -78,7 +77,7 @@ export default function Sidebar({ isOpenSidebar, onCloseSidebar }: Props) {
     <RootStyle
       sx={{
         width: {
-          desktop: isCollapse ? SIDEBAR_COLLAPSE_WIDTH : SIDEBAR_WIDTH,
+          desktop: SIDEBAR_WIDTH,
         },
       }}
     >
@@ -103,13 +102,6 @@ export default function Sidebar({ isOpenSidebar, onCloseSidebar }: Props) {
               width: SIDEBAR_WIDTH,
               borderLeftStyle: 'dashed',
               bgcolor: 'background.default',
-              transition: (theme) =>
-                theme.transitions.create('width', {
-                  duration: theme.transitions.duration.standard,
-                }),
-              ...(isCollapse && {
-                width: SIDEBAR_COLLAPSE_WIDTH,
-              }),
             },
           }}
         >

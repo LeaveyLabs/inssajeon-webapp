@@ -1,59 +1,29 @@
 import { useState } from 'react';
 // @mui
 import { styled, alpha } from '@mui/material/styles';
-import { Input, Slide, Button, InputAdornment, ClickAwayListener } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+
 // utils
 import cssStyles from '../../../utils/cssStyles';
 // components
-import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
-import { IconButtonAnimate } from '../../../components/animate';
 
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
-
-
-// ----------------------------------------------------------------------
-
-// const APPBAR_MOBILE = 64;
-// const APPBAR_DESKTOP = 92;
-
-// const SearchbarStyle = styled('div')(({ theme }) => ({
-//   ...cssStyles(theme).bgBlur(),
-//   top: 0,
-//   left: 0,
-//   zIndex: 99,
-//   width: '100%',
-//   display: 'flex',
-//   position: 'absolute',
-//   alignItems: 'center',
-//   height: APPBAR_MOBILE,
-//   padding: theme.spacing(0, 3),
-//   boxShadow: theme.customShadows.z8,
-//   [theme.breakpoints.up('desktop')]: {
-//     height: APPBAR_DESKTOP,
-//     padding: theme.spacing(0, 5),
-//   },
-// }));
+import { borderColor } from '@mui/system';
 
 // ----------------------------------------------------------------------
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.black, 0.15),
-  '&:hover': {
-    backgroundColor: alpha(theme.palette.common.black, 0.25),
-  },
-  marginLeft: 0,
-  width: '100%',
-  [theme.breakpoints.up('tablet')]: {
-    marginLeft: theme.spacing(1),
-    width: 'auto',
-  },
+  backgroundColor: alpha(theme.palette.common.black, 0.05),
+  marginLeft: theme.spacing(2),
+  marginRight: theme.spacing(1),
+  width: 'auto',
 }));
 
 const SearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 2),
+  padding: theme.spacing(0, 1),
   height: '100%',
   position: 'absolute',
   pointerEvents: 'none',
@@ -63,76 +33,52 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
 }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
   '& .MuiInputBase-input': {
     padding: theme.spacing(1, 1, 1, 0),
     // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    paddingLeft: `calc(1em + ${theme.spacing(3)})`,
     transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('tablet')]: {
-      width: '12ch',
+    borderRadius: theme.shape.borderRadius,
+    border: 5,
+    '&:focus': {
+      backgroundColor: alpha(theme.palette.primary.main, 0.1),
+      boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 2px`,
+    },
+    '&:hover': {
+      backgroundColor: alpha(theme.palette.primary.main, 0.1),
+    },
+    [theme.breakpoints.up('mobile')]: {
+      width: '5ch',
       '&:focus': {
-        width: '20ch',
+        width: '12ch',
       },
     },
+    [theme.breakpoints.up('tablet')]: {
+      width: '10ch',
+      '&:focus': {
+        width: '25ch',
+      },
+    },
+    [theme.breakpoints.up('desktop')]: {
+      width: '20ch',
+      '&:focus': {
+        width: '35ch',
+      },
+    },
+    
   },
 }));
 
 
 export default function Searchbar() {
-  // const [isOpen, setOpen] = useState(false);
-
-  // const handleOpen = () => {
-  //   setOpen((prev) => !prev);
-  // };
-
-  // const handleClose = () => {
-  //   setOpen(false);
-  // };
+  const theme = useTheme();
 
   return (
-    
-    <Search>
+    <Search >
       <SearchIconWrapper>
-        <SearchIcon />
+        <SearchIcon color='primary' />
       </SearchIconWrapper>
-      <StyledInputBase
-        placeholder="Search…"
-        inputProps={{ 'aria-label': 'search' }}
-      />
+      <StyledInputBase placeholder="겸색..." inputProps={{ 'aria-label': 'search' }} />
     </Search>
-    
-    
-    
-    // <ClickAwayListener onClickAway={handleClose}>
-    //   <div>
-    //     {!isOpen && (
-    //       <IconButtonAnimate onClick={handleOpen}>
-    //         <SearchRoundedIcon fontSize="large"/>
-    //       </IconButtonAnimate>
-    //     )}
-
-    //     <Slide direction="down" in={isOpen} mountOnEnter unmountOnExit>
-    //       <SearchbarStyle>
-    //         <Input
-    //           autoFocus
-    //           fullWidth
-    //           disableUnderline
-    //           placeholder="Search…"
-    //           startAdornment={
-    //             <InputAdornment position="start">
-    //               <SearchRoundedIcon fontSize="large"/>
-    //             </InputAdornment>
-    //           }
-    //           sx={{ mr: 1, fontWeight: 'fontWeightBold' }}
-    //         />
-    //         <Button variant="contained" onClick={handleClose}>
-    //           Search
-    //         </Button>
-    //       </SearchbarStyle>
-    //     </Slide>
-    //   </div>
-    // </ClickAwayListener>
   );
 }

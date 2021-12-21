@@ -12,7 +12,7 @@ interface Props extends BoxProps {
 export default function ClickwableWideLogo({ disabledLink = false, sx }: Props) {
 
   const logo = (
-    <Box sx={{ width: 150, height: 30, ...sx }}>
+    <Box sx={{ width: 150, height: 40, ...sx }}>
       <WideLogoSVG/>
     </Box>
   );

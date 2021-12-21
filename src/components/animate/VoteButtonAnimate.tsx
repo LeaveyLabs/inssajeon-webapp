@@ -8,7 +8,7 @@ import { Box, IconButton, IconButtonProps } from '@mui/material';
 const VoteButtonAnimate = forwardRef<HTMLButtonElement, IconButtonProps>(
   ({ children, size = 'medium', ...other }, ref) => (
     <AnimateWrap size={size}>
-      <IconButton size={size} ref={ref} {...other}>
+      <IconButton size={size} disableRipple={true}  ref={ref} {...other} >
         {children}
       </IconButton>
     </AnimateWrap>
@@ -26,17 +26,17 @@ type AnimateWrapProp = {
 
 const varSmall = {
   hover: { scale: 1.3 },
-  tap: { scale: 0.7 },
+  tap: { scale: 0.8 },
 };
 
 const varMedium = {
   hover: { scale: 1.3 },
-  tap: { scale: 0.7 },
+  tap: { scale: 0.8 },
 };
 
 const varLarge = {
   hover: { scale: 1.3 },
-  tap: { scale: 0.7 },
+  tap: { scale: 0.8 },
 };
 
 function AnimateWrap({ size, children }: AnimateWrapProp) {
