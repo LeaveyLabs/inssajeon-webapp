@@ -32,7 +32,7 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
   justifyContent: 'center',
 }));
 
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
+const StyledInputBase = styled(InputBase)(({ theme  }) => ({
   '& .MuiInputBase-input': {
     padding: theme.spacing(1, 1, 1, 0),
     // vertical padding + font size from searchIcon
@@ -62,23 +62,28 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     [theme.breakpoints.up('desktop')]: {
       width: '20ch',
       '&:focus': {
-        width: '35ch',
+        width: '350ch',
       },
     },
     
   },
 }));
 
+// type SearchbarProps = {
+//   handleFocus: VoidFunction;
+// };
 
-export default function Searchbar() {
+export default function Searchbar(  ) {
   const theme = useTheme();
 
   return (
-    <Search >
-      <SearchIconWrapper>
-        <SearchIcon color='primary' />
-      </SearchIconWrapper>
-      <StyledInputBase placeholder="겸색..." inputProps={{ 'aria-label': 'search' }} />
-    </Search>
+    // <ClickAwayListener onClickAway={handleToggleFocus}>
+      <Search >
+        <SearchIconWrapper>
+          <SearchIcon color='primary' />
+        </SearchIconWrapper>
+        <StyledInputBase  placeholder="겸색..." inputProps={{ 'aria-label': 'search' }} />
+      </Search>
+    // </ClickAwayListener>
   );
 }
