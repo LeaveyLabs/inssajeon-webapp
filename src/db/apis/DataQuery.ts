@@ -1,9 +1,10 @@
 import { User } from "firebase/auth";
 import { Profile, ProfileFactory } from "../entities/users/Profile";
-import { POST_DIR, PROFILE_TYPE_ERROR, USER_DIR, USER_PROFILE_HEADER, USER_TYPE_ERROR, WORD_DIR } from "../strings/apiStringLibrary";
+import { POST_DIR, POST_TAGS_HEADER, PROFILE_TYPE_ERROR, USER_DIR, USER_PROFILE_HEADER, USER_TYPE_ERROR, WORD_DIR } from "../strings/apiStringLibrary";
 import { collection, doc, getDocs, getFirestore, query, setDoc, where } from "firebase/firestore"; 
-import { userDatabase } from "./dbRefs";
+import { postDatabase, userDatabase } from "./dbRefs";
 import { UserFactory } from "../entities/users/User";
+import { Post, PostFactory } from "../entities/posts/Post";
 
 export const DataQuery = function () {};
 
@@ -34,3 +35,41 @@ export const DataQuery = function () {};
     });
     return validUserResults;
 };
+
+/**
+ * @param  {string} tag - tag to search
+ * @returns Promise<Array<Post>> - posts that match that tag
+ * @description queries the firebase database to find all posts with a tag
+ */
+DataQuery.searchTag = async (tag: string) : Promise<Array<Post>> => {
+    /*
+    Query all posts with an identical tag.
+    */
+    const tagQuery = query(postDatabase, where(POST_TAGS_HEADER, "array-contains", tag));
+    const tagQueryResult = await getDocs(tagQuery);
+    /*
+    Validate that the results are well-formed posts.
+    */
+    const validPostResults:Array<Post> = [];
+    tagQueryResult.forEach((post) => {
+        /* Check whether profile match is a valid User interface */
+        try { validPostResults.push(PostFactory.fromExportJson(post.data()));}
+        catch (e) {/* Invalid users are skipped. */ }
+    });
+    return validPostResults;
+};
+
+DataQuery.searchPostID = function () {};
+
+DataQuery.searchUserID = function () {};
+
+DataQuery.searchWord = function () {};
+
+
+const nearWords = (word:string) => {
+    throw Error("Not implemented");
+}
+const nearTags = (word:string) => {
+    throw Error("Not implemented");
+}
+
