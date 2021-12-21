@@ -41,7 +41,7 @@ export default function PageNotFound() {
             </Typography>
 
             <m.div variants={varBounce().in}>
-              <PageNotFoundIllustration sx={{ height: 260, my: { xs: 5, sm: 10 } }} />
+              <PageNotFoundIllustration sx={{ height: 260, my: { mobile: 5 } }} />
             </m.div>
 
             <Button to="/" size="large" variant="contained" component={RouterLink}>
