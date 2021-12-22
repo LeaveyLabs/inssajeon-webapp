@@ -1,4 +1,4 @@
-import { USERIDSET_TYPE_ERROR } from "../../strings/apiStringLibrary";
+import { USERIDSET_TYPE_ERROR } from "../../strings/apiConstLibrary";
 import { EntityFactory, IndexedStringSet, jsonToStringSet, stringSetToJson, validatedObject } from "../jsonFormat";
 
 /* Defines the database type of UserID */

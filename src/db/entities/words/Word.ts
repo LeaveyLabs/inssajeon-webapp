@@ -1,4 +1,4 @@
-import { WORD_TYPE_ERROR } from "../../strings/apiStringLibrary";
+import { WORD_TYPE_ERROR } from "../../strings/apiConstLibrary";
 import { EntityFactory, IDictionary, validatedObject } from "../jsonFormat";
 import { PostIDSet, PostIDSetFactory } from "../posts/PostID";
 

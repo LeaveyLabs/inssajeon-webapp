@@ -1,4 +1,4 @@
-import {USER_TYPE_ERROR} from "../../strings/apiStringLibrary";
+import {USER_TYPE_ERROR} from "../../strings/apiConstLibrary";
 
 import {Profile, ProfileFactory} from './Profile';
 import {Activity, ActivityFactory} from './Activity';

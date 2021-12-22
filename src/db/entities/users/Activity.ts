@@ -1,5 +1,5 @@
 import { Timestamp } from "firebase/firestore";
-import {ACTIVITY_TYPE_ERROR} from "../../strings/apiStringLibrary";
+import {ACTIVITY_TYPE_ERROR} from "../../strings/apiConstLibrary";
 import {EntityFactory, IDictionary, validatedObject} from '../jsonFormat';
 import {PostIDSet, PostIDSetFactory} from '../posts/PostID';
 

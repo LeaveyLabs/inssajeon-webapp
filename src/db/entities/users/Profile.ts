@@ -1,4 +1,4 @@
-import { PROFILE_TYPE_ERROR } from "../../strings/apiStringLibrary";
+import { PROFILE_TYPE_ERROR } from "../../strings/apiConstLibrary";
 import { EntityFactory, IDictionary, validatedObject } from "../jsonFormat";
 
 /* Holds user's personal profile information */

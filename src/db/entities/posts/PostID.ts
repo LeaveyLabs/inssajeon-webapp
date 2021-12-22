@@ -1,4 +1,4 @@
-import { POSTIDSET_TYPE_ERROR } from "../../strings/apiStringLibrary";
+import { POSTIDSET_TYPE_ERROR } from "../../strings/apiConstLibrary";
 import { EntityFactory, IndexedEntitySet, IndexedStringSet, jsonToStringSet, stringSetToJson, validatedObject } from "../jsonFormat";
 
 /* Defines the database type of PostID */

@@ -1,6 +1,6 @@
 import { collection, getFirestore } from "firebase/firestore";
 import firebaseApp from "../../firebase"
-import { POST_DIR, USER_DIR, WORD_DIR } from "../strings/apiStringLibrary";
+import { POST_DIR, USER_DIR, WORD_DIR } from "../strings/apiConstLibrary";
 import { getStorage } from "firebase/storage";
 
 const dataDB = getFirestore(firebaseApp);

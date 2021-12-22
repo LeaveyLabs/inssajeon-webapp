@@ -1,4 +1,4 @@
-import { ACCOUNT_TYPE_ERROR } from "../../strings/apiStringLibrary";
+import { ACCOUNT_TYPE_ERROR } from "../../strings/apiConstLibrary";
 import { EntityFactory, IDictionary, validatedObject } from "../jsonFormat";
 
 /* Holds all of one user's profile settings for 인싸전 */

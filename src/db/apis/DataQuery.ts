@@ -1,6 +1,6 @@
 import { User } from "firebase/auth";
 import { Profile, ProfileFactory } from "../entities/users/Profile";
-import { POST_DIR, POST_TAGS_HEADER, PROFILE_TYPE_ERROR, USER_DIR, USER_PROFILE_HEADER, USER_TYPE_ERROR, WORD_DIR } from "../strings/apiStringLibrary";
+import { POST_DIR, POST_TAGS_HEADER, PROFILE_TYPE_ERROR, USER_DIR, USER_PROFILE_HEADER, USER_TYPE_ERROR, WORD_DIR } from "../strings/apiConstLibrary";
 import { collection, doc, getDocs, getFirestore, query, setDoc, where } from "firebase/firestore"; 
 import { postDatabase, userDatabase } from "./dbRefs";
 import { UserFactory } from "../entities/users/User";
