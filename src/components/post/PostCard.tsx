@@ -28,6 +28,7 @@ import {
   Button,
 } from '@mui/material';
 import { green, pink, red } from '@mui/material/colors';
+//hooks
 
 // utils
 // import { fDate } from '../../../../utils/formatTime';
@@ -39,6 +40,9 @@ import VotePanel from './VotePanel';
 // import Iconify from '../../../../components/Iconify';
 // import MyAvatar from '../../../../components/MyAvatar';
 // import EmojiPicker from '../../../../components/EmojiPicker';
+import useMobileOrTabletDevice from '../../hooks/useMobileOrTabletDevice';
+import { isMobileCordova } from '@firebase/util';
+
 
 
 // ----------------------------------------------------------------------
@@ -96,42 +100,27 @@ export default function PostCard(/*{ post }: Props*/) {
     setIsFavorited(prevIsFavorited => !isFavorited)
   }
 
-  const handleToggleUpvote = () => {
-    if (isUpvoted) { //unupvote
-      setIsUpvoted(false);
-      setUpvotes((prevUpvotes) => prevUpvotes - 1);
-    }
-    else if (isDownvoted) { //undownvote and upvote
-      setIsDownvoted(false);
-      setDownvotes((prevDownvotes) => prevDownvotes - 1);
-      setIsUpvoted(true);
-      setUpvotes((prevUpvotes) => prevUpvotes + 1);
-    }
-    else { //upvote
-      setIsUpvoted(true);
-      setUpvotes((prevUpvotes) => prevUpvotes + 1);
-    }
-  }
-
-  const handleToggleDownvote = () => {
-    if (isDownvoted) { //undownvote
-      setIsDownvoted(false);
-      setDownvotes((prevDownvotes) => prevDownvotes - 1);
-    }
-    else if (isUpvoted) { //unupvote and downvote
-      setIsUpvoted(false);
-      setUpvotes((prevUpvotes) => prevUpvotes - 1);
-      setIsDownvoted(true);
-      setDownvotes((prevDownvotes) => prevDownvotes + 1);
-    }
-    else { //downvote
-      setIsDownvoted(true);
-      setDownvotes((prevDownvotes) => prevDownvotes + 1);
-    }
-  }
-
   const handleShare = () => {
-
+    
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    console.log(isMobile)
+    if (true) {
+      if (true) {
+        navigator
+          .share({
+            title: "`${upvotes} | ${downvotes}`,",
+            text: 'Check out this post on 인싸전!',
+            url: document.location.href,
+          })
+          .then(() => {
+            console.log('Successfully shared');
+          })
+          .catch(error => {
+            console.error('Something went wrong sharing the blog', error);
+          });
+      }
+    }
+    
   }
 
   //notes on custom hook for menu
