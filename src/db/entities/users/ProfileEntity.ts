@@ -2,7 +2,7 @@ import { PROFILE_TYPE_ERROR } from "../../strings/apiConstLibrary";
 import { EntityFactory, IDictionary, validatedObject } from "../jsonFormat";
 
 /* Holds user's personal profile information */
-export interface Profile extends IDictionary<Object> {
+export interface ProfileEntity extends IDictionary<Object> {
     username: string;
     bio: string;
     picPath: string;
@@ -13,12 +13,12 @@ export interface Profile extends IDictionary<Object> {
 export const ProfileFactory:EntityFactory = function () {};
 
 /**
- * @param  {Profile} profile
+ * @param  {ProfileEntity} profile
  * @returns Object
  * @description converts a profile into a database-exportable json object
  */
-ProfileFactory.toExportJson = (profile:Profile) : Object => { 
-    const json:Profile =  {
+ProfileFactory.toExportJson = (profile:ProfileEntity) : Object => { 
+    const json:ProfileEntity =  {
         username: profile.username, 
         bio: profile.bio,
         picPath: profile.picPath,
@@ -32,15 +32,15 @@ ProfileFactory.toExportJson = (profile:Profile) : Object => {
  * @returns Profile
  * @description converts a json string into a profile
  */
-ProfileFactory.fromExportJson = (json:any) : Profile => {
+ProfileFactory.fromExportJson = (json:any) : ProfileEntity => {
     /* 
     Ensure username, bio, picPath, and inssajeom are present.
     */
-    const profile:Profile =  {
+    const profile:ProfileEntity =  {
         username: json.username, 
         bio: json.bio,
         picPath: json.picPath,
         inssajeom: json.inssajeom,
     };
-    return validatedObject(profile, PROFILE_TYPE_ERROR) as Profile;
+    return validatedObject(profile, PROFILE_TYPE_ERROR) as ProfileEntity;
 };

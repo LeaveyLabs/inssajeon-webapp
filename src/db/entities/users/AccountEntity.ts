@@ -2,7 +2,7 @@ import { ACCOUNT_TYPE_ERROR } from "../../strings/apiConstLibrary";
 import { EntityFactory, IDictionary, validatedObject } from "../jsonFormat";
 
 /* Holds all of one user's profile settings for 인싸전 */
-export interface Account extends IDictionary<Object> {
+export interface AccountEntity extends IDictionary<Object> {
     signInMethod: Number;
     emailFrequency: Number;
 }
@@ -11,12 +11,12 @@ export interface Account extends IDictionary<Object> {
 export const AccountFactory:EntityFactory = function () {}
 
 /**
- * @param  {Account} acc
+ * @param  {AccountEntity} acc
  * @returns Object
  * @description converts an account into a database-exportable json object
  */
-AccountFactory.toExportJson = (acc:Account) : Object => { 
-    const json:Account = {signInMethod: acc.signInMethod,
+AccountFactory.toExportJson = (acc:AccountEntity) : Object => { 
+    const json:AccountEntity = {signInMethod: acc.signInMethod,
         emailFrequency: acc.emailFrequency};
     return validatedObject(json, ACCOUNT_TYPE_ERROR)
 };
@@ -26,8 +26,8 @@ AccountFactory.toExportJson = (acc:Account) : Object => {
  * @returns Account
  * @description converts a database-exportable object into an account
  */
-AccountFactory.fromExportJson = (json:any) : Account => {
-    const acc:Account = {signInMethod: json.signInMethod,
+AccountFactory.fromExportJson = (json:any) : AccountEntity => {
+    const acc:AccountEntity = {signInMethod: json.signInMethod,
         emailFrequency: json.emailFrequency};
-    return validatedObject(acc, ACCOUNT_TYPE_ERROR) as Account;
+    return validatedObject(acc, ACCOUNT_TYPE_ERROR) as AccountEntity;
 };

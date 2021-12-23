@@ -4,7 +4,7 @@ import {EntityFactory, IDictionary, validatedObject} from '../jsonFormat';
 import {PostIDSet, PostIDSetFactory} from '../posts/PostID';
 
 /* Holds all of one user's interactions with 인싸전 posts */
-export interface Activity extends IDictionary<Object> {
+export interface ActivityEntity extends IDictionary<Object> {
     upvotes: PostIDSet;
     downvotes: PostIDSet;
     favorites: PostIDSet;
@@ -15,17 +15,17 @@ export interface Activity extends IDictionary<Object> {
 /* Converts between JSON strings and Activity Objects */
 export const ActivityFactory:EntityFactory = function () {};
 /**
- * @param  {Activity} act
+ * @param  {ActivityEntity} act
  * @returns Object
  * @description converts an Activity into a database-exportable activity object
  */
-ActivityFactory.toExportJson = (e:Activity) : Object => {
+ActivityFactory.toExportJson = (e:ActivityEntity) : Object => {
     /* 
     Ensure the Activity JSON object has four keys 
     (upvotes, downvotes, favorites, submissions) each with 
     indexed sets. 
     */
-    const act:Activity = {
+    const act:ActivityEntity = {
         upvotes: PostIDSetFactory.toExportJson(e.upvotes),
         downvotes: PostIDSetFactory.toExportJson(e.downvotes),
         favorites: PostIDSetFactory.toExportJson(e.favorites),
@@ -39,8 +39,8 @@ ActivityFactory.toExportJson = (e:Activity) : Object => {
  * @returns Activity
  * @description converts a database-exportable object into an activity
  */
-ActivityFactory.fromExportJson = (json:any) : Activity  => {
-    const act:Activity = {
+ActivityFactory.fromExportJson = (json:any) : ActivityEntity  => {
+    const act:ActivityEntity = {
         /* 
         Ensure the Activity Object has four PostIDSets
         */        
@@ -50,5 +50,5 @@ ActivityFactory.fromExportJson = (json:any) : Activity  => {
         submissions: PostIDSetFactory.fromExportJson(json.submissions),
         lastLogin: json.lastLogin,
     };
-    return validatedObject(act, ACTIVITY_TYPE_ERROR) as Activity;
+    return validatedObject(act, ACTIVITY_TYPE_ERROR) as ActivityEntity;
 };

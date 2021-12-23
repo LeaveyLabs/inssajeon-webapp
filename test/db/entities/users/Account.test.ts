@@ -1,4 +1,4 @@
-import { AccountFactory } from "../../../../src/db/entities/users/Account";
+import { AccountFactory } from "../../../../src/db/entities/users/AccountEntity";
 import { jsonAccount, standardAccount } from "../basicTestEntities";
 import { generateFromExportJsonTest, generateToExportJsonTest } from "../entityTest";
 

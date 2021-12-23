@@ -1,15 +1,13 @@
-import {Entity, IndexedStringSet, stringSetToJson,
-jsonToStringSet, IndexedEntitySet, EntityFactory,
-entitySetToJson, jsonToEntitySet, hasNullProperties, validatedObject} from "../../../src/db/entities/jsonFormat";
-import { Post, PostFactory } from "../../../src/db/entities/posts/Post";
-import { PostID, PostIDSet } from "../../../src/db/entities/posts/PostID";
-import { Tag } from "../../../src/db/entities/posts/Tag";
-import { Account, AccountFactory } from "../../../src/db/entities/users/Account";
-import { Activity, ActivityFactory } from "../../../src/db/entities/users/Activity";
-import { Profile, ProfileFactory } from "../../../src/db/entities/users/Profile";
-import { User, UserFactory } from "../../../src/db/entities/users/User";
-import { Word, WordFactory } from "../../../src/db/entities/words/Word";
-import { USER_TYPE_ERROR } from "../../../src/db/strings/apiStringLibrary";
+import {Entity, stringSetToJson,
+jsonToStringSet, entitySetToJson, jsonToEntitySet, 
+hasNullProperties, validatedObject} from "../../../src/db/entities/jsonFormat";
+import { PostEntity, PostFactory } from "../../../src/db/entities/posts/PostEntity";
+import { AccountEntity, AccountFactory } from "../../../src/db/entities/users/AccountEntity";
+import { ActivityEntity, ActivityFactory } from "../../../src/db/entities/users/ActivityEntity";
+import { ProfileEntity, ProfileFactory } from "../../../src/db/entities/users/ProfileEntity";
+import { UserEntity, UserFactory } from "../../../src/db/entities/users/UserEntity";
+import { WordEntity, WordFactory } from "../../../src/db/entities/words/WordEntity";
+import { USER_TYPE_ERROR } from "../../../src/db/strings/apiConstLibrary";
 import { jsonAccount, jsonActivity, jsonPost, jsonPostIDSet, jsonProfile, jsonTagSet, jsonUser, jsonUserIDSet, jsonWord, standardAccount, standardActivity, standardPost, standardPostID, standardPostIDSet, standardProfile, standardTagSet, standardUser, standardUserID, standardUserIDSet, standardWord } from "./basicTestEntities";
 
 /* stringSetToJson */
@@ -79,7 +77,7 @@ describe("testing entitySetToJson", () => {
         let acc1 = standardAccount;
         let acc2 = JSON.parse(JSON.stringify(standardAccount));
         acc2.emailFrequency = 30;
-        let accSet = new Set<Account>([acc1, acc2]);
+        let accSet = new Set<AccountEntity>([acc1, acc2]);
         /* Initialize a set of json Account objects */
         let jsonAcc1 = jsonAccount;
         let jsonAcc2 = JSON.parse(JSON.stringify(jsonAccount));
@@ -95,7 +93,7 @@ describe("testing entitySetToJson", () => {
         let act1 = standardActivity;
         let act2 = ActivityFactory.fromExportJson(JSON.parse(JSON.stringify(standardActivity)));
         act2.favorites = [standardPostID];
-        let actSet = new Set<Activity>([act1, act2]);
+        let actSet = new Set<ActivityEntity>([act1, act2]);
         /* Initialize a set of json Activity objects */
         let jsonAct1 = jsonActivity;
         let jsonAct2 = JSON.parse(JSON.stringify(jsonActivity));
@@ -117,7 +115,7 @@ describe("testing entitySetToJson", () => {
             submissions: standardPostIDSet,
             lastLogin: user1.activity.lastLogin,
         };
-        let userSet = new Set<User>([user1, user2]);
+        let userSet = new Set<UserEntity>([user1, user2]);
         /* Initialize a set of json User objects */
         let jsonUser1 = jsonUser;
         let jsonUser2 = JSON.parse(JSON.stringify(jsonUser1));
@@ -140,7 +138,7 @@ describe("testing entitySetToJson", () => {
         let post1 = standardPost;
         let post2 = JSON.parse(JSON.stringify(post1));
         post2.trendscore = 15;
-        let postSet = new Set<Post>([post1, post2]);
+        let postSet = new Set<PostEntity>([post1, post2]);
         /* Initialize a set of JSON Post objects */
         let jsonPost1 = jsonPost;
         let jsonPost2 = JSON.parse(JSON.stringify(jsonPost));
@@ -157,7 +155,7 @@ describe("testing entitySetToJson", () => {
         let profile1 = standardProfile;
         let profile2 = JSON.parse(JSON.stringify(standardProfile));
         profile2.inssajeom = 15;
-        let profileSet = new Set<Profile>([profile1, profile2]);
+        let profileSet = new Set<ProfileEntity>([profile1, profile2]);
         /* Initialize a set of json Profile objects */
         let jsonProfile1 = jsonProfile;
         let jsonProfile2 = JSON.parse(JSON.stringify(jsonProfile));
@@ -173,7 +171,7 @@ describe("testing entitySetToJson", () => {
         let word1 = standardWord;
         let word2 = JSON.parse(JSON.stringify(standardWord));
         word2.trendscore = 15; 
-        let wordSet = new Set<Word>([word1, word2]);
+        let wordSet = new Set<WordEntity>([word1, word2]);
         /* Initialize a set of json Word objects */
         let jsonWord1 = jsonWord;
         let jsonWord2 = JSON.parse(JSON.stringify(jsonWord1));
@@ -199,7 +197,7 @@ describe("testing jsonToEntitySet", () => {
         let acc1 = standardAccount;
         let acc2 = JSON.parse(JSON.stringify(standardAccount));
         acc2.emailFrequency = 30;
-        let accSet = new Set<Account>([acc1, acc2]);
+        let accSet = new Set<AccountEntity>([acc1, acc2]);
         /* Initialize a set of json Account objects */
         let jsonAcc1 = jsonAccount;
         let jsonAcc2 = JSON.parse(JSON.stringify(jsonAccount));
@@ -215,7 +213,7 @@ describe("testing jsonToEntitySet", () => {
         let act1 = standardActivity;
         let act2 = ActivityFactory.fromExportJson(JSON.parse(JSON.stringify(standardActivity)));
         act2.favorites = [standardPostID];
-        let actSet = new Set<Activity>([act1, act2]);
+        let actSet = new Set<ActivityEntity>([act1, act2]);
         /* Initialize a set of json Activity objects */
         let jsonAct1 = jsonActivity;
         let jsonAct2 = JSON.parse(JSON.stringify(jsonActivity));
@@ -237,7 +235,7 @@ describe("testing jsonToEntitySet", () => {
             submissions: standardPostIDSet,
             lastLogin: user1.activity.lastLogin,
         };
-        let userSet = new Set<User>([user1, user2]);
+        let userSet = new Set<UserEntity>([user1, user2]);
         /* Initialize a set of json User objects */
         let jsonUser1 = jsonUser;
         let jsonUser2 = JSON.parse(JSON.stringify(jsonUser1));
@@ -260,7 +258,7 @@ describe("testing jsonToEntitySet", () => {
         let post1 = standardPost;
         let post2 = JSON.parse(JSON.stringify(post1));
         post2.trendscore = 15;
-        let postSet = new Set<Post>([post1, post2]);
+        let postSet = new Set<PostEntity>([post1, post2]);
         /* Initialize a set of JSON Post objects */
         let jsonPost1 = jsonPost;
         let jsonPost2 = JSON.parse(JSON.stringify(jsonPost));
@@ -277,7 +275,7 @@ describe("testing jsonToEntitySet", () => {
         let profile1 = standardProfile;
         let profile2 = JSON.parse(JSON.stringify(standardProfile));
         profile2.inssajeom = 15;
-        let profileSet = new Set<Profile>([profile1, profile2]);
+        let profileSet = new Set<ProfileEntity>([profile1, profile2]);
         /* Initialize a set of json Profile objects */
         let jsonProfile1 = jsonProfile;
         let jsonProfile2 = JSON.parse(JSON.stringify(jsonProfile));
@@ -293,7 +291,7 @@ describe("testing jsonToEntitySet", () => {
         let word1 = standardWord;
         let word2 = JSON.parse(JSON.stringify(standardWord));
         word2.trendscore = 15; 
-        let wordSet = new Set<Word>([word1, word2]);
+        let wordSet = new Set<WordEntity>([word1, word2]);
         /* Initialize a set of json Word objects */
         let jsonWord1 = jsonWord;
         let jsonWord2 = JSON.parse(JSON.stringify(jsonWord1));

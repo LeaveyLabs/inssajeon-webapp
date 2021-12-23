@@ -1,14 +1,14 @@
 import { standardAccount, standardActivity, standardProfile, standardUser, standardUserID } from "../entities/basicTestEntities";
-import { User } from "../../../src/db/entities/users/User"
-import { Post } from "../../../src/db/entities/posts/Post";
-import { Word } from "../../../src/db/entities/words/Word";
+import { UserEntity } from "../../../src/db/entities/users/UserEntity"
+import { PostEntity } from "../../../src/db/entities/posts/PostEntity";
+import { WordEntity } from "../../../src/db/entities/words/WordEntity";
 import { collection, deleteDoc, doc, getDocs, getFirestore, setDoc, Timestamp } from "firebase/firestore"; 
 import { postDatabase, userDatabase, wordDatabase } from "../../../src/db/apis/dbRefs";
 
 export interface Verifier {
-    users: Set<User>,
-    posts: Set<Post>,
-    words: Set<Word>,
+    users: Set<UserEntity>,
+    posts: Set<PostEntity>,
+    words: Set<WordEntity>,
 }
 
 export type VerifierFunction = (v:Verifier) => Promise<any>;
@@ -17,7 +17,7 @@ export const executeInDatabase = async (testFunc:VerifierFunction) : Promise<voi
     /* 
     Define Users 
     */
-    const user1:User = {
+    const user1:UserEntity = {
         id: "1",
         info: {
             username: "adamNovak15",
@@ -34,7 +34,7 @@ export const executeInDatabase = async (testFunc:VerifierFunction) : Promise<voi
         },
         account: standardAccount,
     };
-    const user2:User = {
+    const user2:UserEntity = {
         id: "2",
         info: {
             username: "kevin",
@@ -51,7 +51,7 @@ export const executeInDatabase = async (testFunc:VerifierFunction) : Promise<voi
         },
         account: standardAccount,
     };
-    const user3:User = {
+    const user3:UserEntity = {
         id: "3",
         info: {
             username: "rahul",
@@ -68,7 +68,7 @@ export const executeInDatabase = async (testFunc:VerifierFunction) : Promise<voi
         },
         account: standardAccount,
     };
-    const user4:User = {
+    const user4:UserEntity = {
         id: "4",
         info: {
             username: "erica",
@@ -85,7 +85,7 @@ export const executeInDatabase = async (testFunc:VerifierFunction) : Promise<voi
         },
         account: standardAccount,
     };
-    const user5:User = {
+    const user5:UserEntity = {
         id: "5",
         info: {
             username: "alex",
@@ -102,12 +102,12 @@ export const executeInDatabase = async (testFunc:VerifierFunction) : Promise<voi
         },
         account: standardAccount,
     };
-    const userSet:Set<User> = new Set<User>([user1, user2, 
+    const userSet:Set<UserEntity> = new Set<UserEntity>([user1, user2, 
         user3, user4, user5]);
     /* 
     Define Posts 
     */
-    const post1:Post = {
+    const post1:PostEntity = {
         postID: "1",
         userID: "1",
         word: "갑분사",
@@ -117,12 +117,12 @@ export const executeInDatabase = async (testFunc:VerifierFunction) : Promise<voi
         tags: ["#YOLO"],
         userProfile: user1.info,
         trendscore: 15,
-        upvoteCount: 1,
-        downvoteCount: 0,
-        shareCount: 0,
-        flagCount: 0,
+        upvotes: ["1"],
+        downvotes: [],
+        shares: [],
+        flags: [],
     }
-    const post2:Post = {
+    const post2:PostEntity = {
         postID: "2",
         userID: "1",
         word: "갑분사",
@@ -132,12 +132,12 @@ export const executeInDatabase = async (testFunc:VerifierFunction) : Promise<voi
         tags: ["#YOLO"],
         userProfile: user1.info,
         trendscore: 15,
-        upvoteCount: 0,
-        downvoteCount: 1,
-        shareCount: 0,
-        flagCount: 0,
+        upvotes: [],
+        downvotes: ["2"],
+        shares: [],
+        flags: [],
     }
-    const post3:Post = {
+    const post3:PostEntity = {
         postID: "3",
         userID: "2",
         word: "신조언",
@@ -147,12 +147,12 @@ export const executeInDatabase = async (testFunc:VerifierFunction) : Promise<voi
         tags: ["#OKIE"],
         userProfile: user2.info,
         trendscore: 20,
-        upvoteCount: 3,
-        downvoteCount: 0,
-        shareCount: 0,
-        flagCount: 0,
+        upvotes: ["1", "2", "3"],
+        downvotes: [],
+        shares: [],
+        flags: [],
     }
-    const post4:Post = {
+    const post4:PostEntity = {
         postID: "4",
         userID: "3",
         word: "신조언",
@@ -162,12 +162,12 @@ export const executeInDatabase = async (testFunc:VerifierFunction) : Promise<voi
         tags: [],
         userProfile: user3.info,
         trendscore: 5,
-        upvoteCount: 0,
-        downvoteCount: 0,
-        shareCount: 0,
-        flagCount: 0,
+        upvotes: [],
+        downvotes: [],
+        shares: [],
+        flags: [],
     }
-    const post5:Post = {
+    const post5:PostEntity = {
         postID: "5",
         userID: "5",
         word: "신조언",
@@ -177,26 +177,26 @@ export const executeInDatabase = async (testFunc:VerifierFunction) : Promise<voi
         tags: ["#okie"],
         userProfile: user4.info,
         trendscore: 5,
-        upvoteCount: 0,
-        downvoteCount: 0,
-        shareCount: 0,
-        flagCount: 0,
+        upvotes: [],
+        downvotes: [],
+        shares: [],
+        flags: [],
     }
-    const postSet = new Set<Post>([post1, post2, post3, post4, post5]);
+    const postSet = new Set<PostEntity>([post1, post2, post3, post4, post5]);
     /* 
     Define Words 
     */
-    const word1:Word = {
+    const word1:WordEntity = {
         wordString: "갑분사",
         wordPosts: ["1", "2"],
         trendscore: 10,
     }
-    const word2:Word = {
+    const word2:WordEntity = {
         wordString: "신조언",
         wordPosts: ["3", "4", "5"],
         trendscore: 30,
     }
-    const wordSet = new Set<Word>([word1, word2]);
+    const wordSet = new Set<WordEntity>([word1, word2]);
     /* 
     Verifier holds each set of Objects. 
     Permits checking through Set operations.

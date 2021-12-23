@@ -1,4 +1,4 @@
-import { UserFactory } from "../../../../src/db/entities/users/User";
+import { UserFactory } from "../../../../src/db/entities/users/UserEntity";
 import { jsonUser, standardPostID, standardPostIDSet, standardUser } from "../basicTestEntities";
 import { generateFromExportJsonTest, generateToExportJsonTest } from "../entityTest";
 

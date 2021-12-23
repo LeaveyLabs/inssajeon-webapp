@@ -1,12 +1,12 @@
 import { Timestamp } from 'firebase/firestore';
 import { POST_TYPE_ERROR } from '../../strings/apiConstLibrary';
 import { EntityFactory, IDictionary, validatedObject } from '../jsonFormat';
-import { Profile, ProfileFactory } from '../users/Profile';
-import { UserID } from '../users/UserID';
-import { PostID } from './PostID';
+import { ProfileEntity, ProfileFactory } from '../users/ProfileEntity';
+import { UserID, UserIDSet } from '../users/UserID';
+import { PostID, PostIDSetFactory } from './PostID';
 import { TagSet, TagSetFactory } from './Tag';
 
-export interface Post extends IDictionary<Object> {
+export interface PostEntity extends IDictionary<Object> {
     readonly postID: PostID;
     readonly userID: UserID;
     readonly word: string;
@@ -14,20 +14,20 @@ export interface Post extends IDictionary<Object> {
     readonly quote: string;
     readonly timestamp: Timestamp;
     readonly tags: TagSet;
-    userProfile: Profile;
+    userProfile: ProfileEntity;
     trendscore: number;
-    upvoteCount: number;
-    downvoteCount: number;
-    shareCount: number;
-    flagCount: number;
+    upvotes: UserIDSet;
+    downvotes: UserIDSet;
+    shares: UserIDSet;
+    flags: UserIDSet;
 }
 
 export const PostFactory:EntityFactory = function () {};
 /**
- * @param  {Post} post
+ * @param  {PostEntity} post
  * @returns Object
  */
-PostFactory.toExportJson = (post:Post) : Object => {
+PostFactory.toExportJson = (post:PostEntity) : Object => {
     /* 
     Ensure all data members are in the correct format. 
     Primitives are copied over. 
@@ -43,10 +43,10 @@ PostFactory.toExportJson = (post:Post) : Object => {
         tags: TagSetFactory.toExportJson(post.tags), 
         userProfile: ProfileFactory.toExportJson(post.userProfile),
         trendscore: post.trendscore,
-        upvoteCount: post.upvoteCount,
-        downvoteCount: post.downvoteCount,
-        shareCount: post.shareCount,
-        flagCount: post.flagCount,
+        upvotes: PostIDSetFactory.toExportJson(post.upvotes),
+        downvotes: PostIDSetFactory.toExportJson(post.downvotes),
+        shares: PostIDSetFactory.toExportJson(post.shares),
+        flags: PostIDSetFactory.toExportJson(post.flags),
     }
     return validatedObject(o, POST_TYPE_ERROR);
 };
@@ -55,13 +55,13 @@ PostFactory.toExportJson = (post:Post) : Object => {
  * @param  {any} json
  * @returns Post
  */
-PostFactory.fromExportJson = (json:any) : Post => {
+PostFactory.fromExportJson = (json:any) : PostEntity => {
     /* 
     Ensure all data members are in the correct format. 
     Primitives are copied over. 
     Entities are funnelled through. 
     */
-    const post:Post = {
+    const post:PostEntity = {
         postID: json.postID,
         userID: json.userID,
         word: json.word,
@@ -71,10 +71,10 @@ PostFactory.fromExportJson = (json:any) : Post => {
         tags: TagSetFactory.fromExportJson(json.tags), 
         userProfile: ProfileFactory.fromExportJson(json.userProfile),
         trendscore: json.trendscore,
-        upvoteCount: json.upvoteCount,
-        downvoteCount: json.downvoteCount,
-        shareCount: json.shareCount,
-        flagCount: json.flagCount,
+        upvotes: PostIDSetFactory.fromExportJson(json.upvotes),
+        downvotes: PostIDSetFactory.fromExportJson(json.downvotes),
+        shares: PostIDSetFactory.fromExportJson(json.shares),
+        flags: PostIDSetFactory.fromExportJson(json.flags),
     }
-    return validatedObject(post, POST_TYPE_ERROR) as Post;
+    return validatedObject(post, POST_TYPE_ERROR) as PostEntity;
 };

@@ -2,7 +2,7 @@ import { WORD_TYPE_ERROR } from "../../strings/apiConstLibrary";
 import { EntityFactory, IDictionary, validatedObject } from "../jsonFormat";
 import { PostIDSet, PostIDSetFactory } from "../posts/PostID";
 
-export interface Word extends IDictionary<Object> {
+export interface WordEntity extends IDictionary<Object> {
     readonly wordString: string;
     wordPosts: PostIDSet;
     trendscore: number;
@@ -11,11 +11,11 @@ export interface Word extends IDictionary<Object> {
 export const WordFactory:EntityFactory = function () {};
 
 /**
- * @param  {Word} word
+ * @param  {WordEntity} word
  * @returns Object
  */
-WordFactory.toExportJson = (word:Word) : Object => {
-    const o:Word = {
+WordFactory.toExportJson = (word:WordEntity) : Object => {
+    const o:WordEntity = {
         wordString: word.wordString,
         wordPosts: PostIDSetFactory.toExportJson(word.wordPosts),
         trendscore: word.trendscore,
@@ -27,11 +27,11 @@ WordFactory.toExportJson = (word:Word) : Object => {
  * @param  {any} json
  * @returns Word
  */
-WordFactory.fromExportJson = (json:any) : Word => {
-    const word:Word = {
+WordFactory.fromExportJson = (json:any) : WordEntity => {
+    const word:WordEntity = {
         wordString: json.wordString,
         wordPosts: PostIDSetFactory.fromExportJson(json.wordPosts),
         trendscore: json.trendscore,
     };
-    return validatedObject(word, WORD_TYPE_ERROR) as Word;
+    return validatedObject(word, WORD_TYPE_ERROR) as WordEntity;
 }

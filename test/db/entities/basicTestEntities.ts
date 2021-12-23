@@ -1,12 +1,12 @@
-import { Post } from "../../../src/db/entities/posts/Post";
+import { PostEntity } from "../../../src/db/entities/posts/PostEntity";
 import { Tag, TagSet } from "../../../src/db/entities/posts/Tag";
-import { Account } from "../../../src/db/entities/users/Account";
-import { Activity } from "../../../src/db/entities/users/Activity";
-import { Profile } from "../../../src/db/entities/users/Profile";
+import { AccountEntity } from "../../../src/db/entities/users/AccountEntity";
+import { ActivityEntity } from "../../../src/db/entities/users/ActivityEntity";
+import { ProfileEntity } from "../../../src/db/entities/users/ProfileEntity";
 import { UserID, UserIDSet} from "../../../src/db/entities/users/UserID";
-import { User } from "../../../src/db/entities/users/User";
+import { UserEntity } from "../../../src/db/entities/users/UserEntity";
 import { PostID, PostIDSet } from "../../../src/db/entities/posts/PostID";
-import { Word } from "../../../src/db/entities/words/Word";
+import { WordEntity } from "../../../src/db/entities/words/WordEntity";
 import { Timestamp } from "firebase/firestore";
 
 export const standardUserID:UserID = "aaaaabbyzhs12345";
@@ -27,7 +27,7 @@ export const jsonTagSet:Object = [];
 export const time = Timestamp.fromDate(new Date());
 
 /* Account */
-export const standardAccount:Account = {
+export const standardAccount:AccountEntity = {
     signInMethod: 10,
     emailFrequency: 5,
 };
@@ -37,7 +37,7 @@ export const jsonAccount:Object = {
     emailFrequency: 5,
 };
 
-export const standardActivity:Activity = {
+export const standardActivity:ActivityEntity = {
     upvotes: standardPostIDSet,
     downvotes: standardPostIDSet,
     favorites: standardPostIDSet,
@@ -53,7 +53,7 @@ export const jsonActivity:Object = {
     lastLogin: time,
 };
 
-export const standardProfile:Profile = {
+export const standardProfile:ProfileEntity = {
     username: "adamNovak15",
     bio: "A little bit about me: I am most interested in the realm of human-centered technology and how designers and engineers can be more thoughtful of the humanness of the user of their technology.",
     picPath: "c",
@@ -67,7 +67,7 @@ export const jsonProfile:Object = {
     inssajeom: 5,
 };
 
-export const standardPost:Post = {
+export const standardPost:PostEntity = {
     postID: "1",
     userID: "2",
     word: "갑분사",
@@ -77,10 +77,10 @@ export const standardPost:Post = {
     tags: standardTagSet,
     userProfile: standardProfile,
     trendscore: 10,
-    upvoteCount: 0,
-    downvoteCount: 0, 
-    shareCount: 0, 
-    flagCount: 0, 
+    upvotes: [],
+    downvotes: [], 
+    shares: [], 
+    flags: [], 
 };
 
 export const jsonPost = {
@@ -93,13 +93,13 @@ export const jsonPost = {
     tags: jsonTagSet,
     userProfile: jsonProfile,
     trendscore: 10,
-    upvoteCount: 0,
-    downvoteCount: 0, 
-    shareCount: 0, 
-    flagCount: 0, 
+    upvotes: [],
+    downvotes: [], 
+    shares: [], 
+    flags: [], 
 };
 
-export const standardUser:User = {
+export const standardUser:UserEntity = {
     id: standardUserID,
     info: standardProfile,
     activity: standardActivity,
@@ -113,7 +113,7 @@ export const jsonUser:Object = {
     account: jsonAccount,
 };
 
-export const standardWord:Word = {
+export const standardWord:WordEntity = {
     wordString: "견박",
     wordPosts: standardPostIDSet,
     trendscore: 10,

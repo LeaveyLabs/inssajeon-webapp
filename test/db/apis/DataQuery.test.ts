@@ -2,15 +2,14 @@ import { getDocs } from "firebase/firestore";
 import { userDatabase } from "../../../src/db/apis/dbRefs";
 import { DataQuery } from "../../../src/db/apis/DataQuery";
 import { executeInDatabase, Verifier } from "./dbTestEnv";
-import { Post } from "../../../src/db/entities/posts/Post";
+import { PostEntity } from "../../../src/db/entities/posts/PostEntity";
 import { Tag } from "../../../src/db/entities/posts/Tag";
 
-
-describe("testing firebase", () => {
+describe("testing DataQuery", () => {
     it("checking if firebase is initialized", async () => {
         await getDocs(userDatabase);
     });
-    /* Query.searchUserProfile */
+    /* DataQuery.searchUserProfile */
     it("every uploaded profile can be queried sucessfully", async () : Promise<void> => {
         await executeInDatabase(async (verifier:Verifier) : Promise<void> => {
             const userList = Array.from(verifier.users);
@@ -30,18 +29,18 @@ describe("testing firebase", () => {
    });
    it("profile queries with missing information return the correct people", () => {});
    it("profile queries with missing information return no wrong people", () => {});
-   /* Query.searchTag */
+   /* DataQuery.searchTag */
    it("every uploaded tag can be queried successfully", async () : Promise<void> => {
         await executeInDatabase(async (verifier:Verifier) : Promise<void> => {
             const tagSet = new Set<Tag>();
-            const tagMap = new Map<Tag, Set<Post>>();
+            const tagMap = new Map<Tag, Set<PostEntity>>();
             verifier.posts.forEach((post) => {
                 for(const tag of post.tags) {
                     /*
                     Map each tag to all the posts attached to it. 
                     Have a list of all the tags we want to search.
                     */
-                    if(tagMap.has(tag)) (tagMap.get(tag) as Set<Post>).add(post);
+                    if(tagMap.has(tag)) (tagMap.get(tag) as Set<PostEntity>).add(post);
                     else tagMap.set(tag, new Set([post]));
                     tagSet.add(tag);
                 };
@@ -59,4 +58,6 @@ describe("testing firebase", () => {
             }
         });
     });
+    /* DataQuery.*/
+    
 });

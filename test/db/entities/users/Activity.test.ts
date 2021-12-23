@@ -1,4 +1,4 @@
-import { ActivityFactory } from "../../../../src/db/entities/users/Activity";
+import { ActivityFactory } from "../../../../src/db/entities/users/ActivityEntity";
 import { jsonActivity, standardActivity } from "../basicTestEntities";
 import { generateFromExportJsonTest, generateToExportJsonTest } from "../entityTest";
 

@@ -1,4 +1,4 @@
-import { PostFactory } from "../../../../src/db/entities/posts/Post";
+import { PostFactory } from "../../../../src/db/entities/posts/PostEntity";
 import { jsonPost, standardPost } from "../basicTestEntities";
 import { generateFromExportJsonTest, generateToExportJsonTest } from "../entityTest";
 

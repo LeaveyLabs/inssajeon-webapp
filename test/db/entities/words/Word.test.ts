@@ -1,4 +1,4 @@
-import { WordFactory } from "../../../../src/db/entities/words/Word";
+import { WordFactory } from "../../../../src/db/entities/words/WordEntity";
 import { jsonWord, standardWord } from "../basicTestEntities";
 import { generateFromExportJsonTest, generateToExportJsonTest } from "../entityTest";
 

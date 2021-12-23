@@ -1,4 +1,4 @@
-import { ProfileFactory } from "../../../../src/db/entities/users/Profile";
+import { ProfileFactory } from "../../../../src/db/entities/users/ProfileEntity";
 import { jsonProfile, standardProfile } from "../basicTestEntities";
 import { generateFromExportJsonTest, generateToExportJsonTest } from "../entityTest";
 

@@ -1,7 +1,7 @@
 import { Entity, EntityFactory } from "../../../src/db/entities/jsonFormat";
 
 /* fromExportJson */
-export function generateFromExportJsonTest(factory:EntityFactory, standard:Entity, json:any, modified:Entity) {
+export function generateFromExportJsonTest(factory:EntityFactory, standard:any, json:any, modified:Entity) {
     return () => {
         it("empty set: {} -> {}", () => {
             const a = {};
