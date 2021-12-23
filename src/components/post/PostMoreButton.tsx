@@ -5,7 +5,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { IconButton } from '@mui/material';
 
-export default function PostMoreMenu() {
+export default function PostMoreButton() {
   return (
     <PopupState variant="popover" popupId="demo-popup-menu">
       {(popupState) => (

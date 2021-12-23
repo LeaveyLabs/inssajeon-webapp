@@ -20,6 +20,7 @@ import { IconButtonAnimate } from '../../../components/animate';
 import Searchbar from './Searchbar';
 import DropSearchbar from './DropSearchbar';
 import ClickwableWideLogo from '../../../components/ClickableWideLogo';
+import AutocompleteSearch from './AutocompleteSearch';
 
 // ----------------------------------------------------------------------
 
