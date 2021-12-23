@@ -1,12 +1,30 @@
 import { User } from "firebase/auth";
-import { Profile, ProfileFactory } from "../entities/users/Profile";
-import { POST_DIR, POST_TAGS_HEADER, PROFILE_TYPE_ERROR, USER_DIR, USER_PROFILE_HEADER, USER_TYPE_ERROR, WORD_DIR } from "../strings/apiConstLibrary";
-import { collection, doc, getDocs, getFirestore, query, setDoc, where } from "firebase/firestore"; 
-import { postDatabase, userDatabase } from "./dbRefs";
-import { UserFactory } from "../entities/users/User";
-import { Post, PostFactory } from "../entities/posts/Post";
+import { POST_POSTID_HEADER, POST_TAGS_HEADER, USER_PROFILE_HEADER, USER_USERID_HEADER, WORD_WORDSTRING_HEADER } from "../strings/apiConstLibrary";
+import { getDocs, Query, query, where } from "firebase/firestore"; 
+import { postDatabase, userDatabase, wordDatabase } from "./dbRefs";
+import { UserFactory } from "../entities/users/UserEntity";
+import { PostEntity, PostFactory } from "../entities/posts/PostEntity";
+import { PostID } from "../entities/posts/PostID";
+import { UserID } from "../entities/users/UserID";
+import { EntityFactory } from "../entities/jsonFormat";
+import { WordEntity, WordFactory } from "../entities/words/WordEntity";
 
 export const DataQuery = function () {};
+
+async function firebaseEntityQuery<Type> (query:Query, factory:EntityFactory) : Promise<Array<Type>> {
+    /* Use the query to find a list of Entities. */
+    const entityQueryResult = await getDocs(query);
+
+    /* Prune any invalid entity results. */
+    const validEntityResults:Array<Type> = []
+    entityQueryResult.forEach((result) => {
+        /* Attempt to use the factory to generate a valid entity  */
+        try { validEntityResults.push(factory.fromExportJson(result.data()));}
+        catch (e) {/* Invalid entities are skipped */ }
+    });
+
+    return validEntityResults;
+}
 
 /**
  * @param  {any} profile - profile to search (any missing paramters should be empty strings)
@@ -23,17 +41,11 @@ export const DataQuery = function () {};
     );
     /*
     Use the query fields to find a list of Users.
+    Call firebase to filter out and return a list of valid users.
     */
     const profileQuery = query(userDatabase, ...queryFields);
-    const userQueryResult = await getDocs(profileQuery);
-
-    const validUserResults:Array<User> = []
-    userQueryResult.forEach((user) => {
-        /* Check whether profile match is a valid User interface */
-        try { validUserResults.push(UserFactory.fromExportJson(user.data()));}
-        catch (e) {/* Invalid users are skipped. */ }
-    });
-    return validUserResults;
+    const queryResult = await firebaseEntityQuery<User>(profileQuery, UserFactory);
+    return queryResult;
 };
 
 /**
@@ -41,30 +53,45 @@ export const DataQuery = function () {};
  * @returns Promise<Array<Post>> - posts that match that tag
  * @description queries the firebase database to find all posts with a tag
  */
-DataQuery.searchTag = async (tag: string) : Promise<Array<Post>> => {
+DataQuery.searchTag = async (tag: string) : Promise<Array<PostEntity>> => {
     /*
-    Query all posts with an identical tag.
+    Query all posts with an identical tag. 
+    Among these, call firebase to return all the valid posts.
     */
     const tagQuery = query(postDatabase, where(POST_TAGS_HEADER, "array-contains", tag));
-    const tagQueryResult = await getDocs(tagQuery);
-    /*
-    Validate that the results are well-formed posts.
-    */
-    const validPostResults:Array<Post> = [];
-    tagQueryResult.forEach((post) => {
-        /* Check whether profile match is a valid User interface */
-        try { validPostResults.push(PostFactory.fromExportJson(post.data()));}
-        catch (e) {/* Invalid users are skipped. */ }
-    });
-    return validPostResults;
+    const tagQueryResult = await firebaseEntityQuery<PostEntity>(tagQuery, PostFactory);
+    return tagQueryResult;
 };
 
-DataQuery.searchPostID = function () {};
+DataQuery.searchPostID = async (id:PostID) : Promise <Array<PostEntity>> => {
+    /*
+    Query posts with an identical postID.
+    Among these, call firebase to return all the valid posts.
+    */
+    const postIDQuery = query(postDatabase, where(POST_POSTID_HEADER, "==", id));
+    const postIDQueryResult = await firebaseEntityQuery<PostEntity>(postIDQuery, PostFactory);
+    return postIDQueryResult;
+};
 
-DataQuery.searchUserID = function () {};
+DataQuery.searchUserID = async (id:UserID) : Promise<Array<User>> => {
+    /*
+    Query posts with an identical userID.
+    Among these, call firebase to return all the valid users.
+    */
+    const userIDQuery = query(userDatabase, where(USER_USERID_HEADER, "==", id));
+    const userIDQueryResult = await firebaseEntityQuery<User>(userIDQuery, UserFactory);
+    return userIDQueryResult;
+};
 
-DataQuery.searchWord = function () {};
-
+DataQuery.searchWord = async (word:string) : Promise<Array<WordEntity>> => {
+    /*
+    Query words with an identical wordString.
+    Among these, call firebase to return all the valid words.
+    */
+    const wordQuery = query(wordDatabase, where(WORD_WORDSTRING_HEADER, "==", word));
+    const wordQueryResult = await firebaseEntityQuery<WordEntity>(wordQuery, WordFactory);
+    return wordQueryResult;
+};
 
 const nearWords = (word:string) => {
     throw Error("Not implemented");
