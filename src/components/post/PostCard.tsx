@@ -122,7 +122,7 @@ export default function PostCard(/*{ post }: Props*/) {
   //notes on custom hook for menu
   //https://github.com/jcoreio/material-ui-popup-state
   return (
-    <Card>
+    <Card >
       <Box sx={{ px:2, height:60, display:'flex', flexDirection: "row", alignItems:"center", justifyContent:"center", }}>
         <AccountCircleIcon sx={{mx:1}} />
         <Link to={`/users/102984019284091`} variant="subtitle1" color="text.primary" component={RouterLink}>
