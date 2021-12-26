@@ -17,20 +17,10 @@ const RootStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-type Props = {
-  isCollapse: boolean | undefined;
-};
-
-export default function SidebarAccount({ isCollapse }: Props) {
+export default function SidebarAccount( ) {
   return (
     <Link underline="none" color="inherit">
-      <RootStyle
-        sx={{
-          ...(isCollapse && {
-            bgcolor: 'transparent',
-          }),
-        }}
-      >
+      <RootStyle>
         <Badge badgeContent={2} color="error">
           <Avatar
             src=""
@@ -44,10 +34,6 @@ export default function SidebarAccount({ isCollapse }: Props) {
               theme.transitions.create('width', {
                 duration: theme.transitions.duration.shorter,
               }),
-            ...(isCollapse && {
-              ml: 0,
-              width: 0,
-            }),
           }}
         >
           <Typography variant="subtitle2" noWrap>

@@ -17,14 +17,12 @@ export type NavListProps = {
 
 export type NavItemProps = {
   item: NavListProps;
-  isCollapse: boolean;
   active: boolean;
   open?: boolean;
   onOpen?: VoidFunction;
 };
 
 export interface NavSectionProps extends BoxProps {
-  isCollapse?: boolean;
   navConfig: {
     subheader: string;
     items: NavListProps[];

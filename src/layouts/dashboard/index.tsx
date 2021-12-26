@@ -39,7 +39,7 @@ const MainStyle = styled('main')(({ theme }) => ({
 
 
 export default function DashboardLayout() {
-  const { isCollapse } = useCollapseSidebar();
+  //const { isCollapse } = useCollapseSidebar();
   const [open, setOpen] = useState(false);
   const isDesktop = useResponsive('up', 'desktop');
   const [dialogOpen, setDialogOpen] = useState(false);
