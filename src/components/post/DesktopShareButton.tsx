@@ -41,7 +41,7 @@ export default function DesktopShareButton() {
 
   return (
     <CopyToClipboard text="inssajeon.com" onCopy={onCopyText}>
-      <LightTooltip TransitionComponent={Zoom} onClose={handleTooltipClose} title={copyText} leaveDelay={200}>
+      <LightTooltip placement="top" TransitionComponent={Zoom} onClose={handleTooltipClose} title={copyText} leaveDelay={200}>
         {!isCopied ?
         <IconButton sx={{mr:1}}>
           <ContentCopy color="primary" fontSize="small" />

@@ -6,7 +6,8 @@ import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
 import ArrowCircleDownTwoToneIcon from '@mui/icons-material/ArrowCircleDownTwoTone';
 import { Container, Grid, Box, Typography } from '@mui/material';
 import { green, pink } from '@mui/material/colors';
-
+//utils
+import { fDecimal } from 'src/utils/formatNumber';
 // // components
 import VoteButtonAnimate from '../animate/VoteButtonAnimate';
 
@@ -18,7 +19,7 @@ export default function VotePanel(/*{ post }: Props*/) {
   //const { user } = useAuth();
   const [isUpvoted, setIsUpvoted] = useState(false);
   const [isDownvoted, setIsDownvoted] = useState(false);
-  const [upvotes, setUpvotes] = useState(100);
+  const [upvotes, setUpvotes] = useState(10000005);
   const [downvotes, setDownvotes] = useState(5);
 
   const handleToggleUpvote = () => {
@@ -61,7 +62,7 @@ export default function VotePanel(/*{ post }: Props*/) {
         {isUpvoted ? <ArrowCircleUpTwoToneIcon sx={{ fontSize:35, color: green[500] }}/> : <ArrowCircleUpIcon fontSize="medium" /> }
       </VoteButtonAnimate>
       <Typography >
-        {upvotes-downvotes+".3천"  /*fShortenNumber(likes)*/}
+        {fDecimal(upvotes-downvotes)  /*fShortenNumber(likes)*/}
       </Typography>
       <VoteButtonAnimate onClick={handleToggleDownvote} >
         {isDownvoted ? <ArrowCircleDownTwoToneIcon sx={{ fontSize:35, color: pink[500] }} /> : <ArrowCircleDownIcon fontSize="medium" /> }

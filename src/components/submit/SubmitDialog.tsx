@@ -8,7 +8,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
-import { Box } from '@mui/material';
+import { Box, Divider } from '@mui/material';
 import { Typography } from '@mui/material';
 
 //components
@@ -17,6 +17,7 @@ import SubmitForm from './SubmitForm';
 import { IconButton, useMediaQuery, useTheme } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { borderColor } from '@mui/system';
+import SidebarAccount from 'src/layouts/dashboard/sidebar/SidebarAccount';
 
 interface SubmitDialogProps {
   open: boolean;
@@ -72,10 +73,12 @@ export default function SubmitDialog( {open, handleClose}: SubmitDialogProps ) {
             color: (theme) => theme.palette.grey[500],
           }}
         >
-          <CloseIcon />
+          <CloseIcon sx={{ fontSize: 40 }} />
         </IconButton>
       </DialogTitle>
-      <DialogContent>
+      <Divider/>
+      <DialogContent sx={{mt:2, p:2, }}>
+        <SidebarAccount />
         <SubmitForm handleClose={handleClose}/>
       </DialogContent>
     </StyledSubmitDialog>

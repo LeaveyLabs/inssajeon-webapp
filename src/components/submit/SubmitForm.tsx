@@ -123,7 +123,7 @@ export default function SubmitForm( {handleClose} : SubmitFormProps) {
             onChange={(event, newValue) => {
               formik.setFieldValue('tags', newValue);
             }}
-            style={{ width: 500 }} //TODO fix this
+            //style={{ width: 500 }} //TODO fix this
             options={TAGS_OPTIONS.map((option) => option.word).filter(tag => !formik.values.tags.includes(tag))}
             renderTags={(value, getTagProps) =>
               value.map((option, index) => (
