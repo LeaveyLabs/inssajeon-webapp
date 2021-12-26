@@ -34,7 +34,8 @@ ProfileWrite.createProfile = async (profile:ProfileEntity, customID:UserID) : Pr
     try { UserFactory.fromExportJson(userFromProfile); }
     catch (e) { throw e; }
 
-    try { await setDoc(doc(userDatabase, customID), userFromProfile); }
+    try { await setDoc(doc(userDatabase, customID), 
+        UserFactory.toExportJson(userFromProfile)); }
     catch (e) { throw new Error(PROFILE_USER_CREATION_ERROR); }
 }
 

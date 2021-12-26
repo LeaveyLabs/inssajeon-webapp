@@ -1,11 +1,16 @@
-import { arrayRemove, arrayUnion, doc, setDoc, updateDoc } from "firebase/firestore";
+import { arrayRemove, arrayUnion, doc, FieldValue, increment, setDoc, updateDoc } from "firebase/firestore";
 import { PostEntity, PostFactory } from "../entities/posts/PostEntity";
 import { WordEntity } from "../entities/words/WordEntity";
-import { DataQuery } from "./DataQuery";
+import { DataQuery, WordOrder } from "./DataQuery";
 import { postDatabase, userDatabase, wordDatabase } from "./dbRefs";
 
 export const PostWrite = function () {};
-
+/**
+ * @param  {string} userID - upvoter
+ * @param  {string} postID - post to be upvoted
+ * @returns Promise
+ * @description adds an upvoter to the post's "upvotes" and removes from "downvotes" (backend server will update the count)
+ */
 PostWrite.upvotePost = async (userID:string, postID:string) : Promise<void> => {
     try { 
         await updateDoc(doc(postDatabase, postID), 
@@ -15,7 +20,12 @@ PostWrite.upvotePost = async (userID:string, postID:string) : Promise<void> => {
     }
     catch (e) { throw new Error("Could not add upvote to post"); }
 }
-
+/**
+ * @param  {string} userID - downvoter
+ * @param  {string} postID - post to be downvoted
+ * @returns Promise
+ * @description removes an upvoter to the post's "upvotes" and adds to "downvotes" (backend server will update the count)
+ */
 PostWrite.downvotePost = async (userID:string, postID:string) : Promise<void> => {
     try { 
         await updateDoc(doc(postDatabase, postID), 
@@ -25,7 +35,12 @@ PostWrite.downvotePost = async (userID:string, postID:string) : Promise<void> =>
     }
     catch (e) { throw new Error("Could not add downvote to post"); }
 }
-
+/**
+ * @param  {string} userID - sharer
+ * @param  {string} postID - post to be shared
+ * @returns Promise
+ * @description adds a user to the "shares" element of a post
+ */
 PostWrite.sharePost = async (userID:string, postID:string) : Promise<void> => {
     try { 
         await updateDoc(doc(postDatabase, postID), 
@@ -33,7 +48,12 @@ PostWrite.sharePost = async (userID:string, postID:string) : Promise<void> => {
     }
     catch (e) { throw new Error("Could not add share to post"); }
 }
-
+/**
+ * @param  {string} userID - flagger
+ * @param  {string} postID - post to be flagged
+ * @returns Promise
+ * @description adds a user to the "flags" element of a post
+ */
 PostWrite.flagPost = async (userID:string, postID:string) : Promise<void> => {
     try { 
         await updateDoc(doc(postDatabase, postID), 
@@ -41,27 +61,37 @@ PostWrite.flagPost = async (userID:string, postID:string) : Promise<void> => {
     }
     catch (e) { throw new Error("Could not add flag to post"); }
 }
-
-PostWrite.flagPost = async (userID:string, postID:string) : Promise<void> => {
+/**
+ * @param  {string} userID - flagger
+ * @param  {string} postID - post to be unflagged
+ * @returns Promise
+ * @description removes a user from the "flags" element of a post
+ */
+PostWrite.unflagPost = async (userID:string, postID:string) : Promise<void> => {
     try { 
         await updateDoc(doc(postDatabase, postID), 
         {"flags": arrayRemove(userID)}); 
     }
     catch (e) { throw new Error("Could not remove flag from post"); }
 }
-
+/**
+ * @param  {string} postID 
+ * @param  {PostEntity} post
+ * @returns Promise
+ * @description adds a post to the database under the specified postID
+ */
 PostWrite.createPost = async (postID:string, post:PostEntity) : Promise<void> => {
     try { PostFactory.fromExportJson(post); }
     catch (e) { throw e; }
 
-    try { await setDoc(doc(postDatabase, postID), post); }
+    try { await setDoc(doc(postDatabase, postID), PostFactory.toExportJson(post)); }
     catch (e) { throw new Error("Could add post to database."); }
 
-    const matchWords = await DataQuery.searchWord(post.word);
+    const matchWords = await DataQuery.searchWordByWord(post.word, WordOrder.Trendscore);
     if(matchWords.length == 0) {
         const newWord:WordEntity = {
             wordString: post.word,
-            wordPosts: [postID],
+            numberOfPosts: 1,
             trendscore: 0,
         };
         await setDoc(doc(wordDatabase, post.word), newWord);
@@ -70,9 +100,13 @@ PostWrite.createPost = async (postID:string, post:PostEntity) : Promise<void> =>
         await addPostToWord(postID, post.word);
     }
 }
-
+/**
+ * @param  {string} postID
+ * @returns Promise
+ * @description removes a post with this postID
+ */
 PostWrite.removePost = async (postID:string) : Promise<void> => {
-    const posts:Array<PostEntity> = await DataQuery.searchPostID(postID);
+    const posts:Array<PostEntity> = await DataQuery.searchPostByPostID(postID);
     const post = posts[0];
 
     /* Get rid of the post from the word database */
@@ -95,7 +129,12 @@ async function updateInssajeom(userID:string, newInssajeom:number) : Promise<voi
     }
     catch (e) { throw new Error("Could not update inssajeom."); }
 }
-
+/**
+ * @param  {string} userID
+ * @param  {string} postID
+ * @returns Promise
+ * @description erases all traces of the post from the user's activity
+ */
 async function removePostFromUser(userID:string, postID:string) : Promise<void> {
     try {
         await updateDoc(doc(userDatabase, userID), 
@@ -107,19 +146,29 @@ async function removePostFromUser(userID:string, postID:string) : Promise<void> 
     }
     catch(e) {throw new Error("Could not remove post from user activity."); }
 }
-
+/**
+ * @param  {string} postID
+ * @param  {string} word
+ * @returns Promise
+ * @description increments a word's count of posts
+ */
 async function addPostToWord(postID:string, word:string) : Promise<void> {
     try { 
         await updateDoc(doc(wordDatabase, postID), 
-        {"wordPosts": arrayUnion(postID)}); 
+        {"numberOfPosts": increment(1)}); 
     }
     catch (e) { throw new Error(`Could not add post to word: ${word}`); }
 }
-
+/**
+ * @param  {string} postID
+ * @param  {string} word
+ * @returns Promise
+ * @description decrements a word's count of posts
+ */
 async function removePostFromWord(postID:string, word:string) : Promise<void> {
     try { 
         await updateDoc(doc(wordDatabase, postID), 
-        {"wordPosts": arrayRemove(postID)}); 
+        {"numberofPosts": increment(-1)}); 
     }
     catch (e) { throw new Error(`Could not remove post from word: ${word}`); }
 }
