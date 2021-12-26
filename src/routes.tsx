@@ -13,7 +13,6 @@ import SettingsPage from './pages/Account/SettingsPage';
 import ExplorePage from './pages/Feeds/ExplorePage';
 import ResultsPage from './pages/Feeds/ResultsPage';
 import ChartsPage from './pages/Charts/ChartsPage';
-import SubmitPage from './pages/Submit/SubmitPage';
 
 // ----------------------------------------------------------------------
 
@@ -59,10 +58,6 @@ export default function Router() {
         ]}
       ]
     },
-    { path: 'submit', element: <PlainLayout/>, children: [
-      { path: "*", element: <Navigate to="" replace />, index:true },
-      { path: '', element: <SubmitPage /> },
-    ]},
     { path: 'charts', element: <DashboardLayout />, children: [
       { path: "*", element: <Navigate to="" replace />, index:true },
       { path: '', element: <ChartsPage /> },

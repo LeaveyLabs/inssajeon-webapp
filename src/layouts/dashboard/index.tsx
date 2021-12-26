@@ -9,6 +9,7 @@ import useCollapseSidebar from '../../hooks/useCollapseSidebar';
 import useResponsive from 'src/hooks/useResponsive';
 //components
 import DialogAnimate from 'src/components/animate/DialogAnimate'
+import SubmitDialog from 'src/components/submit/SubmitDialog';
 import Navbar from './navbar';
 import Sidebar from './sidebar';
 import FloatingSubmitButton from './FloatingSubmitButton';
@@ -41,7 +42,14 @@ export default function DashboardLayout() {
   const { isCollapse } = useCollapseSidebar();
   const [open, setOpen] = useState(false);
   const isDesktop = useResponsive('up', 'desktop');
-
+  const [dialogOpen, setDialogOpen] = useState(false);
+  
+  const handleDialogOpen = () => {
+    setDialogOpen(true);
+  };
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+  };
 
   return (
     <RootStyle>
@@ -51,7 +59,8 @@ export default function DashboardLayout() {
         <MainStyle >
           <Outlet />
         </MainStyle>
-        <FloatingSubmitButton/>
+        <FloatingSubmitButton handleDialogOpen={handleDialogOpen}/>
+        <SubmitDialog handleClose={handleDialogClose} open={dialogOpen} />
       </Container>
     </RootStyle>
   );
