@@ -1,10 +1,9 @@
 import { WORD_TYPE_ERROR } from "../../strings/apiConstLibrary";
 import { EntityFactory, IDictionary, validatedObject } from "../jsonFormat";
-import { PostIDSet, PostIDSetFactory } from "../posts/PostID";
 
 export interface WordEntity extends IDictionary<Object> {
     readonly wordString: string;
-    wordPosts: PostIDSet;
+    numberOfPosts: number;
     trendscore: number;
 };
 
@@ -17,7 +16,7 @@ export const WordFactory:EntityFactory = function () {};
 WordFactory.toExportJson = (word:WordEntity) : Object => {
     const o:WordEntity = {
         wordString: word.wordString,
-        wordPosts: PostIDSetFactory.toExportJson(word.wordPosts),
+        numberOfPosts: word.numberOfPosts,
         trendscore: word.trendscore,
     };
     return validatedObject(o, WORD_TYPE_ERROR);
@@ -30,7 +29,7 @@ WordFactory.toExportJson = (word:WordEntity) : Object => {
 WordFactory.fromExportJson = (json:any) : WordEntity => {
     const word:WordEntity = {
         wordString: json.wordString,
-        wordPosts: PostIDSetFactory.fromExportJson(json.wordPosts),
+        numberOfPosts: json.numberOfPosts,
         trendscore: json.trendscore,
     };
     return validatedObject(word, WORD_TYPE_ERROR) as WordEntity;

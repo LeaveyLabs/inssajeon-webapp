@@ -34,8 +34,6 @@ export const PROFILE_BIO_UPDATE_ERROR = "Error in updating username.";
 export const PROFILE_PIC_UPDATE_ERROR = "Error in updating picture path.";
 
 // export const WORD_HEADER = "word";
-export const WORD_WORDSTRING_HEADER = "wordSring";
-// export const WORD_WORDPOSTS_HEADER = "wordPosts";
 // export const WORD_TRENDSCORES_HEADER = "trendscores"; CLIENT CANNOT ACCESS THIS
 // export const WORD_TRENDSCORE_HEADER = "trendscore";
 export const WORD_TYPE_ERROR = "Incorrect formatting of Word data."
@@ -58,6 +56,7 @@ export const POST_TYPE_ERROR = "Incorrect formatting of Post data.";
 
 export const POSTIDSET_TYPE_ERROR = "Incorrect formatting of PostIDSet data.";
 
+export const TAG_TYPE_ERROR = "Incorrect formatting of Tag data.";
 export const TAGSET_TYPE_ERROR = "Incorrect formatting of TagSet data.";
 
 export const POST_DIR = "posts";
@@ -71,3 +70,5 @@ export const SUPPORTED_EXT:Array<string> = ["jpg", "jpeg", "png"]
 export const IMG_ERROR_UNSUPPORTED_EXT = "Not an image file.";
 export const IMG_ERROR_SIZE =`Image size must not exceed ${MAX_IMG_BYTES/1_000_000} megabytes.`;
 export const IMG_ERROR_URL = "Firebase storage path could not be converted into an image URL.";
+
+export const MAX_QUERY = 500;

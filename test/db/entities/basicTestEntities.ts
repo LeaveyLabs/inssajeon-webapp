@@ -115,12 +115,12 @@ export const jsonUser:Object = {
 
 export const standardWord:WordEntity = {
     wordString: "견박",
-    wordPosts: standardPostIDSet,
+    numberOfPosts: 10,
     trendscore: 10,
 };
 
 export const jsonWord:Object = {
     wordString: "견박",
-    wordPosts: jsonPostIDSet,
+    numberOfPosts: 10,
     trendscore: 10,
 };
