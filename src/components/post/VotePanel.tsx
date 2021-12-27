@@ -57,31 +57,22 @@ export default function VotePanel(/*{ post }: Props*/) {
   }
 
   return (
-    <Box sx={{ display:'flex', flexDirection: "row", alignItems:"center", justifyContent:"center", }}>
-      <VoteButtonAnimate onClick={handleToggleUpvote}>
-        {isUpvoted ? <ArrowCircleUpTwoToneIcon sx={{ fontSize:35, color: green[500] }}/> : <ArrowCircleUpIcon fontSize="medium" /> }
-      </VoteButtonAnimate>
-      <Typography >
-        {fDecimal(upvotes-downvotes)  /*fShortenNumber(likes)*/}
-      </Typography>
-      <VoteButtonAnimate onClick={handleToggleDownvote} >
-        {isDownvoted ? <ArrowCircleDownTwoToneIcon sx={{ fontSize:35, color: pink[500] }} /> : <ArrowCircleDownIcon fontSize="medium" /> }
-      </VoteButtonAnimate>
-    </Box>
-    // <Grid container spacing={2}>
-    //   <Grid item xs={6} md={8}>
-    //     <VoteButtonAnimate onClick={handleToggleUpvote}>
-    //       {isUpvoted ? <ArrowCircleUpTwoToneIcon sx={{ fontSize:35, color: green[500] }}/> : <ArrowCircleUpIcon fontSize="medium" /> }
-    //     </VoteButtonAnimate>
-    //   </Grid>
-    //   <Grid item xs={6} md={4}>
-    //     {upvotes-downvotes+".3천"  /*fShortenNumber(likes)*/}
-    //   </Grid>
-    //   <Grid item xs={6} md={8}>
-    //     <VoteButtonAnimate onClick={handleToggleDownvote}>
-    //       {isDownvoted ? <ArrowCircleDownTwoToneIcon sx={{ fontSize:35, color: pink[500] }} /> : <ArrowCircleDownIcon fontSize="medium" /> }
-    //     </VoteButtonAnimate>
-    //   </Grid>
-    // </Grid>
+    <>
+      <Box sx={{display: 'flex', justifyContent:'center', height:30, width:30 }}>
+        <VoteButtonAnimate onClick={handleToggleUpvote}>
+          {isUpvoted ? <ArrowCircleUpTwoToneIcon sx={{ fontSize:35, color: green[500] }}/> : <ArrowCircleUpIcon sx={{}}fontSize="medium" /> }
+        </VoteButtonAnimate>
+      </Box>
+      <Box sx={{display: 'flex', justifyContent:'center', alignItems:'center', height:40, width:70, }}>
+        <Typography >
+          {fDecimal(upvotes-downvotes)  /*fShortenNumber(likes)*/}
+        </Typography>
+      </Box>
+      <Box sx={{display: 'flex', justifyContent:'center', height:30, width:30, }}>
+        <VoteButtonAnimate onClick={handleToggleDownvote} >
+          {isDownvoted ? <ArrowCircleDownTwoToneIcon sx={{ fontSize:35, color: pink[500] }} /> : <ArrowCircleDownIcon fontSize="medium" /> }
+        </VoteButtonAnimate>
+      </Box>
+    </>
   );
 }
