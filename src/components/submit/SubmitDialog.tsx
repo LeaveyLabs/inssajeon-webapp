@@ -1,14 +1,12 @@
 import * as React from 'react';
 //mui
 import { styled } from '@mui/material/styles';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
-import { Box, Divider } from '@mui/material';
+import { Divider } from '@mui/material';
 import { Typography } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
@@ -16,7 +14,6 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import SubmitForm from './SubmitForm';
 import { IconButton, useMediaQuery, useTheme } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { borderColor } from '@mui/system';
 import SubmitDialogProfile from './SubmitDialogProfile';
 
 const Transition = React.forwardRef(function Transition(

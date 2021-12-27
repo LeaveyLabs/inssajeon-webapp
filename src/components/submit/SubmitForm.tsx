@@ -11,6 +11,8 @@ import { LoadingButton } from '@mui/lab';
 import { Container, Box, Chip, Stack, Button, TextField, Typography, Autocomplete } from '@mui/material';
 //components
 import SubmitDeleteDialog from './SubmitDeleteDialog';
+import SubmitSuccessDialog from './SubmitSuccessDialog';
+import { PersistFormikValues } from 'formik-persist-values';
 
 // ----------------------------------------------------------------------
 
@@ -19,19 +21,26 @@ interface Tag {
   trendscore: number;
 }
 
-const TAGS_OPTIONS: Tag[] = [
-  { 
-    word: '대학',
-    trendscore: 100,
-  },
-  { 
-    word: '가족',
-    trendscore: 10,
-  },
-  { 
-    word: '음식',
-    trendscore: 1,
-  },
+let FORM_SESSION_STORAGE_ID: string = "submit-form"
+
+// const TAGS_OPTIONS: Tag[] = [
+//   { 
+//     word: '대학',
+//     trendscore: 100,
+//   },
+//   { 
+//     word: '가족',
+//     trendscore: 10,
+//   },
+//   { 
+//     word: '음식',
+//     trendscore: 1,
+//   },
+// ];
+const TAGS_OPTIONS = [
+    '대학',
+    '가족',
+    '음식',
 ];
 
 export type NewPostFormValues = {
@@ -51,6 +60,8 @@ export default function SubmitForm( {handleClose} : SubmitFormProps) {
   let navigate = useNavigate();
   //let [tagsInputValue, setTagsInputValue] = React.useState('')
 
+  const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
+
   const NewPostSchema = Yup.object().shape({
     word: Yup
       .string()
@@ -63,7 +74,8 @@ export default function SubmitForm( {handleClose} : SubmitFormProps) {
       .required('필수'),
     tags: Yup
       .array()
-      .min(3, "적어도 3개"),
+      .min(3, "적어도 3개")
+      .max(7, "최대 7개"),
   });
 
   const formik = useFormik<NewPostFormValues>({ //<NewPostFormValues is necessary for typescript
@@ -75,18 +87,20 @@ export default function SubmitForm( {handleClose} : SubmitFormProps) {
     },
     validationSchema: NewPostSchema,
     onSubmit: (values, { setSubmitting, resetForm }) => { //if onSubmit is async isSubmitting automotically gets set to false after the async completes? read more here: https://github.com/jaredpalmer/formik/issues/2442#
-          setTimeout(() => {
-          alert(JSON.stringify(values, null, 2));
-          setSubmitting(false);
-          handleClose();
-          resetForm();
-          navigate("/post/", { replace: true }); //navigate to that submitted post
-        }, 1000);
-
-        //present modal: POST UPLOADED, click to view now! // click to share with friends!
-      
+      setTimeout(() => {
+        setSubmitting(false);
+        setIsSuccessDialogOpen(true);
+      }, 1000);
     },
   });
+
+  const allDone = () => {
+    formik.resetForm();
+    sessionStorage.removeItem(FORM_SESSION_STORAGE_ID)
+    handleClose();
+    navigate("/post/", { replace: true }); //navigate to that submitted post
+    //TODO: "click to share with friends!" icon
+  }
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const handleOpenDeleteDialog = () => {
@@ -97,10 +111,10 @@ export default function SubmitForm( {handleClose} : SubmitFormProps) {
   };
   const handleDeleteDraft = ( ) => {
     setIsDeleteDialogOpen(false)
+    sessionStorage.removeItem(FORM_SESSION_STORAGE_ID)
     formik.resetForm()
     handleClose()
   }
-
 
   return (
     <>
@@ -109,8 +123,13 @@ export default function SubmitForm( {handleClose} : SubmitFormProps) {
         handleClose={handleCloseDeleteDialog}
         handleConfirmDelete={handleDeleteDraft}
       />
+      <SubmitSuccessDialog
+        open={isSuccessDialogOpen}
+        handleClose={allDone}
+      />
       <FormikProvider value={formik}> {/* FormikProvider allows you to define the formik context above and then pass it as a prop*/}
         <Form autoComplete="off" noValidate> {/* onSubmit is implicit within formik's Form component // noValidate turns off auto browser validation*/} 
+          <PersistFormikValues name={FORM_SESSION_STORAGE_ID} storage="sessionStorage" persistInvalid={true} />
           <Stack spacing={2}>
             <TextField 
               id="word" //required
@@ -151,18 +170,19 @@ export default function SubmitForm( {handleClose} : SubmitFormProps) {
             <Autocomplete
               multiple
               freeSolo
+              disableClearable
               value={formik.values.tags}
               onChange={(event, newValue) => {
                 formik.setFieldValue('tags', newValue);
               }}
               //style={{ width: 500 }} //TODO fix this
-              options={TAGS_OPTIONS.map((option) => option.word).filter(tag => !formik.values.tags.includes(tag))}
-              renderTags={(value, getTagProps) =>
+              options={TAGS_OPTIONS.map((option) => option).filter(tag => !formik.values.tags.includes(tag))}
+              renderTags={(value: readonly string[], getTagProps) =>
                 value.map((option, index) => (
                   <Chip
                     {...getTagProps({ index })}
                     key={option}
-                    size="small"
+                    //size="small"
                     label={option}
                   />
                 ))
@@ -172,7 +192,7 @@ export default function SubmitForm( {handleClose} : SubmitFormProps) {
                   {...params} 
                   label="태그" 
                   id="tags"
-                  {...formik.getFieldProps('tags')} //not sure if this is actually needed. this autocomplete seciton seems to function fine without it
+                  //dont use formik.getFieldProps for autocomplete input field.
                   error={ formik.values.tags.length<3 && formik.touched.tags }
                   helperText={ formik.values.tags.length<3 && formik.touched.tags && String(formik.errors.tags) }
                 />
