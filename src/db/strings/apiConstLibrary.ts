@@ -63,6 +63,7 @@ export const POST_DIR = "posts";
 export const USER_DIR = "users";
 export const WORD_DIR = "words";
 export const IMG_DIR = "images";
+export const TAG_DIR = "tags";
 
 export const MAX_IMG_BYTES:number = 10_000_000; /* Maximum bytes is 10MB */
 export const MAX_UPLOAD_TIME:number = 20_000; /* Maximum upload is 20 seconds */

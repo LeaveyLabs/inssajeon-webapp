@@ -1,23 +1,19 @@
-import { addDoc, doc, setDoc, updateDoc } from "@firebase/firestore";
-import { deleteDoc, Timestamp } from "firebase/firestore";
-import { readFile, readFileSync } from "fs";
-import path from "path/posix";
-import { ProfileEntity } from "../entities/users/ProfileEntity";
+import { deleteDoc, doc, setDoc, updateDoc } from "@firebase/firestore";
+import { Timestamp } from "firebase/firestore";
+import { UserInfoEntity } from "../entities/users/UserInfoEntity";
 import { UserEntity, UserFactory } from "../entities/users/UserEntity";
-import { UserID } from "../entities/users/UserID";
-import { ACCOUNT_DEFAULT_SETTINGS, PROFILE_BIO_UPDATE_ERROR, PROFILE_PIC_UPDATE_ERROR, PROFILE_USERNAME_UPDATE_ERROR, PROFILE_USER_CREATION_ERROR } from "../strings/apiConstLibrary";
+import { ACCOUNT_DEFAULT_SETTINGS, PROFILE_BIO_UPDATE_ERROR, PROFILE_PIC_UPDATE_ERROR, PROFILE_USERNAME_UPDATE_ERROR, PROFILE_USER_CREATION_ERROR, PROFILE_USER_DELETION_ERROR } from "../strings/apiConstLibrary";
 import { userDatabase } from "./dbRefs";
-import { ImageFactory } from "./ImageFactory";
 
 export const ProfileWrite = function () {};
 
 /**
- * @param  {ProfileEntity} profile
+ * @param  {UserInfoEntity} profile
  * @param  {UserID} userID
  * @returns void
  * @decription add a new profile with a custom userID in the database
  */
-ProfileWrite.createProfile = async (profile:ProfileEntity, customID:UserID) : Promise<void> => {
+ProfileWrite.createProfile = async (profile:UserInfoEntity, customID:string) : Promise<void> => {
     const userFromProfile:UserEntity = {
         id: customID,
         info: profile,
@@ -44,8 +40,9 @@ ProfileWrite.createProfile = async (profile:ProfileEntity, customID:UserID) : Pr
  * @returns void
  * @decription delete a user's profile from the database
  */
-ProfileWrite.deleteProfile = async (userID:UserID) : Promise<void> => {
-    throw Error("not implemented");
+ProfileWrite.deleteProfile = async (userID:string) : Promise<void> => {
+    try { await deleteDoc(doc(userDatabase, userID)); }
+    catch (e) { throw new Error(PROFILE_USER_DELETION_ERROR); }
 }
 
 /**

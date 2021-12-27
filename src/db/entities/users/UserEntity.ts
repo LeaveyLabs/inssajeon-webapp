@@ -1,16 +1,14 @@
-import {USER_TYPE_ERROR} from "../../strings/apiConstLibrary";
-
-import {ProfileEntity, ProfileFactory} from './ProfileEntity';
-import {ActivityEntity, ActivityFactory} from './ActivityEntity';
-import {AccountEntity, AccountFactory} from './AccountEntity';
-import {UserID} from "./UserID"
+import { USER_TYPE_ERROR } from "../../strings/apiConstLibrary";
+import { UserInfoEntity, UserInfoFactory } from './UserInfoEntity';
+import { UserActivityEntity, UserActivityFactory } from './UserActivityEntity';
+import { AccountEntity, AccountFactory } from './AccountEntity';
 import { EntityFactory, IDictionary, validatedObject } from "../jsonFormat";
 
 /* Holds all data owned by an 인싸전 User */
 export interface UserEntity extends IDictionary<Object> {
-    readonly id: UserID;
-    info: ProfileEntity;
-    activity: ActivityEntity;
+    readonly id: string;
+    info: UserInfoEntity;
+    activity: UserActivityEntity;
     account: AccountEntity;
 };
 
@@ -29,8 +27,8 @@ UserFactory.toExportJson = (user:UserEntity) : Object => {
     */
     const o:UserEntity = {
         id: user.id, 
-        info: ProfileFactory.toExportJson(user.info),
-        activity: ActivityFactory.toExportJson(user.activity), 
+        info: UserInfoFactory.toExportJson(user.info),
+        activity: UserActivityFactory.toExportJson(user.activity), 
         account: AccountFactory.toExportJson(user.account),
     };
     return validatedObject(o, USER_TYPE_ERROR);
@@ -48,8 +46,8 @@ UserFactory.fromExportJson = (json:any) : UserEntity => {
     */
     const user:UserEntity = {
         id: json.id, 
-        info: ProfileFactory.fromExportJson(json.info),
-        activity: ActivityFactory.fromExportJson(json.activity),
+        info: UserInfoFactory.fromExportJson(json.info),
+        activity: UserActivityFactory.fromExportJson(json.activity),
         account: AccountFactory.fromExportJson(json.account),
     }
     return validatedObject(user, USER_TYPE_ERROR) as UserEntity;

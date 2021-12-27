@@ -4,8 +4,6 @@ import { getDocs, limit, orderBy, Query, query, QueryConstraint, where } from "f
 import { postDatabase, userDatabase, wordDatabase } from "./dbRefs";
 import { UserFactory } from "../entities/users/UserEntity";
 import { PostEntity, PostFactory } from "../entities/posts/PostEntity";
-import { PostID } from "../entities/posts/PostID";
-import { UserID } from "../entities/users/UserID";
 import { EntityFactory } from "../entities/jsonFormat";
 import { WordEntity, WordFactory } from "../entities/words/WordEntity";
 
@@ -42,7 +40,7 @@ const profileOrderQuery:Array<QueryConstraint> = [
  * @returns Promise<Array<User>> - promises a list of users that match the profile
  * @description queries the database for any users with a matching profile
  */
- DataQuery.searchUserByProfile = async (profile:any, ordering:ProfileOrder) : Promise<Array<User>> => {
+ DataQuery.searchUserByUserInfo = async (profile:any, ordering:ProfileOrder) : Promise<Array<User>> => {
     /*
     Filter out all empty string fields, and convert them into query fields.
     */
@@ -157,7 +155,7 @@ DataQuery.searchWordByWord = async (word:string, ordering:WordOrder) : Promise<A
  * @param  {PostID} id
  * @returns Promise
  */
-DataQuery.searchPostByPostID = async (id:PostID) : Promise<Array<PostEntity>> => {
+DataQuery.searchPostByPostID = async (id:string) : Promise<Array<PostEntity>> => {
     /*
     Query posts with an identical postID.
     Among these, call firebase to return all the valid posts.
@@ -170,7 +168,7 @@ DataQuery.searchPostByPostID = async (id:PostID) : Promise<Array<PostEntity>> =>
  * @param  {UserID} id
  * @returns Promise
  */
-DataQuery.searchUserByUserID = async (id:UserID) : Promise<Array<User>> => {
+DataQuery.searchUserByUserID = async (id:string) : Promise<Array<User>> => {
     /*
     Query posts with an identical userID.
     Among these, call firebase to return all the valid users.

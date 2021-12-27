@@ -12,12 +12,12 @@ export function generateFromExportJsonTest(factory:EntityFactory, standard:any, 
         it("valid entity: entity -> entity", () => {
             let a = standard;
             let b = json;
-            expect(factory.fromExportJson(json)).toStrictEqual(standard);
+            expect(factory.fromExportJson(json)).toEqual(standard);
         });
     
         it("two different objects should not export the same result", () => {
-            expect(factory.fromExportJson(json)).toStrictEqual(standard);
-            expect(factory.fromExportJson(modified)).not.toStrictEqual(standard);
+            expect(factory.fromExportJson(json)).toEqual(standard);
+            expect(factory.fromExportJson(modified)).not.toEqual(standard);
         });
     
         it("export inverts import", () => {
@@ -40,12 +40,12 @@ export function generateToExportJsonTest(factory:EntityFactory, standard:Entity,
         it("valid entity: entity -> entity", () => {
             let a = standard;
             let b = json;
-            expect(factory.toExportJson(json)).toStrictEqual(standard);
+            expect(factory.toExportJson(json)).toEqual(standard);
         });
     
         it("two different objects should not export the same result", () => {
-            expect(factory.toExportJson(json)).toStrictEqual(standard);
-            expect(factory.toExportJson(modified)).not.toStrictEqual(standard);
+            expect(factory.toExportJson(json)).toEqual(standard);
+            expect(factory.toExportJson(modified)).not.toEqual(standard);
         });
     
         it("import inverts export", () => {

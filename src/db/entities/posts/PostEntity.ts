@@ -1,28 +1,26 @@
 import { Timestamp } from 'firebase/firestore';
 import { POST_TYPE_ERROR } from '../../strings/apiConstLibrary';
 import { EntityFactory, IDictionary, validatedObject } from '../jsonFormat';
-import { ProfileEntity, ProfileFactory } from '../users/ProfileEntity';
-import { UserID, UserIDSet, UserIDSetFactory } from '../users/UserID';
-import { PostID } from './PostID';
-import { TagSet, TagSetFactory } from './Tag';
+import { UserInfoEntity, UserInfoFactory } from '../users/UserInfoEntity';
+import { StringListFactory } from '../StringList';
 
 export interface PostEntity extends IDictionary<Object> {
-    readonly postID: PostID;
-    readonly userID: UserID;
+    readonly postID: string;
+    readonly userID: string;
     readonly word: string;
     readonly definition: string;
     readonly quote: string;
     readonly timestamp: Timestamp;
-    readonly tags: TagSet;
-    userProfile: ProfileEntity;
-    trendscore: number;
-    upvotes: UserIDSet;
+    readonly tags: Array<string>;
+    trendscore: number;    
+    userProfile: UserInfoEntity;
+    upvotes: Array<string>;
+    downvotes: Array<string>;
+    shares: Array<string>;
+    flags: Array<string>;
     upvoteCount: number;
-    downvotes: UserIDSet;
     downvoteCount: number;
-    shares: UserIDSet;
     shareCount: number;
-    flags: UserIDSet;
     flagCount: number;
 }
 
@@ -43,17 +41,21 @@ PostFactory.toExportJson = (post:PostEntity) : Object => {
         word: post.word,
         definition: post.definition,
         quote: post.quote,
-        timestamp: post.timestamp,
-        tags: TagSetFactory.toExportJson(post.tags), 
-        userProfile: ProfileFactory.toExportJson(post.userProfile),
+        timestamp: new Timestamp(
+            (post.timestamp as Timestamp).seconds,
+            (post.timestamp as Timestamp).nanoseconds),
         trendscore: post.trendscore,
-        upvotes: UserIDSetFactory.toExportJson(post.upvotes),
+
+        tags: StringListFactory.toExportJson(post.tags), 
+        userProfile: UserInfoFactory.toExportJson(post.userProfile),
+        upvotes: StringListFactory.toExportJson(post.upvotes),
+        downvotes: StringListFactory.toExportJson(post.downvotes),
+        shares: StringListFactory.toExportJson(post.shares),
+        flags: StringListFactory.toExportJson(post.flags),
+
         upvoteCount: post.upvoteCount,
-        downvotes: UserIDSetFactory.toExportJson(post.downvotes),
         downvoteCount: post.downvoteCount,
-        shares: UserIDSetFactory.toExportJson(post.shares),
         shareCount: post.shareCount,
-        flags: UserIDSetFactory.toExportJson(post.flags),
         flagCount: post.flagCount,
     }
     return validatedObject(o, POST_TYPE_ERROR);
@@ -75,17 +77,21 @@ PostFactory.fromExportJson = (json:any) : PostEntity => {
         word: json.word,
         definition: json.definition,
         quote: json.quote,
-        timestamp: json.timestamp,
-        tags: TagSetFactory.fromExportJson(json.tags), 
-        userProfile: ProfileFactory.fromExportJson(json.userProfile),
+        timestamp: new Timestamp(
+            (json.timestamp as Timestamp).seconds,
+            (json.timestamp as Timestamp).nanoseconds),
         trendscore: json.trendscore,
-        upvotes: UserIDSetFactory.fromExportJson(json.upvotes),
+
+        tags: StringListFactory.fromExportJson(json.tags), 
+        userProfile: UserInfoFactory.fromExportJson(json.userProfile),
+        upvotes: StringListFactory.fromExportJson(json.upvotes),
+        downvotes: StringListFactory.fromExportJson(json.downvotes),
+        shares: StringListFactory.fromExportJson(json.shares),
+        flags: StringListFactory.fromExportJson(json.flags),
+
         upvoteCount: json.upvoteCount,
-        downvotes: UserIDSetFactory.fromExportJson(json.downvotes),
         downvoteCount: json.downvoteCount,
-        shares: UserIDSetFactory.fromExportJson(json.shares),
         shareCount: json.shareCount,
-        flags: UserIDSetFactory.fromExportJson(json.flags),
         flagCount: json.flagCount,
     }
     return validatedObject(post, POST_TYPE_ERROR) as PostEntity;
