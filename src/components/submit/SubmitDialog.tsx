@@ -10,19 +10,14 @@ import Slide from '@mui/material/Slide';
 import { TransitionProps } from '@mui/material/transitions';
 import { Box, Divider } from '@mui/material';
 import { Typography } from '@mui/material';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 //components
-import { ReactComponent as WideLogoSVG } from 'src/assets/logos/logo-wide.svg'
 import SubmitForm from './SubmitForm';
 import { IconButton, useMediaQuery, useTheme } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { borderColor } from '@mui/system';
-import SidebarAccount from 'src/layouts/dashboard/sidebar/SidebarAccount';
-
-interface SubmitDialogProps {
-  open: boolean;
-  handleClose: VoidFunction
-}
+import SubmitDialogProfile from './SubmitDialogProfile';
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -35,11 +30,15 @@ const Transition = React.forwardRef(function Transition(
 
 const StyledSubmitDialog = styled(Dialog)(({ theme }) => ({
   [theme.breakpoints.down('tablet')]: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(12),
   },
-  border:5,
-  borderRadius:5,
+  //border:5,
 }));
+
+interface SubmitDialogProps {
+  open: boolean;
+  handleClose: VoidFunction
+}
 
 export default function SubmitDialog( {open, handleClose}: SubmitDialogProps ) {
   const theme = useTheme();
@@ -55,30 +54,26 @@ export default function SubmitDialog( {open, handleClose}: SubmitDialogProps ) {
       fullScreen={fullScreen}
       scroll='paper'
     >
-      <DialogTitle sx={{ m: 0, p: 2 }} >
-        {/* {fullScreen && 
-          <Box sx={{ width: 150, height: 40 }}>
-            <WideLogoSVG/>
-          </Box>} */}
+      <DialogTitle sx={{ m: 0, p: 2, display: 'flex', justifyContent: 'center' }} >
         <Typography variant="h2" >
-          단어 정의하기
+          새 단어 정의하기
         </Typography>
-        <IconButton
+        <IconButton 
           aria-label="close"
           onClick={handleClose}
           sx={{
             position: 'absolute',
-            right: 8,
-            top: 8,
+            right: 10,
+            top: 10,
             color: (theme) => theme.palette.grey[500],
           }}
         >
-          <CloseIcon sx={{ fontSize: 40 }} />
+          {fullScreen ? <KeyboardArrowDownIcon sx={{ fontSize: 35 }} /> : <CloseIcon sx={{ fontSize: 35 }} />}
         </IconButton>
       </DialogTitle>
       <Divider/>
-      <DialogContent sx={{mt:2, p:2, }}>
-        <SidebarAccount />
+      <DialogContent sx={{ p:3,pb:10 }}>
+        <SubmitDialogProfile />
         <SubmitForm handleClose={handleClose}/>
       </DialogContent>
     </StyledSubmitDialog>

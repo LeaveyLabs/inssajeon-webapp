@@ -23,7 +23,7 @@ const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
   },
 }));
 
-export default function DesktopShareButton() {
+export default function DesktopCopyButton() {
   const [isCopied, setIsCopied] = useState(false);
   const [copyText, setCopyText] = useState("클립보드에 복사");
 
@@ -44,7 +44,7 @@ export default function DesktopShareButton() {
       <LightTooltip placement="top" TransitionComponent={Zoom} onClose={handleTooltipClose} title={copyText} leaveDelay={200}>
         {!isCopied ?
         <IconButton sx={{mr:1}}>
-          <ContentCopy color="primary" fontSize="small" />
+          <ContentCopy  fontSize="small" />
         </IconButton>
         :
         <IconButton sx={{mr:1}} >

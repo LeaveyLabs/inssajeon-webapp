@@ -38,7 +38,7 @@ import { green, pink, red } from '@mui/material/colors';
 // // components
 import PostMoreButton from 'src/components/post/PostMoreButton'
 import VotePanel from './VotePanel';
-import DesktopShareButton from './DesktopShareButton';
+import DesktopCopyButton from './DesktopCopyButton';
 // import Image from '../../../../components/Image';
 // import Iconify from '../../../../components/Iconify';
 // import MyAvatar from '../../../../components/MyAvatar';
@@ -153,7 +153,7 @@ export default function PostCard(/*{ post }: Props*/) {
             <IosShareIcon />
           </IconButton>}
         {!isMobile &&
-          <DesktopShareButton/>}
+          <DesktopCopyButton/>}
       </Box>
     </Card>
   );
