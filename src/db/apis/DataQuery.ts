@@ -30,8 +30,8 @@ export enum ProfileOrder {
 };
 
 const profileOrderQuery:Array<QueryConstraint> = [
-    orderBy("profile.username"),
-    orderBy("profile.inssajeom"),
+    orderBy("info.username"),
+    orderBy("info.inssajeom", "desc"),
 ];
 
 /**
@@ -50,8 +50,11 @@ const profileOrderQuery:Array<QueryConstraint> = [
     );
     /*
     Order the query and limit the total results.
+    Order alphabetically only if that's not a relevant query.
     */
-    queryFields.push(profileOrderQuery[ordering]);
+    if(ordering !== ProfileOrder.Alphabetical) {
+        queryFields.push(profileOrderQuery[ordering]);
+    }
     queryFields.push(limit(MAX_QUERY));
     /*
     Use the query fields to find a list of Users.
@@ -69,9 +72,9 @@ export enum PostOrder {
 };
 
 const postOrderQuery:Array<QueryConstraint> = [
-    orderBy("trendscore"),
-    orderBy("upvoteCount"),
-    orderBy("timestamp"),
+    orderBy("trendscore", "desc"),
+    orderBy("upvoteCount", "desc"),
+    orderBy("timestamp", "desc"),
 ];
 
 /**
@@ -126,8 +129,8 @@ export enum WordOrder {
 }
 
 const wordOrderQuery:Array<QueryConstraint> = [
-    orderBy("trendscore"),
-    orderBy("numberOfPosts"),
+    orderBy("trendscore", "desc"),
+    orderBy("numberOfPosts", "desc"),
 ];
 /**
  * @param  {string} word

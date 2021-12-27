@@ -24,7 +24,7 @@ export const executeInDatabase = async (testFunc:VerifierFunction) : Promise<voi
     /* 
     Define 10 Users
     */
-    for(let i = 0; i < 10; ++i) { userSet.add(createRandomUser()); }
+    userSet.add(createRandomUser());
     for(const user of Array.from(userSet)) {
         const allPosts = user.activity.upvotes
         .concat(user.activity.downvotes)
@@ -74,24 +74,22 @@ export const executeInDatabase = async (testFunc:VerifierFunction) : Promise<voi
     /*
     Iterable lists of each set
     */
-    const userList = Array.from(userSet);
-    const postList = Array.from(postSet);
-    const wordList = Array.from(wordSet);
+    const userList:Array<UserEntity> = Array.from(userSet);
+    const postList:Array<PostEntity> = Array.from(postSet);
+    const wordList:Array<WordEntity> = Array.from(wordSet);
+    const tagList:Array<TagEntity> = Array.from(tagSet);
 
     /*
     Upload each set to the database. 
     */
-    let i = -1;
     for(const user of userList) {
-        await setDoc(doc(userDatabase, String(i--)), user);
+        await setDoc(doc(userDatabase, user.id), user);
     }
-    let j = -1;
     for(const post of postList) {
-        await setDoc(doc(postDatabase, String(j--)), post);
+        await setDoc(doc(postDatabase, post.postID), post);
     }
-    let k = -1;
     for(const word of wordList) {
-        await setDoc(doc(wordDatabase, String(k--)), word);
+        await setDoc(doc(wordDatabase, word.wordString), word);
     }
     /*
     Run the function in this test environment.
@@ -101,12 +99,12 @@ export const executeInDatabase = async (testFunc:VerifierFunction) : Promise<voi
     Delete each set from the database. 
     */
     for(const user of userList) {
-        await deleteDoc(doc(userDatabase, String(++i)));
+        await deleteDoc(doc(userDatabase, user.id));
     }
     for(const post of postList) {
-        await deleteDoc(doc(postDatabase, String(++j)));
+        await deleteDoc(doc(postDatabase, post.postID));
     }
     for(const word of wordList) {
-        await deleteDoc(doc(wordDatabase, String(++k)));
+        await deleteDoc(doc(wordDatabase, word.wordString));
     }
 };

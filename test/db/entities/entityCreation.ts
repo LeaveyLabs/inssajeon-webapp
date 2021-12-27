@@ -85,8 +85,8 @@ export function createRandomPostWithID(postID:string, userID:string) : PostEntit
     let flags:Array<string> = [];
     let arrayGauntlet = [tags, upvotes, downvotes, shares, flags];
     for(let i = 0; i < arrayGauntlet.length; ++i) {
-        for(let j = 0; j < Math.random()*10; ++j) {
-            arrayGauntlet[i].push(String(uuidv4).replace("-", ""));
+        for(let j = 0; j < Math.random()*3; ++j) {
+            arrayGauntlet[i].push(String(uuidv4()).replace("-", ""));
         }
     }
     return {

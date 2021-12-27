@@ -9,7 +9,7 @@ import { UserFactory } from "../../../src/db/entities/users/UserEntity";
 import { UserInfoFactory } from "../../../src/db/entities/users/UserInfoEntity";
 import { WordFactory } from "../../../src/db/entities/words/WordEntity";
 import { USER_TYPE_ERROR } from "../../../src/db/strings/apiConstLibrary";
-import { createRandomAccount, createRandomActivity, createRandomPost, createRandomTag, createRandomUser, createRandomUserInfo, createRandomWord } from "./entityCreation";
+import { createRandomAccount, createRandomUserActivity, createRandomPost, createRandomTag, createRandomUser, createRandomUserInfo, createRandomWord } from "./entityCreation";
 
 /* stringSetToJson */
 describe("testing stringSetToJson", () => {
@@ -83,7 +83,7 @@ describe("testing entitySetToJson and jsonToEntitySet", () => {
             {entity: createRandomUser, factory: UserFactory},
             {entity: createRandomPost, factory: PostFactory},
             {entity: createRandomTag, factory: TagFactory},
-            {entity: createRandomActivity, factory: UserActivityFactory},
+            {entity: createRandomUserActivity, factory: UserActivityFactory},
             {entity: createRandomUserInfo, factory: UserInfoFactory},
             {entity: createRandomAccount, factory: AccountFactory},
             {entity: createRandomWord, factory: WordFactory}
