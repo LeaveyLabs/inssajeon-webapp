@@ -11,7 +11,7 @@ import { StrictMode } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 // contexts
-import { CollapseDrawerProvider } from './contexts/CollapseDrawerContext';
+import { SidebarProvider } from './contexts/SidebarContext';
 //import { AuthProvider } from "./contexts/AuthContext";
 //
 import App from './App';
@@ -23,11 +23,11 @@ ReactDOM.render(
   <StrictMode>
     <HelmetProvider>
       {/* <AuthProvider> */}
-        <CollapseDrawerProvider>
+        <SidebarProvider>
           <BrowserRouter>
             <App />
           </BrowserRouter>
-        </CollapseDrawerProvider>
+        </SidebarProvider>
       {/* </AuthProvider> */}
     </HelmetProvider>
   </StrictMode>,

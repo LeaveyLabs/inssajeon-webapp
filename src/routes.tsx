@@ -12,6 +12,8 @@ import LoginPage from './pages/Registration/LoginPage';
 import SettingsPage from './pages/Account/SettingsPage';
 import ExplorePage from './pages/Feeds/ExplorePage';
 import ResultsPage from './pages/Feeds/ResultsPage';
+import ChartsPage from './pages/Charts/ChartsPage';
+import SubmitPage from './pages/Submit/SubmitPage';
 
 // ----------------------------------------------------------------------
 
@@ -26,7 +28,7 @@ export default function Router() {
   return useRoutes([
     //(mostly) registeredUser and guestUser routes
     { path: '/', element: <DashboardLayout />, children: [
-        { path: "*", element: <Navigate to="" replace />, index:true },
+        { path: ':id', element: <ResultsPage /> },
         { path: '', element: <HomePage /> },
         { path: 'categories', children: [
             { path: '', element: <ExplorePage /> },
@@ -36,10 +38,6 @@ export default function Router() {
         { path: 'users', children: [
             { path: ':id', element: <UserPage /> },
             { path: 'me', element: <UserPage /> },
-          ]
-        },
-        { path: 'search', children: [
-            { path: ':id', element: <ResultsPage /> },
           ]
         },
       ],
@@ -61,6 +59,14 @@ export default function Router() {
         ]}
       ]
     },
+    { path: 'submit', element: <LogoOnlyLayout/>, children: [
+      { path: "*", element: <Navigate to="" replace />, index:true },
+      { path: '', element: <SubmitPage /> },
+    ]},
+    { path: 'charts', element: <DashboardLayout />, children: [
+      { path: "*", element: <Navigate to="" replace />, index:true },
+      { path: '', element: <ChartsPage /> },
+    ]},
     //404
     {
       path: '*',
