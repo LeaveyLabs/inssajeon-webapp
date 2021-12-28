@@ -2,14 +2,14 @@ import { doc, updateDoc } from "@firebase/firestore";
 import { arrayRemove, arrayUnion } from "firebase/firestore";
 import { userDatabase } from "./dbRefs";
 
-export const ActivityWrite = function () {};
+export const UserActivityWrite = function () {};
 /**
  * @param  {string} userID
  * @param  {string} postID
  * @returns Promise
  * @description adds an upvoted post to the user's activity
  */
-ActivityWrite.addUpvote = async (userID:string, postID:string) : Promise<void> => {
+UserActivityWrite.addUpvote = async (userID:string, postID:string) : Promise<void> => {
     try { await updateDoc(doc(userDatabase, userID), 
         {"activity.upvotes": arrayUnion(postID)}); }
     catch (e) { throw new Error("Could not add upvote."); }
@@ -20,7 +20,7 @@ ActivityWrite.addUpvote = async (userID:string, postID:string) : Promise<void> =
  * @returns Promise
  * @description removes an upvoted post from the user's activity
  */
-ActivityWrite.removeUpvote = async (userID:string, postID:string) : Promise<void> => {
+UserActivityWrite.removeUpvote = async (userID:string, postID:string) : Promise<void> => {
     try { await updateDoc(doc(userDatabase, userID), 
         {"activity.upvotes": arrayRemove(postID)}); }
     catch (e) { throw new Error("Could not remove upvote."); }
@@ -31,7 +31,7 @@ ActivityWrite.removeUpvote = async (userID:string, postID:string) : Promise<void
  * @returns Promise
  * @description adds a downvoted post to the user's activity
  */
-ActivityWrite.addDownvote = async (userID:string, postID:string) : Promise<void> => {
+UserActivityWrite.addDownvote = async (userID:string, postID:string) : Promise<void> => {
     try { await updateDoc(doc(userDatabase, userID), 
         {"activity.downvotes": arrayUnion(postID)}); }
     catch (e) { throw new Error("Could not add downvote."); }
@@ -42,7 +42,7 @@ ActivityWrite.addDownvote = async (userID:string, postID:string) : Promise<void>
  * @returns Promise
  * @description removes a downvoted post from the user's activity
  */
-ActivityWrite.removeDownvote = async (userID:string, postID:string) : Promise<void> => {
+UserActivityWrite.removeDownvote = async (userID:string, postID:string) : Promise<void> => {
     try { await updateDoc(doc(userDatabase, userID), 
         {"activity.downvotes": arrayRemove(postID)}); }
     catch (e) { throw new Error("Could not remove downvote."); }
@@ -53,7 +53,7 @@ ActivityWrite.removeDownvote = async (userID:string, postID:string) : Promise<vo
  * @returns Promise
  * @description adds a favorited post to the user's actiivty
  */
-ActivityWrite.addFavorite = async (userID:string, postID:string) : Promise<void> => {
+UserActivityWrite.addFavorite = async (userID:string, postID:string) : Promise<void> => {
     try { await updateDoc(doc(userDatabase, userID), 
         {"activity.favorites": arrayUnion(postID)}); }
     catch (e) { throw new Error("Could not add to favorites."); }
@@ -64,7 +64,7 @@ ActivityWrite.addFavorite = async (userID:string, postID:string) : Promise<void>
  * @returns Promise
  * @description removes a favorited post from the user's activity
  */
-ActivityWrite.removeFavorite = async (userID:string, postID:string) : Promise<void> => {
+UserActivityWrite.removeFavorite = async (userID:string, postID:string) : Promise<void> => {
     try { await updateDoc(doc(userDatabase, userID), 
         {"activity.favorites": arrayRemove(postID)}); }
     catch (e) { throw new Error("Could not remove from favorites."); }
@@ -75,7 +75,7 @@ ActivityWrite.removeFavorite = async (userID:string, postID:string) : Promise<vo
  * @returns Promise
  * @description adds a submitted post to the user's activity
  */
-ActivityWrite.addSubmission = async (userID:string, postID:string) : Promise<void> => {
+UserActivityWrite.addSubmission = async (userID:string, postID:string) : Promise<void> => {
     try { await updateDoc(doc(userDatabase, userID), 
         {"activity.submissions": arrayUnion(postID)}); }
     catch (e) { throw new Error("Could not add to submissions."); }
@@ -86,7 +86,7 @@ ActivityWrite.addSubmission = async (userID:string, postID:string) : Promise<voi
  * @returns Promise
  * @description removes a submitted post to the user's activity
  */
-ActivityWrite.removeSubmission = async (userID:string, postID:string) : Promise<void> => {
+UserActivityWrite.removeSubmission = async (userID:string, postID:string) : Promise<void> => {
     try { await updateDoc(doc(userDatabase, userID), 
         {"activity.submissions": arrayRemove(postID)}); }
     catch (e) { throw new Error("Could not remove from submissions."); }

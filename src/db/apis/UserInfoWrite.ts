@@ -5,7 +5,7 @@ import { UserEntity, UserFactory } from "../entities/users/UserEntity";
 import { ACCOUNT_DEFAULT_SETTINGS, PROFILE_BIO_UPDATE_ERROR, PROFILE_PIC_UPDATE_ERROR, PROFILE_USERNAME_UPDATE_ERROR, PROFILE_USER_CREATION_ERROR, PROFILE_USER_DELETION_ERROR } from "../strings/apiConstLibrary";
 import { userDatabase } from "./dbRefs";
 
-export const ProfileWrite = function () {};
+export const UserInfoWrite = function () {};
 
 /**
  * @param  {UserInfoEntity} profile
@@ -13,7 +13,7 @@ export const ProfileWrite = function () {};
  * @returns void
  * @decription add a new profile with a custom userID in the database
  */
-ProfileWrite.createProfile = async (profile:UserInfoEntity, customID:string) : Promise<void> => {
+UserInfoWrite.createProfile = async (profile:UserInfoEntity, customID:string) : Promise<void> => {
     const userFromProfile:UserEntity = {
         id: customID,
         info: profile,
@@ -40,7 +40,7 @@ ProfileWrite.createProfile = async (profile:UserInfoEntity, customID:string) : P
  * @returns void
  * @decription delete a user's profile from the database
  */
-ProfileWrite.deleteProfile = async (userID:string) : Promise<void> => {
+UserInfoWrite.deleteProfile = async (userID:string) : Promise<void> => {
     try { await deleteDoc(doc(userDatabase, userID)); }
     catch (e) { throw new Error(PROFILE_USER_DELETION_ERROR); }
 }
@@ -51,7 +51,7 @@ ProfileWrite.deleteProfile = async (userID:string) : Promise<void> => {
   * @returns void
   * @throws error if username cannot be updated
   */
-ProfileWrite.setUsername = async (userID:string, username:string) : Promise<void> => {
+UserInfoWrite.setUsername = async (userID:string, username:string) : Promise<void> => {
     try { await updateDoc(doc(userDatabase, userID), 
         {"profile.username": username}); }
     catch (e) { throw new Error(PROFILE_USERNAME_UPDATE_ERROR); }
@@ -63,7 +63,7 @@ ProfileWrite.setUsername = async (userID:string, username:string) : Promise<void
  * @returns void
  * @throws error if bio cannot be updated
  */
-ProfileWrite.setBio = async (userID:string, bio:string) : Promise<void> => {
+UserInfoWrite.setBio = async (userID:string, bio:string) : Promise<void> => {
     try { await updateDoc(doc(userDatabase, userID), 
         {"profile.bio": bio}); }
     catch (e) { throw new Error(PROFILE_BIO_UPDATE_ERROR); }
@@ -74,7 +74,7 @@ ProfileWrite.setBio = async (userID:string, bio:string) : Promise<void> => {
  * @returns void
  * @throws error if picPath cannot be updated
  */
-ProfileWrite.setPic = async (userID:string, picPath:string) : Promise<void> => {
+UserInfoWrite.setPic = async (userID:string, picPath:string) : Promise<void> => {
     try { await updateDoc(doc(userDatabase, userID), 
         {"profile.picPath": picPath}); }
     catch (e) { throw new Error(PROFILE_PIC_UPDATE_ERROR); }
