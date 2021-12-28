@@ -5,7 +5,7 @@ import { Popover, PopoverProps } from '@mui/material';
 // ----------------------------------------------------------------------
 
 const ArrowStyle = styled('span')(({ theme }) => ({
-  [theme.breakpoints.up('sm')]: {
+  [theme.breakpoints.up('mobile')]: {
     top: -7,
     zIndex: 1,
     width: 12,

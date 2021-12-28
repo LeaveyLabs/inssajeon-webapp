@@ -7,7 +7,7 @@ import Page from '../../components/Page';
 
 // ----------------------------------------------------------------------
 
-export default function LoginPage() {
+export default function TermsPage() {
 
   return (
     <Page title="홈">

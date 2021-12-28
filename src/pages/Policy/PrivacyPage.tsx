@@ -7,7 +7,7 @@ import Page from '../../components/Page';
 
 // ----------------------------------------------------------------------
 
-export default function LoginPage() {
+export default function PrivacyPage() {
 
   return (
     <Page title="홈">
