@@ -1,8 +1,7 @@
-import { User } from "firebase/auth";
 import { MAX_QUERY, POST_POSTID_HEADER, POST_TAGS_HEADER, USER_PROFILE_HEADER, USER_USERID_HEADER } from "../strings/apiConstLibrary";
 import { getDocs, limit, orderBy, Query, query, QueryConstraint, where } from "firebase/firestore"; 
 import { postDatabase, userDatabase, wordDatabase } from "./dbRefs";
-import { UserFactory } from "../entities/users/UserEntity";
+import { UserEntity, UserFactory } from "../entities/users/UserEntity";
 import { PostEntity, PostFactory } from "../entities/posts/PostEntity";
 import { EntityFactory } from "../entities/jsonFormat";
 import { WordEntity, WordFactory } from "../entities/words/WordEntity";
@@ -40,7 +39,7 @@ const profileOrderQuery:Array<QueryConstraint> = [
  * @returns Promise<Array<User>> - promises a list of users that match the profile
  * @description queries the database for any users with a matching profile
  */
- DataQuery.searchUserByUserInfo = async (profile:any, ordering:ProfileOrder) : Promise<Array<User>> => {
+ DataQuery.searchUserByUserInfo = async (profile:any, ordering:ProfileOrder) : Promise<Array<UserEntity>> => {
     /*
     Filter out all empty string fields, and convert them into query fields.
     */
@@ -61,7 +60,7 @@ const profileOrderQuery:Array<QueryConstraint> = [
     Call firebase to filter out and return a list of valid users.
     */
     const profileQuery = query(userDatabase, ...queryFields);
-    const queryResult = await firebaseEntityQuery<User>(profileQuery, UserFactory);
+    const queryResult = await firebaseEntityQuery<UserEntity>(profileQuery, UserFactory);
     return queryResult;
 };
 
@@ -171,13 +170,13 @@ DataQuery.searchPostByPostID = async (id:string) : Promise<Array<PostEntity>> =>
  * @param  {UserID} id
  * @returns Promise
  */
-DataQuery.searchUserByUserID = async (id:string) : Promise<Array<User>> => {
+DataQuery.searchUserByUserID = async (id:string) : Promise<Array<UserEntity>> => {
     /*
     Query posts with an identical userID.
     Among these, call firebase to return all the valid users.
     */
     const userIDQuery = query(userDatabase, where(USER_USERID_HEADER, "==", id));
-    const userIDQueryResult = await firebaseEntityQuery<User>(userIDQuery, UserFactory);
+    const userIDQueryResult = await firebaseEntityQuery<UserEntity>(userIDQuery, UserFactory);
     return userIDQueryResult;
 };
 

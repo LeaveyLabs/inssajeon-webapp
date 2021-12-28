@@ -1,4 +1,4 @@
-import { AccountEntity } from "../entities/users/AccountEntity";
+import { UserAccountEntity } from "../entities/users/UserAccountEntity";
 
 export const USER_USERID_HEADER = "id";
 // export const USER_ACCOUNT_HEADER = "account";
@@ -11,7 +11,7 @@ export const USERIDSET_TYPE_ERROR = "Incorrect formatting of UserIDSet data.";
 // export const ACCOUNT_SIGNINMETHOD_HEADER = "activity";
 // export const ACCOUNT_EMAILFREQUENCY_HEADER = "emailFrequency";
 export const ACCOUNT_TYPE_ERROR = "Incorrect formatting of Account data.";
-export const ACCOUNT_DEFAULT_SETTINGS:AccountEntity = {
+export const ACCOUNT_DEFAULT_SETTINGS:UserAccountEntity = {
     signInMethod: 0, 
     emailFrequency: 1,
 }
@@ -60,8 +60,23 @@ export const TAG_TYPE_ERROR = "Incorrect formatting of Tag data.";
 export const TAGSET_TYPE_ERROR = "Incorrect formatting of TagSet data.";
 
 export const POST_DIR = "posts";
+export const POST_UPVOTES_PROPERTY = "upvotes";
+export const POST_DOWNVOTES_PROPERTY = "downvotes";
+export const POST_FLAGS_PROPERTY = "flags";
+export const POST_SHARES_PROPERTY = "shares";
+
 export const USER_DIR = "users";
+export const USER_USERNAME_PROPERTY = "info.username";
+export const USER_BIO_PROPERTY = "info.bio";
+export const USER_PIC_PATH_PROPERTY = "info.picPath";
+export const USER_UPVOTES_PROPERTY = "activity.upvotes";
+export const USER_DOWNVOTES_PROPERTY = "activity.downvotes";
+export const USER_FAVORITES_PROPERTY = "activity.downvotes";
+export const USER_SUBMISSIONS_PROPERTY = "activity.submissions";
+
 export const WORD_DIR = "words";
+export const WORD_NUMBER_OF_POSTS_PROPERTY = "numberOfPosts";
+
 export const IMG_DIR = "images";
 export const TAG_DIR = "tags";
 

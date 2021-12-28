@@ -6,7 +6,7 @@ import { UserEntity } from "../../../src/db/entities/users/UserEntity";
 import { TagEntity } from "../../../src/db/entities/tags/TagEntity";
 import { UserInfoEntity } from "../../../src/db/entities/users/UserInfoEntity";
 import { UserActivityEntity } from "../../../src/db/entities/users/UserActivityEntity";
-import { AccountEntity } from "../../../src/db/entities/users/AccountEntity";
+import { UserAccountEntity } from "../../../src/db/entities/users/UserAccountEntity";
 
 export function createRandomTag() : TagEntity {
     return {
@@ -53,7 +53,7 @@ export function createRandomUserActivity() : UserActivityEntity {
     };
 }
 
-export function createRandomAccount() : AccountEntity {
+export function createRandomAccount() : UserAccountEntity {
     return {
         signInMethod: Math.random()*10,
         emailFrequency: Math.random()*10,
