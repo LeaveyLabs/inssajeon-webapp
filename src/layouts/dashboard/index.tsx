@@ -12,10 +12,10 @@ import DialogAnimate from 'src/components/animate/DialogAnimate'
 import SubmitDialog from 'src/components/submit/SubmitDialog';
 import Navbar from './navbar';
 import Sidebar from './sidebar';
-import FloatingSubmitButton from './FloatingSubmitButton';
+import FloatingSubmitButton from '../../components/submit/FloatingSubmitButton';
 // config
 import {
-  SIDEBAR_WIDTH_MOBILE,
+  SIDEBAR_WIDTH_DESKTOP,
   NAVBAR_HEIGHT,
 } from '../../config';
 //
@@ -25,7 +25,7 @@ import {
 
 const RootStyle = styled('div')(({ theme }) => ({
   [theme.breakpoints.up('desktop')]: {
-    marginRight: SIDEBAR_WIDTH_MOBILE,
+    marginRight: SIDEBAR_WIDTH_DESKTOP,
   },
 }));
 
@@ -54,12 +54,12 @@ export default function DashboardLayout() {
   return (
     <RootStyle>
       <Container maxWidth={'tablet'} >
-        <Navbar onOpenSidebar={() => setOpen(true)} />
+        <Navbar onOpenSidebar={() => setOpen(true)} handleDialogOpen={handleDialogOpen} />
         <Sidebar isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} />
         <MainStyle >
           <Outlet />
         </MainStyle>
-        <FloatingSubmitButton handleDialogOpen={handleDialogOpen}/>
+        {!isDesktop && <FloatingSubmitButton handleDialogOpen={handleDialogOpen}/>}
         <SubmitDialog handleClose={handleDialogClose} open={dialogOpen} />
       </Container>
     </RootStyle>

@@ -10,6 +10,7 @@ import { IconButtonAnimate } from '../../../components/animate';
 
 import {
   NAVBAR_HEIGHT,
+  SIDEBAR_WIDTH_DESKTOP,
 } from '../../../config';
 
 // ----------------------------------------------------------------------
@@ -25,13 +26,15 @@ const DropSearchbarStyle = styled('div')(({ theme }) => ({
   zIndex: 99,
   width: '100%',
   display: 'flex',
-  position: 'absolute',
+  position: 'fixed',
   alignItems: 'center',
   height: NAVBAR_HEIGHT,
   padding: theme.spacing(0, 3),
   boxShadow: theme.customShadows.z8,
   [theme.breakpoints.up('desktop')]: {
     padding: theme.spacing(0, 5),
+    width: '640px',
+    //marginRight: SIDEBAR_WIDTH_DESKTOP,
   },
 }));
 
