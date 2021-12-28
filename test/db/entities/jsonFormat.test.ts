@@ -3,7 +3,7 @@ jsonToStringSet, entitySetToJson, jsonToEntitySet,
 hasNullProperties, validatedObject, EntityFactory} from "../../../src/db/entities/jsonFormat";
 import { PostFactory } from "../../../src/db/entities/posts/PostEntity";
 import { TagFactory } from "../../../src/db/entities/tags/TagEntity";
-import { AccountFactory } from "../../../src/db/entities/users/AccountEntity";
+import { UserAccountFactory } from "../../../src/db/entities/users/UserAccountEntity";
 import { UserActivityFactory } from "../../../src/db/entities/users/UserActivityEntity";
 import { UserFactory } from "../../../src/db/entities/users/UserEntity";
 import { UserInfoFactory } from "../../../src/db/entities/users/UserInfoEntity";
@@ -85,7 +85,7 @@ describe("testing entitySetToJson and jsonToEntitySet", () => {
             {entity: createRandomTag, factory: TagFactory},
             {entity: createRandomUserActivity, factory: UserActivityFactory},
             {entity: createRandomUserInfo, factory: UserInfoFactory},
-            {entity: createRandomAccount, factory: AccountFactory},
+            {entity: createRandomAccount, factory: UserAccountFactory},
             {entity: createRandomWord, factory: WordFactory}
         ];
 
