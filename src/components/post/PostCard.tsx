@@ -36,6 +36,7 @@ interface PostCardProps {
   post: PostEntity;
 }
 
+//TODO create isMobile hook
 //is it bad for this to be checked here? aka just once on the load, and not on rerenders?
 const isMobile = /Mobi/i.test(window.navigator.userAgent) 
 

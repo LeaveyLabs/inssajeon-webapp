@@ -55,7 +55,8 @@ export default function SubmitForm( {handleClose} : SubmitFormProps) {
       .required('필수'),
     definition: Yup
       .string()
-      .required('필수'),
+      .required('필수')
+      .min(5, "적어도 3글자"),
     quote: Yup
       .string()
       .required('필수'),
