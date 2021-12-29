@@ -1,7 +1,6 @@
 import { useState, useRef } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 // @mui
-import { styled } from '@mui/material/styles';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
@@ -9,24 +8,13 @@ import IosShareIcon from '@mui/icons-material/IosShare';
 import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
 import CircleIcon from '@mui/icons-material/Circle';
 import {
-  Alert,
   Box,
   Link,
   Card,
   Stack,
-  Paper,
-  Avatar,
-  Checkbox,
   Divider,
-  TextField,
   Typography,
-  CardHeader,
   IconButton,
-  AvatarGroup,
-  InputAdornment,
-  FormControlLabel,
-  Radio,
-  Button,
 } from '@mui/material';
 import { green, pink, red } from '@mui/material/colors';
 //hooks
@@ -39,59 +27,19 @@ import { green, pink, red } from '@mui/material/colors';
 import PostMoreButton from 'src/components/post/PostMoreButton'
 import VotePanel from './VotePanel';
 import DesktopCopyButton from './DesktopCopyButton';
-// import Image from '../../../../components/Image';
-// import Iconify from '../../../../components/Iconify';
-// import MyAvatar from '../../../../components/MyAvatar';
-// import EmojiPicker from '../../../../components/EmojiPicker';
-//external
-
+import { PostEntity } from 'src/db/entities/posts/PostEntity';
+import { fDate } from 'src/utils/formatTime';
 // ----------------------------------------------------------------------
 
 
-// type Post = {
-//   ID: string,
-//   userID: string,
-//   word: string,
-//   description: string,
-//   quote: string,
-//   tags: string[],
-//   upvotes: string[],
-//   downvotes: string[],
-//   shares: string[],
-//   flags: string[],
-//   //Profile: posterProfile;
-//   timestamp: Date,
-//   trendscore: number; //should we store firebase "number" as int or double or what
-// };
-
-// type User = {
-//   ID: string,
-//   userID: string,
-//   word: string,
-//   description: string,
-//   quote: string,
-//   tags: string[],
-//   upvotes: string[],
-//   downvotes: string[],
-//   shares: string[],
-//   flags: string[],
-//   //Profile: posterProfile;
-//   timestamp: Date,
-//   trendscore: number; //should we store firebase "number" as int or double or what
-// };
-
-// Post post = new Post()
-// User user = new User()
-// User poster = new User()
-
-// interface Props {
-//   post: Post;
-// }
+interface PostCardProps {
+  post: PostEntity;
+}
 
 //is it bad for this to be checked here? aka just once on the load, and not on rerenders?
 const isMobile = /Mobi/i.test(window.navigator.userAgent) 
 
-export default function PostCard(/*{ post }: Props*/) {
+export default function PostCard( { post }: PostCardProps ) {
   //const { user } = useAuth();
   const [isUpvoted, setIsUpvoted] = useState(false);
   const [isDownvoted, setIsDownvoted] = useState(false);
@@ -101,7 +49,7 @@ export default function PostCard(/*{ post }: Props*/) {
   const [downvotes, setDownvotes] = useState(5);
 
   const handleToggleFavorited = () => {
-    setIsFavorited(prevIsFavorited => !isFavorited)
+    setIsFavorited(prevIsFavorited => !isFavorited);
   }
 
   const handleMobileShare = () => {
@@ -126,11 +74,11 @@ export default function PostCard(/*{ post }: Props*/) {
       <Box sx={{ px:2, height:60, display:'flex', flexDirection: "row", alignItems:"center", justifyContent:"center", }}>
         <AccountCircleIcon sx={{mx:1}} />
         <Link to={`/users/102984019284091`} variant="subtitle1" color="text.primary" component={RouterLink}>
-            김아담 {/*post.userID*/}
+            {post.userProfile.username}
           </Link>
         <CircleIcon sx={{ color:'gray',fontSize: 4, ml:2 }}/>
         <Typography variant="caption" sx={{ mx:2,color: 'text.secondary' }}>
-          2일 전에{/*fDate(post.createdAt)*/}
+            {fDate((post.timestamp.toDate()))} {/*2일 전에 fDate(post.createdAt)*/}
         </Typography>
         <LocalFireDepartmentIcon sx={{ color: red[500] }}/>
         <Box sx={{ flexGrow: 1 }} />
@@ -138,9 +86,9 @@ export default function PostCard(/*{ post }: Props*/) {
       </Box>
       <Divider variant="middle" />
       <Stack spacing={3} sx={{ p: 3 }}>
-        <Typography variant="h1">단어</Typography>
-        <Typography variant="body1">ㅁㄴㅇㄹㅁㄴㅇㄹ</Typography>
-        <Typography variant="body3">ㅋㅋㅋㅋㅋㅋㅋ</Typography>
+        <Typography variant="h1">{post.word}</Typography>
+        <Typography variant="body1">{post.definition}</Typography>
+        <Typography variant="body3">{post.quote}</Typography>
       </Stack>
       <Box sx={{ p:2, height:60, display:'flex', flexDirection: "row", alignItems:"center", justifyContent:"center", }}>
         <VotePanel/>

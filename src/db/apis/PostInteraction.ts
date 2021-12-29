@@ -1,4 +1,4 @@
-import { arrayRemove, arrayUnion, deleteDoc, doc, FieldValue, increment, setDoc, updateDoc } from "firebase/firestore";
+import { arrayRemove, arrayUnion, deleteDoc, doc, Timestamp, increment, setDoc, updateDoc } from "firebase/firestore";
 import { PostEntity, PostFactory } from "../entities/posts/PostEntity";
 import { WordEntity } from "../entities/words/WordEntity";
 import { DataQuery, WordOrder } from "./DataQuery";
@@ -132,24 +132,45 @@ PostInteraction.unfavoritePost = async (userID:string, postID:string) : Promise<
  * @returns Promise
  * @description adds a post to the database under the specified postID
  */
-PostInteraction.createPost = async (postID:string, post:PostEntity) : Promise<void> => {
-    try { PostFactory.fromExportJson(post); }
+PostInteraction.createPost = async (postID:string, post:any) : Promise<void> => {
+    /* Do not let user initialize post with upvotes, downvotes, time, etc. */
+    const dbSafePost:PostEntity = {
+        postID: postID,
+        userID: post.userID,
+        word: post.word,
+        definition: post.definition,
+        quote: post.quote,
+        timestamp: Timestamp.fromDate(new Date()),
+        tags: post.tags,
+        trendscore: 0,
+        userProfile: post.userProfile,
+        upvotes: [],
+        downvotes: [],
+        shares: [],
+        flags: [],
+        upvoteCount: 0,
+        downvoteCount: 0,
+        shareCount: 0,
+        flagCount: 0,
+    }        
+
+    try { PostFactory.fromExportJson(dbSafePost); }
     catch (e) { throw e; }
 
-    try { await setDoc(doc(postDatabase, postID), PostFactory.toExportJson(post)); }
+    try { await setDoc(doc(postDatabase, postID), PostFactory.toExportJson(dbSafePost)); }
     catch (e) { throw new Error(`Could not add post ${postID} to database.`); }
 
-    const matchWords = await DataQuery.searchWordByWord(post.word, WordOrder.Trendscore);
-    if(matchWords.length == 0) {
+    const matchWords = await DataQuery.searchWordByWord(dbSafePost.word, WordOrder.Trendscore);
+    if(matchWords.length === 0) {
         const newWord:WordEntity = {
             wordString: post.word,
             numberOfPosts: 1,
             trendscore: 0,
         };
-        await setDoc(doc(wordDatabase, post.word), newWord);
+        await setDoc(doc(wordDatabase, dbSafePost.word), newWord);
     }
     else {
-        await addPostToWord(post.word);
+        await addPostToWord(dbSafePost.word);
     }
 }
 

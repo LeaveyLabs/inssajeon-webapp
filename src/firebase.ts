@@ -5,7 +5,7 @@ import { getAuth } from 'firebase/auth';
 Ensures that tests will also re-direct to the .env.local file
 */
 import dotenv from "dotenv";
-dotenv.config({path: '.env.local'});
+dotenv.config({path: '.env.production'});
 
 const firebaseApp = initializeApp({
     apiKey: process.env.REACT_APP_FIREBASE_API_KEY,

@@ -153,6 +153,7 @@ DataQuery.searchWordByWord = async (word:string, ordering:WordOrder) : Promise<A
    const wordQueryResult = await firebaseEntityQuery<WordEntity>(wordQuery, WordFactory);
    return wordQueryResult;
 };
+
 /**
  * @param  {PostID} id
  * @returns Promise
@@ -166,6 +167,7 @@ DataQuery.searchPostByPostID = async (id:string) : Promise<Array<PostEntity>> =>
     const postIDQueryResult = await firebaseEntityQuery<PostEntity>(postIDQuery, PostFactory);
     return postIDQueryResult;
 };
+
 /**
  * @param  {UserID} id
  * @returns Promise
@@ -179,6 +181,16 @@ DataQuery.searchUserByUserID = async (id:string) : Promise<Array<UserEntity>> =>
     const userIDQueryResult = await firebaseEntityQuery<UserEntity>(userIDQuery, UserFactory);
     return userIDQueryResult;
 };
+
+/**
+ * @returns Promise<Array<PostEntity>>
+ */
+DataQuery.getAllPosts = async (ordering:PostOrder) : Promise<Array<PostEntity>> => {
+    /* Order the posts as specified, up to the limit of posts */
+    const orderedQuery = query(postDatabase, postOrderQuery[ordering], limit(MAX_QUERY));
+    /* Query the database for this order */
+    return await firebaseEntityQuery<PostEntity>(orderedQuery, PostFactory);
+}
 
 const nearWords = (word:string) => {
     throw Error("Not implemented");

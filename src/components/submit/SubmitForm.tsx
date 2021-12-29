@@ -1,5 +1,4 @@
 import * as Yup from 'yup';
-// import { useCallback, useState } from 'react'; somehow callbacks can be useful for forms
 import { useFormik, Form, FormikProvider } from 'formik';
 //react
 import { useState } from 'react';
@@ -13,7 +12,11 @@ import { Container, Box, Chip, Stack, Button, TextField, Typography, Autocomplet
 import SubmitDeleteDialog from './SubmitDeleteDialog';
 import SubmitSuccessDialog from './SubmitSuccessDialog';
 import { PersistFormikValues } from 'formik-persist-values';
-
+//database
+import { v4 as uuidv4 } from "uuid";
+import { PostEntity } from "../../db/entities/posts/PostEntity"
+import { Timestamp } from "firebase/firestore";
+import { PostInteraction } from "../../db/apis/PostInteraction"
 // ----------------------------------------------------------------------
 
 interface Tag {
@@ -23,24 +26,10 @@ interface Tag {
 
 let FORM_SESSION_STORAGE_ID: string = "submit-form"
 
-// const TAGS_OPTIONS: Tag[] = [
-//   { 
-//     word: '대학',
-//     trendscore: 100,
-//   },
-//   { 
-//     word: '가족',
-//     trendscore: 10,
-//   },
-//   { 
-//     word: '음식',
-//     trendscore: 1,
-//   },
-// ];
 const TAGS_OPTIONS = [
-    '대학',
-    '가족',
-    '음식',
+  '대학',
+  '가족',
+  '음식',
 ];
 
 export type NewPostFormValues = {
@@ -58,8 +47,6 @@ interface SubmitFormProps {
 
 export default function SubmitForm( {handleClose} : SubmitFormProps) {
   let navigate = useNavigate();
-  //let [tagsInputValue, setTagsInputValue] = React.useState('')
-
   const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
 
   const NewPostSchema = Yup.object().shape({
@@ -78,19 +65,48 @@ export default function SubmitForm( {handleClose} : SubmitFormProps) {
       .max(7, "최대 7개"),
   });
 
+  let postID:string = uuidv4().slice(24);
+
   const formik = useFormik<NewPostFormValues>({ //<NewPostFormValues is necessary for typescript
     initialValues: {
       word: '',
       definition: '',
       quote: '',
-      tags: ['음식'],
+      tags: [''],
     },
     validationSchema: NewPostSchema,
-    onSubmit: (values, { setSubmitting, resetForm }) => { //if onSubmit is async isSubmitting automotically gets set to false after the async completes? read more here: https://github.com/jaredpalmer/formik/issues/2442#
-      setTimeout(() => {
-        setSubmitting(false);
+    onSubmit: async (values, { setSubmitting, resetForm }) => { //if onSubmit is async isSubmitting automotically gets set to false after the async completes
+      try {
+        const post:PostEntity = {
+          postID: postID,
+          userID: "0", //TODO update
+          word: values.word,
+          definition: values.definition,
+          quote: values.quote,
+          timestamp: Timestamp.fromDate(new Date()),
+          tags: values.tags,
+          trendscore: 0, //TOODO update
+          userProfile: { //TODO update 
+            username: "0",
+            bio: "0",
+            picPath: "0",
+            inssajeom: 0,
+          },
+          upvotes: [],
+          downvotes: [],
+          shares: [],
+          flags: [],
+          upvoteCount: 0,
+          downvoteCount: 0,
+          shareCount: 0,
+          flagCount: 0,
+        }
+        await PostInteraction.createPost(postID, post);    
         setIsSuccessDialogOpen(true);
-      }, 1000);
+        //setSubmitting(false); i dont think this is needed
+      } catch (error) {
+        console.error(error)
+      }
     },
   });
 
@@ -98,7 +114,7 @@ export default function SubmitForm( {handleClose} : SubmitFormProps) {
     formik.resetForm();
     sessionStorage.removeItem(FORM_SESSION_STORAGE_ID)
     handleClose();
-    navigate("/post/", { replace: true }); //navigate to that submitted post
+    navigate(`/${postID}`, { replace: true }); //navigate to that submitted post
     //TODO: "click to share with friends!" icon
   }
 
@@ -137,6 +153,7 @@ export default function SubmitForm( {handleClose} : SubmitFormProps) {
               fullWidth 
               placeholder="갑분사"
               label="단어 또는 표현" 
+              disabled={formik.isSubmitting}
               {...formik.getFieldProps('word')} //wrapper for onChange, onBlur, value, checked. you no longer need to use formik's name prop either
               error={ Boolean(formik.errors.word) && formik.touched.word }
               helperText={ formik.errors.word && formik.touched.word && String(formik.errors.word) }
@@ -150,6 +167,7 @@ export default function SubmitForm( {handleClose} : SubmitFormProps) {
               type="text"
               placeholder="정확한 정의가 아니어도 괜찮아요"
               label="정의"
+              disabled={formik.isSubmitting}
               {...formik.getFieldProps('definition')}
               error={ Boolean(formik.errors.definition) && formik.touched.definition }
               helperText={ formik.errors.definition && formik.touched.definition && String(formik.errors.definition) }
@@ -163,6 +181,7 @@ export default function SubmitForm( {handleClose} : SubmitFormProps) {
               type="text"
               placeholder="여기는 도움이 되는 예문을 쓰세요"
               label="인용 또는 예문"
+              disabled={formik.isSubmitting}
               {...formik.getFieldProps('quote')}
               error={ Boolean(formik.errors.quote) && formik.touched.quote }
               helperText={ formik.errors.quote && formik.touched.quote && String(formik.errors.quote) }
@@ -170,6 +189,7 @@ export default function SubmitForm( {handleClose} : SubmitFormProps) {
             <Autocomplete
               multiple
               freeSolo
+              disabled={formik.isSubmitting}
               disableClearable
               value={formik.values.tags}
               onChange={(event, newValue) => {
