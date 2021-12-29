@@ -36,15 +36,15 @@ PostFactory.toExportJson = (post:PostEntity) : Object => {
     Entities are funnelled through. 
     */
     const o = {
-        postID: post.postID,
-        userID: post.userID,
-        word: post.word,
-        definition: post.definition,
-        quote: post.quote,
+        postID: String(post.postID),
+        userID: String(post.userID),
+        word: String(post.word),
+        definition: String(post.definition),
+        quote: String(post.quote),
         timestamp: new Timestamp(
             (post.timestamp as Timestamp).seconds,
             (post.timestamp as Timestamp).nanoseconds),
-        trendscore: post.trendscore,
+        trendscore: Number(post.trendscore),
 
         tags: StringListFactory.toExportJson(post.tags), 
         userProfile: UserInfoFactory.toExportJson(post.userProfile),
@@ -53,10 +53,10 @@ PostFactory.toExportJson = (post:PostEntity) : Object => {
         shares: StringListFactory.toExportJson(post.shares),
         flags: StringListFactory.toExportJson(post.flags),
 
-        upvoteCount: post.upvoteCount,
-        downvoteCount: post.downvoteCount,
-        shareCount: post.shareCount,
-        flagCount: post.flagCount,
+        upvoteCount: Number(post.upvoteCount),
+        downvoteCount: Number(post.downvoteCount),
+        shareCount: Number(post.shareCount),
+        flagCount: Number(post.flagCount),
     }
     return validatedObject(o, POST_TYPE_ERROR);
 };
@@ -72,15 +72,15 @@ PostFactory.fromExportJson = (json:any) : PostEntity => {
     Entities are funnelled through. 
     */
     const post:PostEntity = {
-        postID: json.postID,
-        userID: json.userID,
-        word: json.word,
-        definition: json.definition,
-        quote: json.quote,
+        postID: String(json.postID),
+        userID: String(json.userID),
+        word: String(json.word),
+        definition: String(json.definition),
+        quote: String(json.quote),
         timestamp: new Timestamp(
             (json.timestamp as Timestamp).seconds,
             (json.timestamp as Timestamp).nanoseconds),
-        trendscore: json.trendscore,
+        trendscore: Number(json.trendscore),
 
         tags: StringListFactory.fromExportJson(json.tags), 
         userProfile: UserInfoFactory.fromExportJson(json.userProfile),
@@ -89,10 +89,10 @@ PostFactory.fromExportJson = (json:any) : PostEntity => {
         shares: StringListFactory.fromExportJson(json.shares),
         flags: StringListFactory.fromExportJson(json.flags),
 
-        upvoteCount: json.upvoteCount,
-        downvoteCount: json.downvoteCount,
-        shareCount: json.shareCount,
-        flagCount: json.flagCount,
+        upvoteCount: Number(json.upvoteCount),
+        downvoteCount: Number(json.downvoteCount),
+        shareCount: Number(json.shareCount),
+        flagCount: Number(json.flagCount),
     }
     return validatedObject(post, POST_TYPE_ERROR) as PostEntity;
 };
