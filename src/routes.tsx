@@ -2,17 +2,38 @@ import { Navigate, useRoutes } from 'react-router-dom';
 // layouts
 import DashboardLayout from './layouts/dashboard';
 import PlainLayout from './layouts/plain';
-// components
+// PAGES
+// Feeds
 import HomePage from './pages/Feeds/HomePage';
+import UsersPage from './pages/Feeds/UsersPage';
+import ExplorePage from './pages/Feeds/ExplorePage';
+import WordsPage from './pages/Feeds/WordsPage';
+import CategoriesPage from './pages/Feeds/CategoriesPage';
+import PostPage from './pages/Feeds/PostPage';
+import MyProfilePage from './pages/Feeds/MyProfilePage';
+import ProfilePage from './pages/Feeds/ProfilePage';
+
+// Misc
 import PageNotFound from './pages/Misc/PageNotFound';
-import UserPage from './pages/Feeds/UserPage';
+
+// FTUX
+
+// Information
+import PrivacyPage from './pages/Information/PrivacyPage';
+import TermsPage from './pages/Information/TermsPage';
+import AboutPage from './pages/Information/AboutPage';
+
+// Registration
 import SignupPage from './pages/Registration/SignupPage';
 import ForgotPasswordPage from './pages/Registration/ForgotPasswordPage';
 import LoginPage from './pages/Registration/LoginPage';
-import SettingsPage from './pages/Account/SettingsPage';
-import ExplorePage from './pages/Feeds/ExplorePage';
-import ResultsPage from './pages/Feeds/ResultsPage';
+
+// Charts
 import ChartsPage from './pages/Charts/ChartsPage';
+
+// Account
+import SettingsPage from './pages/Account/SettingsPage';
+
 
 // ----------------------------------------------------------------------
 
@@ -25,20 +46,37 @@ import ChartsPage from './pages/Charts/ChartsPage';
 
 export default function Router() {
   return useRoutes([
-    //(mostly) registeredUser and guestUser routes
+    //(mostly) BOTH registeredUser and guestUser routes**
     { path: '/', element: <DashboardLayout />, children: [
-        { path: ':id', element: <ResultsPage /> },
         { path: '', element: <HomePage /> },
+        { path: 'words', children: [
+            { path: ':id', element: <WordsPage /> }, //search results for that word/phrase
+          ]
+        },
         { path: 'categories', children: [
             { path: '', element: <ExplorePage /> },
-            { path: ':id', element: <ResultsPage /> },
+            { path: ':id', element: <CategoriesPage /> },
           ]
         },
         { path: 'users', children: [
-            { path: ':id', element: <UserPage /> },
-            { path: 'me', element: <UserPage /> },
+            { path: ':id', element: <UsersPage /> },
+            { path: 'profile', children: [  //TODO: 'profile' must be an unallowed username
+                { path: 'me', element: <MyProfilePage /> }, //**registeredUser only route
+                { path: ':id', element: <ProfilePage /> }, //TODO auto navigate to 'me' if :id matches registeredUser's id
+              ] 
+            },
           ]
         },
+        { path: 'post', children: [
+            { path: ':id', element: <PostPage /> }, //displays that particular post first, followed by top trending posts on inssajeon
+          ]
+        },
+      ],
+    },
+    { path: '/', element: <PlainLayout />, children: [
+        { path: 'about', element: <AboutPage /> },
+        { path: 'privacy', element: <PrivacyPage/> },
+        { path: 'terms', element: <TermsPage/> },
       ],
     },
     //guestUser only routes

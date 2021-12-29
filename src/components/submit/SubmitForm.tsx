@@ -55,8 +55,7 @@ export default function SubmitForm( {handleClose} : SubmitFormProps) {
       .required('필수'),
     definition: Yup
       .string()
-      .required('필수')
-      .min(5, "적어도 3글자"),
+      .required('필수'),
     quote: Yup
       .string()
       .required('필수'),
@@ -73,7 +72,7 @@ export default function SubmitForm( {handleClose} : SubmitFormProps) {
       word: '',
       definition: '',
       quote: '',
-      tags: [''],
+      tags: ['음식'],
     },
     validationSchema: NewPostSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => { //if onSubmit is async isSubmitting automotically gets set to false after the async completes
@@ -115,7 +114,7 @@ export default function SubmitForm( {handleClose} : SubmitFormProps) {
     formik.resetForm();
     sessionStorage.removeItem(FORM_SESSION_STORAGE_ID)
     handleClose();
-    navigate(`/${postID}`, { replace: true }); //navigate to that submitted post
+    navigate(`/post/${postID}`, { replace: true }); //navigate to that submitted post
     //TODO: "click to share with friends!" icon
   }
 

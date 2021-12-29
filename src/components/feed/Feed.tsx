@@ -49,7 +49,13 @@ export default function Feed( { getNewPosts }: Props ) {
   return (
     <div>
       {isLoading ? 
-        <PostSkeleton/>
+        <Stack spacing={2}>
+          <PostSkeleton/>
+          <PostSkeleton/>
+          <PostSkeleton/>
+          <PostSkeleton/>
+          <PostSkeleton/>
+        </Stack>
       :
         <Stack spacing={2}>
           {posts !== undefined 
@@ -60,7 +66,8 @@ export default function Feed( { getNewPosts }: Props ) {
                 post={post} 
                 />
                 ))
-            : <div/> //<NoPostsCard/>
+            : 
+            <NoPostsCard/>
           }
         </Stack>
       }

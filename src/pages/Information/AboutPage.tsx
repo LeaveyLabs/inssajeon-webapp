@@ -7,19 +7,16 @@ import Page from '../../components/Page';
 
 // ----------------------------------------------------------------------
 
-export default function UserPage() {
+export default function AboutPage() {
 
   return (
     <Page title="홈">
       <Container maxWidth={'fullscreen'}>
         <Typography variant="h3" component="h1" paragraph>
-          word
+          about us
         </Typography>
         <Typography gutterBottom>
-          description
-        </Typography>
-        <Typography>
-          quote
+          yup
         </Typography>
       </Container>
     </Page>
