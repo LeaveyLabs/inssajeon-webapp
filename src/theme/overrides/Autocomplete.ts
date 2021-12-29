@@ -14,8 +14,8 @@ export default function Autocomplete(theme: Theme) {
     MuiAutocomplete: {
       styleOverrides: {
         popper: {
-          minWidth: 260,
-          maxWidth: 260,
+          // minWidth: 260,
+          // maxWidth: 260,
         },
         paper: {
           boxShadow,

@@ -63,20 +63,10 @@ const ListItemStyle = styled(ListItemButton, {
   }),
 }));
 
-interface ListItemTextStyleProps extends ListItemButtonProps {
-  isCollapse?: boolean;
-}
-
-const ListItemTextStyle = styled(ListItemText, {
-  shouldForwardProp: (prop) => prop !== 'isCollapse',
-})<ListItemTextStyleProps>(({ isCollapse, theme }) => ({
+const ListItemTextStyle = styled(ListItemText)(({ theme }) => ({
   whiteSpace: 'nowrap',
   transition: theme.transitions.create(['width', 'opacity'], {
     duration: theme.transitions.duration.shorter,
-  }),
-  ...(isCollapse && {
-    width: 0,
-    opacity: 0,
   }),
 }));
 
@@ -93,19 +83,17 @@ const ListItemIconStyle = styled(ListItemIcon)({
 
 const isExternalLink = (path: string) => path.includes('http');
 
-export function NavItemRoot({ item, isCollapse, open = false, active, onOpen }: NavItemProps) {
+export function NavItemRoot({ item, open = false, active, onOpen }: NavItemProps) {
   const { title, path, icon, info, children } = item;
 
   const renderContent = (
     <>
       {icon && <ListItemIconStyle>{icon}</ListItemIconStyle>}
-      <ListItemTextStyle disableTypography primary={title} isCollapse={isCollapse} />
-      {!isCollapse && (
-        <>
+      <ListItemTextStyle disableTypography primary={title} />
+      <>
           {info && info}
           {children && <ArrowIcon open={open} />}
         </>
-      )}
     </>
   );
 
@@ -130,9 +118,7 @@ export function NavItemRoot({ item, isCollapse, open = false, active, onOpen }: 
 
 // ----------------------------------------------------------------------
 
-type NavItemSubProps = Omit<NavItemProps, 'isCollapse'>;
-
-export function NavItemSub({ item, open = false, active, onOpen }: NavItemSubProps) {
+export function NavItemSub({ item, open = false, active, onOpen }: NavItemProps) {
   const { title, path, info, children } = item;
 
   const renderContent = (

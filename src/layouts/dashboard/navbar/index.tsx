@@ -1,7 +1,10 @@
 import { useState } from 'react';
 // @mui
 import { styled } from '@mui/material/styles';
-import { Container, Box, AppBar, Toolbar, Badge } from '@mui/material';
+import { Container, Box, AppBar, Toolbar, Badge, IconButton, Fab } from '@mui/material';
+import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
+import EditIcon from '@mui/icons-material/Edit';
+
 // hooks
 import useOffSetTop from '../../../hooks/useOffSetTop';
 import useResponsive from '../../../hooks/useResponsive';
@@ -10,16 +13,15 @@ import useCollapseSidebar from '../../../hooks/useCollapseSidebar';
 import cssStyles from '../../../utils/cssStyles';
 // config
 import {
-  SIDEBAR_WIDTH_MOBILE,
+  SIDEBAR_WIDTH_DESKTOP,
   NAVBAR_HEIGHT,
 } from '../../../config';
 // components
-import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
-import { IconButtonAnimate } from '../../../components/animate';
 //
 import Searchbar from './Searchbar';
 import DropSearchbar from './DropSearchbar';
 import ClickwableWideLogo from '../../../components/ClickableWideLogo';
+import AutocompleteSearch from './AutocompleteSearch';
 
 // ----------------------------------------------------------------------
 
@@ -28,7 +30,7 @@ const RootStyle = styled(AppBar)(({ theme }) => ({
   backgroundColor: 'white',
   // ...cssStyles(theme).bgBlur(), creates a transparent background
   [theme.breakpoints.up('desktop')]: {
-    marginRight: SIDEBAR_WIDTH_MOBILE/2, //this divide by 2 quirk works because .. the containing div above is also restricted to SIDEBAR_WIDTH.. i think
+    marginRight: SIDEBAR_WIDTH_DESKTOP/2, //this divide by 2 quirk works because .. the containing div above is also restricted to SIDEBAR_WIDTH.. i think
   },
 }));
 
@@ -38,29 +40,32 @@ const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-type Props = {
+type NavbarProps = {
   onOpenSidebar: VoidFunction;
+  handleDialogOpen: VoidFunction
 };
 
-export default function Navbar({ onOpenSidebar }: Props) {
+export default function Navbar({ onOpenSidebar, handleDialogOpen }: NavbarProps) {
   const isDesktop = useResponsive('up', 'desktop');
 
   return (
       <RootStyle >
         <ToolbarStyle>
-          <Container maxWidth={'tablet'}>
-            <Box sx={{ display:'flex',  flexDirection: 'row', alignItems: 'center'}}>
-              <ClickwableWideLogo />
-              <Box sx={{ flexGrow: 1 }} />
-              <DropSearchbar />
-              {!isDesktop  && (
-                <IconButtonAnimate onClick={onOpenSidebar} sx={{ mr: 0,mt:0, color: 'text.primary' }}>
-                  <Badge badgeContent={2} color="error">
-                    <MenuRoundedIcon fontSize='large' />
-                  </Badge> 
-                </IconButtonAnimate>
+          <Container disableGutters maxWidth={'tablet'} sx={{flexDirection: 'row-reverse', height:'4ch', alignItems: 'center', display:'flex',position:'relative'}}>
+            <ClickwableWideLogo sx={{position:'absolute', top:0, left:10, zIndex:1,}} />
+            <Searchbar />
+            {!isDesktop  && (
+              <IconButton onClick={onOpenSidebar} sx={{position:'absolute', zIndex:1, top:-2, right:10, color: 'text.primary' }}>
+                <Badge overlap="circular" badgeContent={2} color="error">
+                  <MenuRoundedIcon fontSize='large' />
+                </Badge> 
+              </IconButton>
               )}
-            </Box>
+            {isDesktop  && (
+              <Fab onClick={handleDialogOpen} size='medium' color="primary" aria-label="입력하기" sx={{position:'absolute', zIndex:1, top:-2, right:10 }}>
+                <EditIcon />
+              </Fab>
+              )}
           </Container>
         </ToolbarStyle>
       </RootStyle>

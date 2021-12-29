@@ -40,7 +40,6 @@ export default function Sidebar({ isOpenSidebar, onCloseSidebar }: Props) {
   const theme = useTheme();
   const { pathname } = useLocation();
   const isDesktop = useResponsive('up', 'desktop');
-  const { isCollapse, onToggleCollapse } = useCollapseSidebar();
 
   useEffect(() => {
     if (isOpenSidebar) {
@@ -65,9 +64,9 @@ export default function Sidebar({ isOpenSidebar, onCloseSidebar }: Props) {
           flexShrink: 0,
         }}
       >
-        <SidebarAccount isCollapse={isCollapse} />
+        <SidebarAccount />
       </Stack>
-      <NavSection navConfig={sidebarConfig} isCollapse={isCollapse} />
+      <NavSection navConfig={sidebarConfig} />
       <Box sx={{ flexGrow: 1 }} />
       <SidebarFooter />
     </Scrollbar>
@@ -100,7 +99,7 @@ export default function Sidebar({ isOpenSidebar, onCloseSidebar }: Props) {
           PaperProps={{
             sx: {
               width: SIDEBAR_WIDTH_DESKTOP,
-              borderLeftStyle: 'dashed',
+              //borderLeftStyle: 'dashed',
               bgcolor: 'background.default',
             },
           }}

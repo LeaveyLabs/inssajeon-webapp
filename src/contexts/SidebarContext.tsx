@@ -6,7 +6,6 @@ import { useTheme } from '@mui/material/styles';
 // ----------------------------------------------------------------------
 
 export type SidebarContextProps = {
-  isCollapse?: boolean;
   onToggleCollapse: VoidFunction;
 };
 
@@ -36,7 +35,6 @@ function SidebarProvider({ children }: SidebarProviderProps) {
   return (
     <SidebarContext.Provider
       value={{
-        isCollapse: collapse,
         onToggleCollapse: handleToggleCollapse,
       }}
     >

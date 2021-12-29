@@ -13,10 +13,9 @@ const getActive = (path: string, pathname: string) =>
 
 type NavListRootProps = {
   list: NavListProps;
-  isCollapse: boolean;
 };
 
-export function NavListRoot({ list, isCollapse }: NavListRootProps) {
+export function NavListRoot({ list }: NavListRootProps) {
   const { pathname } = useLocation();
 
   const active = getActive(list.path, pathname);
@@ -30,13 +29,10 @@ export function NavListRoot({ list, isCollapse }: NavListRootProps) {
       <>
         <NavItemRoot
           item={list}
-          isCollapse={isCollapse}
           active={active}
           open={open}
           onOpen={() => setOpen(!open)}
         />
-
-        {!isCollapse && (
           <Collapse in={open} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
               {(list.children || []).map((item) => (
@@ -44,12 +40,11 @@ export function NavListRoot({ list, isCollapse }: NavListRootProps) {
               ))}
             </List>
           </Collapse>
-        )}
       </>
     );
   }
 
-  return <NavItemRoot item={list} active={active} isCollapse={isCollapse} />;
+  return <NavItemRoot item={list} active={active} />;
 }
 
 // ----------------------------------------------------------------------

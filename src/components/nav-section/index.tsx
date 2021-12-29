@@ -22,23 +22,17 @@ export const ListSubheaderStyle = styled((props) => (
 
 // ----------------------------------------------------------------------
 
-export default function NavSection({ navConfig, isCollapse = false, ...other }: NavSectionProps) {
+export default function NavSection({ navConfig,  ...other }: NavSectionProps) {
   return (
     <Box {...other}>
       {navConfig.map((group) => (
         <List key={group.subheader} disablePadding sx={{ px: 2 }}>
-          <ListSubheaderStyle
-            sx={{
-              ...(isCollapse && {
-                opacity: 0
-              })
-            }}
-          >
+          <ListSubheaderStyle>
             {group.subheader}
           </ListSubheaderStyle>
 
           {group.items.map((list) => (
-            <NavListRoot key={list.title} list={list} isCollapse={isCollapse} />
+            <NavListRoot key={list.title} list={list} />
           ))}
         </List>
       ))}

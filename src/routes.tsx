@@ -1,7 +1,7 @@
 import { Navigate, useRoutes } from 'react-router-dom';
 // layouts
 import DashboardLayout from './layouts/dashboard';
-import LogoOnlyLayout from './layouts/LogoOnlyLayout';
+import PlainLayout from './layouts/plain';
 // components
 import HomePage from './pages/Feeds/HomePage';
 import PageNotFound from './pages/Misc/PageNotFound';
@@ -13,7 +13,6 @@ import SettingsPage from './pages/Account/SettingsPage';
 import ExplorePage from './pages/Feeds/ExplorePage';
 import ResultsPage from './pages/Feeds/ResultsPage';
 import ChartsPage from './pages/Charts/ChartsPage';
-import SubmitPage from './pages/Submit/SubmitPage';
 
 // ----------------------------------------------------------------------
 
@@ -43,7 +42,7 @@ export default function Router() {
       ],
     },
     //guestUser only routes
-    { path: 'registration', element: <LogoOnlyLayout />, children: [
+    { path: 'registration', element: <PlainLayout />, children: [
         { path: "*", element: <Navigate to="signup" replace />, index:true },
         { path: 'signup', element: <SignupPage /> },
         { path: 'login', element: <LoginPage/> },
@@ -53,16 +52,12 @@ export default function Router() {
     //registeredUser only routes
     { path: 'myaccount', children: [
         { path: "*", element: <Navigate to="settings" replace />, index:true },
-        { path: 'settings', element: <LogoOnlyLayout/>, children: [
+        { path: 'settings', element: <PlainLayout/>, children: [
           { path: "*", element: <Navigate to="" replace />, index:true },
           { path: '', element: <SettingsPage /> },
         ]}
       ]
     },
-    { path: 'submit', element: <LogoOnlyLayout/>, children: [
-      { path: "*", element: <Navigate to="" replace />, index:true },
-      { path: '', element: <SubmitPage /> },
-    ]},
     { path: 'charts', element: <DashboardLayout />, children: [
       { path: "*", element: <Navigate to="" replace />, index:true },
       { path: '', element: <ChartsPage /> },
@@ -70,7 +65,7 @@ export default function Router() {
     //404
     {
       path: '*',
-      element: <LogoOnlyLayout />,
+      element: <PlainLayout />,
       children: [
         { path: '*', element: <Navigate to="/404" replace />, index:true },
         { path: '404', element: <PageNotFound /> },

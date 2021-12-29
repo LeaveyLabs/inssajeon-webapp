@@ -118,6 +118,7 @@ const GREY = {
   500_8: alpha('#919EAB', 0.08),
   500_12: alpha('#919EAB', 0.12),
   500_16: alpha('#919EAB', 0.16),
+  500_20: alpha('#919EAB', 0.20),
   500_24: alpha('#919EAB', 0.24),
   500_32: alpha('#919EAB', 0.32),
   500_48: alpha('#919EAB', 0.48),
@@ -154,7 +155,7 @@ const COMMON = {
   chart: CHART_COLORS,
   divider: GREY[500_24],
   action: {
-    hover: GREY[500_8],
+    hover: GREY[500_12],
     selected: GREY[500_16],
     disabled: GREY[500_80],
     disabledBackground: GREY[500_24],

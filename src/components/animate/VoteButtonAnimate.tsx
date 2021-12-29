@@ -25,18 +25,18 @@ type AnimateWrapProp = {
 };
 
 const varSmall = {
-  hover: { scale: 1.3 },
-  tap: { scale: 0.8 },
+  //hover: { scale: 1.3 },
+  tap: { scale: 0.7 },
 };
 
 const varMedium = {
-  hover: { scale: 1.3 },
-  tap: { scale: 0.8 },
+  //hover: { scale: 1.3 },
+  tap: { scale: 0.7 },
 };
 
 const varLarge = {
-  hover: { scale: 1.3 },
-  tap: { scale: 0.8 },
+  //hover: { scale: 1.3 },
+  tap: { scale: 0.7 },
 };
 
 function AnimateWrap({ size, children }: AnimateWrapProp) {

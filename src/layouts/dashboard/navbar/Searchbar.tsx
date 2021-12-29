@@ -1,29 +1,20 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 // @mui
 import { styled, alpha } from '@mui/material/styles';
 import { useTheme } from '@mui/material/styles';
-
-// utils
-import cssStyles from '../../../utils/cssStyles';
-// components
-
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
-import { borderColor } from '@mui/system';
+import { ClickAwayListener } from '@mui/material';
+// components
+//TODO: finish the blur/focus issues with the clear search button
+//TODO: improve the shrink transition onBlur for searchbar.
+import ClearSearchButton from './ClearSearchButton';
 
 // ----------------------------------------------------------------------
 
-const Search = styled('div')(({ theme }) => ({
-  position: 'relative',
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.black, 0.05),
-  marginLeft: theme.spacing(2),
-  marginRight: theme.spacing(1),
-  width: 'auto',
-}));
-
 const SearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 1),
+  padding: theme.spacing(0, 1.3),
+  zIndex:3,
   height: '100%',
   position: 'absolute',
   pointerEvents: 'none',
@@ -32,58 +23,126 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
   justifyContent: 'center',
 }));
 
+const Search = styled('div')(({ theme }) => ({
+  position: 'relative', //so SearchIconWrapper can be placed absolutely within
+  height: 'auto',
+  maxWidth:'100%',
+  borderRadius:10,
+  zIndex:2,
+  [theme.breakpoints.down('desktop')]: {
+    backgroundColor: 'transparent',
+    marginRight: theme.spacing(7.5),
+    borderRadius: 25,
+    width: '4.7ch',
+  },
+  [theme.breakpoints.up('desktop')]: {
+    marginRight: theme.spacing(9),
+    backgroundColor: theme.palette.grey[200],
+    borderRadius: 10,
+    width: '11ch',
+  },
+  transition: theme.transitions.create([
+    "border-color",
+    "background-color",
+    'width',
+    'margin-right',
+  ]),
+  '&:hover': {
+    backgroundColor: theme.palette.action.hover,
+    [theme.breakpoints.up('desktop')]: {
+      boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 3px`,
+    }
+  },
+  "&:focus-within": {
+    backgroundColor: theme.palette.grey[200],
+    width: '60ch',
+    marginRight: 0,
+    boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 3px`,
+    borderColor: theme.palette.primary.main,
+  }
+}));
+
 const StyledInputBase = styled(InputBase)(({ theme  }) => ({
   '& .MuiInputBase-input': {
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(3)})`,
-    transition: theme.transitions.create('width'),
-    borderRadius: theme.shape.borderRadius,
-    border: 5,
-    '&:focus': {
-      backgroundColor: alpha(theme.palette.primary.main, 0.1),
-      boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 2px`,
-    },
-    '&:hover': {
-      backgroundColor: alpha(theme.palette.primary.main, 0.1),
-    },
-    [theme.breakpoints.up('mobile')]: {
-      width: '5ch',
-      '&:focus': {
-        width: '12ch',
-      },
-    },
-    [theme.breakpoints.up('tablet')]: {
-      width: '10ch',
-      '&:focus': {
-        width: '25ch',
-      },
-    },
-    [theme.breakpoints.up('desktop')]: {
-      width: '20ch',
-      '&:focus': {
-        width: '350ch',
-      },
-    },
-    
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    width: '100%',
+    height:'3ch',
   },
 }));
 
-// type SearchbarProps = {
-//   handleFocus: VoidFunction;
-// };
-
 export default function Searchbar(  ) {
-  const theme = useTheme();
+  let theme = useTheme()
+  let [searchInput, setSearchInput] = useState('');
+  let inputRef = useRef<HTMLInputElement>()
 
+  let handleBlur = () => {
+    setSearchInput('')
+    if (inputRef.current) { //a typescript check that the ref is indeed defined
+      inputRef.current.focus();
+      console.log('woo!')
+    }
+  }
+
+  let handleClear = () => {
+    setSearchInput('')
+    console.log('hi')
+    console.log(inputRef.current)
+    if (inputRef.current) { //a typescript check that the ref is indeed defined
+      inputRef.current.focus();
+    }
+  }
+
+  //*if we dont have the clickaway listener, then if the user taps on close button then taps on home screen, searchbar will not dismiss*/}
   return (
-    // <ClickAwayListener onClickAway={handleToggleFocus}>
+    <ClickAwayListener onClickAway={handleBlur}> 
       <Search >
         <SearchIconWrapper>
-          <SearchIcon color='primary' />
+          <SearchIcon fontSize='large' color='primary'  />
         </SearchIconWrapper>
-        <StyledInputBase  placeholder="겸색..." inputProps={{ 'aria-label': 'search' }} />
+        <StyledInputBase type='search' ref={inputRef} autoComplete='off' value={searchInput} onChange={event => setSearchInput(event.target.value)} onBlur={handleBlur} placeholder="겸색..." fullWidth id='search-input' />
+        {/* { searchInput.length !== 0 &&
+          <ClearSearchButton handleClear={handleClear}/>
+        } */}
       </Search>
-    // </ClickAwayListener>
+    </ClickAwayListener>
   );
 }
+
+
+//ANOTHER INPUTBASE TO REFERENCE LATER ON FOR MORE BEAUTIFICATION:
+
+// const BootstrapInput = styled(InputBase)(({ theme }) => ({
+//   "& .MuiInputBase-input": {
+//     borderRadius: 4,
+//     position: 'relative',
+//     zIndex:2,
+//     width: '6ch',
+//     height:'3ch',
+//     maxWidth:'100%',
+//     marginRight: theme.spacing(7.5),
+//     [theme.breakpoints.up('desktop')]: {
+//       marginRight: theme.spacing(0)
+//     },
+//     backgroundColor: theme.palette.mode === "light" ? "#fcfcfb" : "#2b2b2b",
+//     border: "1px solid #ced4da",
+//     fontSize: 16,
+//     padding: "10px 12px",
+//     transition: theme.transitions.create([
+//       "border-color",
+//       "box-shadow",
+//       'width',
+//       'margin-right',
+//     ]),
+//     '&:hover': {
+//       backgroundColor: theme.palette.grey[200],
+//     },
+//     "&:focus": {
+//       backgroundColor: theme.palette.grey[200],
+//       width: '80ch',
+//       marginRight: 0,
+//       boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 2px`,
+//       borderColor: theme.palette.primary.main,
+//     }
+//   }
+// }));

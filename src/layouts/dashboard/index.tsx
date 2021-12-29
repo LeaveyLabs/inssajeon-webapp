@@ -9,21 +9,23 @@ import useCollapseSidebar from '../../hooks/useCollapseSidebar';
 import useResponsive from 'src/hooks/useResponsive';
 //components
 import DialogAnimate from 'src/components/animate/DialogAnimate'
+import SubmitDialog from 'src/components/submit/SubmitDialog';
+import Navbar from './navbar';
+import Sidebar from './sidebar';
+import FloatingSubmitButton from '../../components/submit/FloatingSubmitButton';
 // config
 import {
-  SIDEBAR_WIDTH_MOBILE,
+  SIDEBAR_WIDTH_DESKTOP,
   NAVBAR_HEIGHT,
 } from '../../config';
 //
-import Navbar from './navbar';
-import Sidebar from './sidebar';
-import SubmitForm from 'src/components/submit/SubmitForm';
+
 
 // ----------------------------------------------------------------------
 
 const RootStyle = styled('div')(({ theme }) => ({
   [theme.breakpoints.up('desktop')]: {
-    marginRight: SIDEBAR_WIDTH_MOBILE,
+    marginRight: SIDEBAR_WIDTH_DESKTOP,
   },
 }));
 
@@ -37,37 +39,28 @@ const MainStyle = styled('main')(({ theme }) => ({
 
 
 export default function DashboardLayout() {
-  const { isCollapse } = useCollapseSidebar();
-  const [isOpenModal, setIsOpenModal] = useState(false);
+  //const { isCollapse } = useCollapseSidebar();
   const [open, setOpen] = useState(false);
   const isDesktop = useResponsive('up', 'desktop');
-
-  const handleAddPost = () => {
-    setIsOpenModal(true)
-  };
+  const [dialogOpen, setDialogOpen] = useState(false);
   
-  const handleCloseModal = () => {
-    setIsOpenModal(false)
+  const handleDialogOpen = () => {
+    setDialogOpen(true);
+  };
+  const handleDialogClose = () => {
+    setDialogOpen(false);
   };
 
   return (
     <RootStyle>
       <Container maxWidth={'tablet'} >
-        <Navbar onOpenSidebar={() => setOpen(true)} />
+        <Navbar onOpenSidebar={() => setOpen(true)} handleDialogOpen={handleDialogOpen} />
         <Sidebar isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} />
-        <DialogAnimate open={isOpenModal} onClose={handleCloseModal}>
-          <DialogTitle>{'Add Post'}</DialogTitle>
-          <SubmitForm
-          />
-        </DialogAnimate>
         <MainStyle >
           <Outlet />
-          <Box sx={{display: 'flex', flexDirection: 'row-reverse', position:'sticky', bottom: 30}}>
-            <Fab  sx={{marginRight:5, }} color="primary" aria-label="입력하기" onClick={handleAddPost}>
-              <EditIcon />
-            </Fab>
-          </Box>
         </MainStyle>
+        {!isDesktop && <FloatingSubmitButton handleDialogOpen={handleDialogOpen}/>}
+        <SubmitDialog handleClose={handleDialogClose} open={dialogOpen} />
       </Container>
     </RootStyle>
   );
