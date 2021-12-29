@@ -19,7 +19,6 @@
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "useUnknownInCatchVariables": false,
     "noEmit": true,
     "jsx": "react-jsx",
     "isolatedModules": true
