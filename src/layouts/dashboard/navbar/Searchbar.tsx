@@ -1,22 +1,19 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 // @mui
 import { styled, alpha } from '@mui/material/styles';
 import { useTheme } from '@mui/material/styles';
-import ClearIcon from '@mui/icons-material/Clear';
-// utils
-import cssStyles from '../../../utils/cssStyles';
-// components
-
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
-import { borderColor, palette } from '@mui/system';
-import TextField, { TextFieldProps } from '@mui/material/TextField';
-import { OutlinedInputProps } from '@mui/material/OutlinedInput';
+import { ClickAwayListener } from '@mui/material';
+// components
+//TODO: finish the blur/focus issues with the clear search button
+//TODO: improve the shrink transition onBlur for searchbar.
+import ClearSearchButton from './ClearSearchButton';
 
 // ----------------------------------------------------------------------
 
 const SearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 1.2),
+  padding: theme.spacing(0, 1.3),
   zIndex:3,
   height: '100%',
   position: 'absolute',
@@ -35,7 +32,7 @@ const Search = styled('div')(({ theme }) => ({
   [theme.breakpoints.down('desktop')]: {
     backgroundColor: 'transparent',
     marginRight: theme.spacing(7.5),
-    borderRadius: 100,
+    borderRadius: 25,
     width: '4.7ch',
   },
   [theme.breakpoints.up('desktop')]: {
@@ -47,12 +44,14 @@ const Search = styled('div')(({ theme }) => ({
   transition: theme.transitions.create([
     "border-color",
     "background-color",
-    "box-shadow",
     'width',
     'margin-right',
   ]),
   '&:hover': {
-    backgroundColor: theme.palette.grey[200],
+    backgroundColor: theme.palette.action.hover,
+    [theme.breakpoints.up('desktop')]: {
+      boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 3px`,
+    }
   },
   "&:focus-within": {
     backgroundColor: theme.palette.grey[200],
@@ -74,23 +73,39 @@ const StyledInputBase = styled(InputBase)(({ theme  }) => ({
 
 export default function Searchbar(  ) {
   let theme = useTheme()
-  let [isFocused, setIsFocused] = useState(false);
-
-  let handleFocus = () => {
-    setIsFocused(true);
-  }
+  let [searchInput, setSearchInput] = useState('');
+  let inputRef = useRef<HTMLInputElement>()
 
   let handleBlur = () => {
-    setIsFocused(false);
+    setSearchInput('')
+    if (inputRef.current) { //a typescript check that the ref is indeed defined
+      inputRef.current.focus();
+      console.log('woo!')
+    }
   }
 
+  let handleClear = () => {
+    setSearchInput('')
+    console.log('hi')
+    console.log(inputRef.current)
+    if (inputRef.current) { //a typescript check that the ref is indeed defined
+      inputRef.current.focus();
+    }
+  }
+
+  //*if we dont have the clickaway listener, then if the user taps on close button then taps on home screen, searchbar will not dismiss*/}
   return (
-    <Search >
-      <SearchIconWrapper>
-        <SearchIcon fontSize='large' color='primary'  />
-      </SearchIconWrapper>
-      <StyledInputBase type='search' onBlur={handleBlur} onFocus={handleFocus} placeholder="겸색..." fullWidth id='search-input' />
-    </Search>
+    <ClickAwayListener onClickAway={handleBlur}> 
+      <Search >
+        <SearchIconWrapper>
+          <SearchIcon fontSize='large' color='primary'  />
+        </SearchIconWrapper>
+        <StyledInputBase type='search' ref={inputRef} autoComplete='off' value={searchInput} onChange={event => setSearchInput(event.target.value)} onBlur={handleBlur} placeholder="겸색..." fullWidth id='search-input' />
+        {/* { searchInput.length !== 0 &&
+          <ClearSearchButton handleClear={handleClear}/>
+        } */}
+      </Search>
+    </ClickAwayListener>
   );
 }
 

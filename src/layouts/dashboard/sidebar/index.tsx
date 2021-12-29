@@ -99,7 +99,7 @@ export default function Sidebar({ isOpenSidebar, onCloseSidebar }: Props) {
           PaperProps={{
             sx: {
               width: SIDEBAR_WIDTH_DESKTOP,
-              borderLeftStyle: 'dashed',
+              //borderLeftStyle: 'dashed',
               bgcolor: 'background.default',
             },
           }}
