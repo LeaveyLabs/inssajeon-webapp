@@ -3,20 +3,31 @@ import { format, getTime, formatDistanceToNow } from 'date-fns';
 // ----------------------------------------------------------------------
 
 export function fDate(date: Date | string | number) {
-  //TODO
+  /* Calculate the difference between now and the date in milliseconds. */
+  const msDiff:number = (new Date()).valueOf() - (new Date(date)).valueOf();
 
-  //seconds ago
+  /* Convert to seconds. */
+  const secDiff:number = Math.floor(msDiff/1000);
+  /* If below a minute, show difference in seconds. */
+  if(secDiff < 60) return `${secDiff}초 전`;
 
-  //x minutes ago
+  /* Convert to minutes. */
+  const minDiff:number = Math.floor(secDiff/60);
+  /* If below an hour, show difference in minutes. */
+  if(minDiff < 60) return `${minDiff}분 전`;
 
-  //x hours ago
+  /* Convert to hours. */
+  const hourDiff:number = Math.floor(minDiff/60);
+  /* If below a day, show difference in hours. */
+  if(hourDiff < 24) return `${hourDiff}시간 전`;
 
-  //x days ago
-  
-  //specific date
+  /* Convert to days. */
+  const dayDiff:number = Math.floor(hourDiff/24);
+  /* If below a week, show difference in hours. */
+  if(dayDiff < 7) return `${dayDiff}일 전`;
 
-
-  return format(new Date(date), 'dd MMMM yyyy');
+  /* Otherwise, return the specific date. */
+  return format(new Date(date), 'dd일 mm월 yyyy년');
 }
 
 
