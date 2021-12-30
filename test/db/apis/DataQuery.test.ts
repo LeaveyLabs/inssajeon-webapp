@@ -1,8 +1,8 @@
-import { getDocs } from "firebase/firestore"; 
+import { DocumentSnapshot, getDocs } from "firebase/firestore"; 
 import { userDatabase } from "../../../src/db/apis/dbRefs";
 import { DataQuery, PostOrder, ProfileOrder, WordOrder } from "../../../src/db/apis/DataQuery";
 import { executeInDatabase, Verifier } from "./dbTestEnv";
-import { PostEntity } from "../../../src/db/entities/posts/PostEntity";
+import { PostEntity, PostFactory } from "../../../src/db/entities/posts/PostEntity";
 import { WordEntity } from "../../../src/db/entities/words/WordEntity";
 import { UserEntity } from "../../../src/db/entities/users/UserEntity";
 
@@ -48,6 +48,13 @@ describe("testing DataQuery", () => {
             expect(queryResult.length).toBeGreaterThan(0);
             queryResult.forEach((result) => expect(result).toStrictEqual(user));
         }
+    });
+   }, 30000),
+   it("post queries return the correct last post", async () => {
+    await executeInDatabase(async (verifier:Verifier) : Promise<void> => {
+        const lastDoc:DocumentSnapshot[] = [];
+        const queryResult = await DataQuery.getAllPosts(PostOrder.Recency, lastDoc);
+        expect(queryResult[queryResult.length-1]).toEqual(PostFactory.fromExportJson(lastDoc[0].data()));
     });
    }, 30000),
    /* DataQuery.searchTag */
