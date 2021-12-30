@@ -1,6 +1,5 @@
-import axios from "axios";
 import { ImageFactory } from "../../../src/db/apis/ImageFactory"
-import { readFile, readFileSync } from 'fs';
+import { readFileSync } from 'fs';
 import path from "path";
 
 describe("testing ImageFactory", () => {
