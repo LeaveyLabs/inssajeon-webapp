@@ -29,7 +29,12 @@ const StyledSubmitDialog = styled(Dialog)(({ theme }) => ({
   [theme.breakpoints.down('tablet')]: {
     marginTop: theme.spacing(12),
   },
-  //border:5,
+  '& .MuiDialog-paper': {
+    [theme.breakpoints.down('tablet')]: {
+      borderBottomRightRadius:0,
+      borderBottomLeftRadius:0,
+    },
+  },
 }));
 
 interface SubmitDialogProps {

@@ -21,10 +21,10 @@ export default function SidebarFooter() {
         </IconButton>
       </a>
       <div>
-        <Typography component={Link} to={'/privacy'} variant="body2" sx={{ color: 'text.secondary', textDecoration:'none' }}>
+        <Typography component={Link} to={'/terms'} variant="body2" sx={{ color: 'text.secondary', textDecoration:'none' }}>
           이용약관
         </Typography><br/>
-        <Typography component={Link} to={'/terms'} variant="body2" sx={{ color: 'text.secondary', textDecoration:'none' }}>
+        <Typography component={Link} to={'/privacy'} variant="body2" sx={{ color: 'text.secondary', textDecoration:'none' }}>
           개인정보처리방침
         </Typography>
         <Typography variant="body2" sx={{ color: 'text.secondary', textDecoration:'none' }}>

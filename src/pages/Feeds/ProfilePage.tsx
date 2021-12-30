@@ -9,17 +9,17 @@ import Feed from 'src/components/feed/Feed';
 import { DataQuery, PostOrder } from '../../db/apis/DataQuery';
 // ----------------------------------------------------------------------
 
-export default function HomePage() {
+export default function ProfilePage() {
   async function getNewPosts() {
     try {
-      return await DataQuery.getAllPosts(PostOrder.Trendscore);
+      return await DataQuery.getAllPosts(PostOrder.Trendscore); //TODO change
     } catch (error) {
       console.log(error)
     }
   }
 
   return (
-    <Page title="홈">
+    <Page title="프로필 ? 프로필들?">
       <Feed getNewPosts={getNewPosts} />
     </Page>
   );
