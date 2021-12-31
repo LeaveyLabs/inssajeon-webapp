@@ -20,7 +20,7 @@ import {
 //
 import Searchbar from './Searchbar';
 import DropSearchbar from './DropSearchbar';
-import ClickwableWideLogo from '../../../components/ClickableWideLogo';
+import ClickwableWideLogo from '../../../components/misc/ClickableWideLogo';
 import AutocompleteSearch from './AutocompleteSearch';
 
 // ----------------------------------------------------------------------

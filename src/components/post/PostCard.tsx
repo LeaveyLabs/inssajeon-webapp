@@ -18,7 +18,7 @@ import {
 } from '@mui/material';
 import { green, pink, red } from '@mui/material/colors';
 //hooks
-
+import useIsMobile from 'src/hooks/useIsMobile';
 // utils
 // import { fDate } from '../../../../utils/formatTime';
 // import { fShortenNumber } from '../../../../utils/formatNumber';
@@ -32,47 +32,48 @@ import { fDate } from 'src/utils/formatTime';
 
 // ----------------------------------------------------------------------
 
-
 interface PostCardProps {
   post: PostEntity;
 }
-
-//TODO create isMobile hook
-//is it bad for this to be checked here? aka just once on the load, and not on rerenders?
-const isMobile = /Mobi/i.test(window.navigator.userAgent) 
 
 export default function PostCard( { post }: PostCardProps ) {
   //const { user } = useAuth();
   const [isUpvoted, setIsUpvoted] = useState(false);
   const [isDownvoted, setIsDownvoted] = useState(false);
   const [isFavorited, setIsFavorited] = useState(false);
-  const [isMobileCheck, setIsMobileCheck] = useState(false);
   const [upvotes, setUpvotes] = useState(100);
   const [downvotes, setDownvotes] = useState(5);
+
+  let isMobile = 'canShare' in navigator; 
+  //window.navigator.canShare() //this is the 'proper' way accordint to mozilla to check if canShare, but im getting errors using this method. use this workaround detailed here instead: https://stackoverflow.com/questions/57345539/navigator-canshare-in-typescript-permissions-denied
 
   const handleToggleFavorited = () => {
     setIsFavorited(prevIsFavorited => !isFavorited);
   }
 
-  const handleMobileShare = () => {
-    navigator
+  //TODO add proper icons (in src/public folder) so that share action on Kakao/kakaostory/naver is accompanied by our logo
+  //TODO add a custom share pop up for devices with width small enough to be mobile which dont qualify for navigator.share (would much rather create a custom share feature than just have them use copy button)
+  const handleMobileShare = async () => {
+      navigator
       .share({
-        title: "title of post!",
-        text: 'Check out this post on 인싸전!',
-        url: document.location.href,
+        //title: "title of post!", //mozilla: "the title may be ignored"
+        //text: 'Check out this post on 인싸전!', using the text property makes the share image go away :( so leave it off
+        url: `https://inssajeon.com/post/${post.postID}`,
       })
       .then(() => {
-        //TODO a little "successful share" icon?
+        //TODO increase share count by one
       })
       .catch(error => {
-        console.error('Something went wrong sharing the blog', error);
+        console.error('Something went wrong sharing. error: ', error);
       });
+    
   }
 
   //notes on custom hook for menu
   //https://github.com/jcoreio/material-ui-popup-state
   return (
     <Card >
+      {isMobile ? 'canshare' : 'cant share'}
       <Box sx={{ px:2, height:60, display:'flex', flexDirection: "row", alignItems:"center", justifyContent:"center", }}>
         <AccountCircleIcon sx={{mx:1}} />
         <Link to={`/users/${post.userProfile.username}`} variant="subtitle1" color="text.primary" component={RouterLink}>
@@ -103,7 +104,7 @@ export default function PostCard( { post }: PostCardProps ) {
             <IosShareIcon />
           </IconButton>}
         {!isMobile &&
-          <DesktopCopyButton/>}
+          <DesktopCopyButton postID={post.postID}/>}
       </Box>
     </Card>
   );

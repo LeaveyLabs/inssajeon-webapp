@@ -11,13 +11,10 @@ export const ListSubheaderStyle = styled((props) => (
   <ListSubheader disableSticky disableGutters {...props} />
 ))(({ theme }) => ({
   ...theme.typography.overline,
-  paddingTop: theme.spacing(3),
+  paddingTop: theme.spacing(2),
   paddingLeft: theme.spacing(2),
   paddingBottom: theme.spacing(1),
   color: theme.palette.text.primary,
-  transition: theme.transitions.create('opacity', {
-    duration: theme.transitions.duration.shorter
-  })
 }));
 
 // ----------------------------------------------------------------------

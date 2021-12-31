@@ -6,7 +6,7 @@ import { Container, Box, AppBar, Toolbar, } from '@mui/material';
 // config
 import { NAVBAR_HEIGHT } from 'src/config';
 // components
-import ClickwableWideLogo from 'src/components/ClickableWideLogo';
+import ClickwableWideLogo from 'src/components/misc/ClickableWideLogo';
 
 // ----------------------------------------------------------------------
 

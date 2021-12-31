@@ -2,6 +2,7 @@
 import CategoryIcon from '@mui/icons-material/Category';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import HelpOutlineSharpIcon from '@mui/icons-material/HelpOutlineSharp';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { ReactComponent as LogoSVG } from 'src/assets/logos/logo.svg'
 
 // ----------------------------------------------------------------------
@@ -19,7 +20,8 @@ const sidebarConfig = [
   {
     subheader: 'More',
     items: [
-      { title: '인싸전이란?', path: '/about', icon: <HelpOutlineSharpIcon/> },
+      { title: '인싸전이란?', path: '/about', icon: <InfoOutlinedIcon/> },
+      { title: '자주 묻는 질문', path: '/faq', icon: <HelpOutlineSharpIcon/> },
     ]
   },
 ];

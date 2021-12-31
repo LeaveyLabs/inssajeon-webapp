@@ -3,7 +3,7 @@ import { ReactNode, useMemo } from 'react';
 import { ThemeProvider, createTheme, useTheme } from '@mui/material/styles';
 // hooks
 //
-import componentsOverride from '../theme/overrides';
+import componentsOverride from '../../theme/overrides';
 
 // ----------------------------------------------------------------------
 

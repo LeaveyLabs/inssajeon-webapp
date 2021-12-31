@@ -1,5 +1,5 @@
 // components
-import Iconify from '../components/Iconify';
+import Iconify from '../components/misc/Iconify';
 //
 import _mock from './_mock';
 

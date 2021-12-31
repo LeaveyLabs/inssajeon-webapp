@@ -27,6 +27,7 @@ export default function PostMoreButton() {
               horizontal: 'right',
             }}>
             <MenuItem onClick={popupState.close}>신고하기</MenuItem>
+            <MenuItem onClick={popupState.close}>이 사용자을 차단하기</MenuItem>
           </Menu>
         </React.Fragment>
       )}

@@ -44,8 +44,9 @@ export default function Feed( { getNewPosts }: Props ) {
     fetchPosts()
   }, []); //TODO call useEffect to query more posts whenever almost all posts have been rendered
 
-  //TODO code to handle rendering another 10 posts as user scrolls down
+  //TODO code to handle rendering another 10 posts as user scrolls down (should be able to find this online)
 
+  //TODO look into lists vs stack: is stack really the best way to display posts as you scroll down?
   return (
     <div>
       {isLoading ? 

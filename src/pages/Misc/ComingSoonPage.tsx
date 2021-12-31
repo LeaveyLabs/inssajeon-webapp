@@ -7,19 +7,13 @@ import Page from '../Page';
 
 // ----------------------------------------------------------------------
 
-export default function FTUXPage1() {
+export default function ComingSoonPage() {
 
   return (
-    <Page title="홈">
+    <Page title="">
       <Container maxWidth={'fullscreen'}>
         <Typography variant="h3" component="h1" paragraph>
-          word
-        </Typography>
-        <Typography gutterBottom>
-          description
-        </Typography>
-        <Typography>
-          quote
+          coming soon...
         </Typography>
       </Container>
     </Page>

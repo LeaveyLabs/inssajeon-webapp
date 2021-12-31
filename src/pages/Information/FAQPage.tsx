@@ -7,19 +7,13 @@ import Page from '../Page';
 
 // ----------------------------------------------------------------------
 
-export default function FTUXPage1() {
+export default function FAQPage() {
 
   return (
-    <Page title="홈">
+    <Page title="자주 묻는 질문">
       <Container maxWidth={'fullscreen'}>
         <Typography variant="h3" component="h1" paragraph>
-          word
-        </Typography>
-        <Typography gutterBottom>
-          description
-        </Typography>
-        <Typography>
-          quote
+          인싸전 왜 이렇게나 멋지지?
         </Typography>
       </Container>
     </Page>

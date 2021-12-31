@@ -11,8 +11,8 @@ import cssStyles from '../../../utils/cssStyles';
 // config
 import { SIDEBAR_WIDTH_DESKTOP, SIDEBAR_WIDTH_MOBILE } from '../../../config';
 // components
-import Scrollbar from '../../../components/Scrollbar';
-import NavSection from '../../../components/nav-section';
+import Scrollbar from './Scrollbar';
+import NavSection from './sidebar-nav';
 //
 import SidebarAccount from './SidebarAccount';
 import SidebarFooter from './SidebarFooter';
@@ -55,17 +55,7 @@ export default function Sidebar({ isOpenSidebar, onCloseSidebar }: Props) {
         '& .simplebar-content': { height: 1, display: 'flex', flexDirection: 'column' },
       }}
     >
-      <Stack
-        spacing={3}
-        sx={{
-          pt: 3,
-          pb: 2,
-          px: 2.5,
-          flexShrink: 0,
-        }}
-      >
-        <SidebarAccount />
-      </Stack>
+      <SidebarAccount />
       <NavSection navConfig={sidebarConfig} />
       <Box sx={{ flexGrow: 1 }} />
       <SidebarFooter />

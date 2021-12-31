@@ -1,6 +1,6 @@
 // components
-import Image from '../components/Image';
-import Iconify from '../components/Iconify';
+import Image from '../components/misc/Image';
+import Iconify from '../components/misc/Iconify';
 
 // ----------------------------------------------------------------------
 

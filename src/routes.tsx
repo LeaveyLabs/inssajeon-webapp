@@ -22,6 +22,7 @@ import PageNotFound from './pages/Misc/PageNotFound';
 import PrivacyPage from './pages/Information/PrivacyPage';
 import TermsPage from './pages/Information/TermsPage';
 import AboutPage from './pages/Information/AboutPage';
+import FAQPage from './pages/Information/FAQPage';
 
 // Registration
 import SignupPage from './pages/Registration/SignupPage';
@@ -33,6 +34,7 @@ import ChartsPage from './pages/Charts/ChartsPage';
 
 // Account
 import SettingsPage from './pages/Account/SettingsPage';
+import ComingSoonPage from './pages/Misc/ComingSoonPage';
 
 
 // ----------------------------------------------------------------------
@@ -54,7 +56,7 @@ export default function Router() {
           ]
         },
         { path: 'categories', children: [
-            { path: '', element: <ExplorePage /> },
+            { path: '', element: <ComingSoonPage /> },
             { path: ':id', element: <CategoriesPage /> },
           ]
         },
@@ -73,14 +75,15 @@ export default function Router() {
         },
       ],
     },
-    { path: '/', element: <PlainLayout />, children: [
+    { path: '/', element: <DashboardLayout />, children: [
         { path: 'about', element: <AboutPage /> },
         { path: 'privacy', element: <PrivacyPage/> },
         { path: 'terms', element: <TermsPage/> },
+        { path: 'faq', element: <FAQPage/> },
       ],
     },
     //guestUser only routes
-    { path: 'registration', element: <PlainLayout />, children: [
+    { path: 'registration', element: <DashboardLayout />, children: [
         { path: "*", element: <Navigate to="signup" replace />, index:true },
         { path: 'signup', element: <SignupPage /> },
         { path: 'login', element: <LoginPage/> },
@@ -98,7 +101,7 @@ export default function Router() {
     },
     { path: 'charts', element: <DashboardLayout />, children: [
       { path: "*", element: <Navigate to="" replace />, index:true },
-      { path: '', element: <ChartsPage /> },
+      { path: '', element: <ComingSoonPage /> },
     ]},
     //404
     {

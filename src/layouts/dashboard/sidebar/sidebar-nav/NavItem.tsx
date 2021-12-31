@@ -16,9 +16,9 @@ import {
   SIDEBAR_ROOT_ITEM_HEIGHT,
   SIDEBAR_SUB_ITEM_HEIGHT,
   SIDEBAR_ICON_ITEM_SIZE,
-} from '../../config';
+} from '../../../../config';
 //
-import Iconify from '../Iconify';
+import Iconify from '../../../../components/misc/Iconify';
 // type
 import { NavItemProps } from './type';
 

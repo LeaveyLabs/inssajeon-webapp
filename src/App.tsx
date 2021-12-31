@@ -4,10 +4,9 @@ import Router from './routes';
 import ThemeProvider from './theme';
 import GlobalStyles from './theme/globalStyles';
 // components
-import RtlLayout from './components/RtlLayout';
-import ScrollToTop from './components/ScrollToTop';
-import { ProgressBarStyle } from './components/ProgressBar';
-import ThemeColorPresets from './components/ThemeColorPresets';
+import ScrollToTop from './components/app-level/ScrollToTop';
+import { ProgressBarStyle } from './components/app-level/ProgressBar';
+import ThemeColorPresets from './components/app-level/ThemeColorPresets';
 import MotionLazyContainer from './components/animate/MotionLazyContainer';
 
 // ----------------------------------------------------------------------
@@ -16,14 +15,12 @@ export default function App() {
   return (
     <ThemeProvider>
       <ThemeColorPresets>
-        <RtlLayout>
-          <MotionLazyContainer>
-            <GlobalStyles />
-            <ProgressBarStyle />
-            <ScrollToTop />
-            <Router />
-          </MotionLazyContainer>
-        </RtlLayout>
+        <MotionLazyContainer>
+          <GlobalStyles />
+          <ProgressBarStyle />
+          <ScrollToTop />
+          <Router />
+        </MotionLazyContainer>
       </ThemeColorPresets>
     </ThemeProvider>
   );
