@@ -1,5 +1,5 @@
 // routes
-import Router from './routes';
+import Router from './routing/routes';
 // theme
 import ThemeProvider from './theme';
 import GlobalStyles from './theme/globalStyles';
