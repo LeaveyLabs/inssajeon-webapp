@@ -4,7 +4,7 @@ import { getAuth } from 'firebase/auth';
 /*
 Ensures that tests will also re-direct to the .env.local file
 */
-import dotenv from "dotenv";
+import * as dotenv from "dotenv";
 dotenv.config({path: '.env.production'});
 
 const firebaseApp = initializeApp({
