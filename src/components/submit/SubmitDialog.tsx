@@ -27,12 +27,10 @@ const Transition = React.forwardRef(function Transition(
 
 const StyledSubmitDialog = styled(Dialog)(({ theme }) => ({
   [theme.breakpoints.down('tablet')]: {
-    marginTop: theme.spacing(12),
-  },
-  '& .MuiDialog-paper': {
-    [theme.breakpoints.down('tablet')]: {
-      borderBottomRightRadius:0,
-      borderBottomLeftRadius:0,
+    marginTop: theme.spacing(8),
+    '& .MuiDialog-paper': {
+        borderBottomRightRadius:0,
+        borderBottomLeftRadius:0,
     },
   },
 }));
