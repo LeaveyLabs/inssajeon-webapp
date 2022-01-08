@@ -44,8 +44,8 @@ export default function PostCard( { post }: PostCardProps ) {
   const [upvotes, setUpvotes] = useState(100);
   const [downvotes, setDownvotes] = useState(5);
 
-  let isMobile = 'canShare' in navigator; 
-  //window.navigator.canShare() //this is the 'proper' way accordint to mozilla to check if canShare, but im getting errors using this method. use this workaround detailed here instead: https://stackoverflow.com/questions/57345539/navigator-canshare-in-typescript-permissions-denied
+  let canNativeMobileShare = 'canShare' in navigator; //checks if user's device has a native share functionality
+  //window.navigator.canShare() //this is the 'proper' way according to mozilla to check if canShare, but im getting errors using this method. use this workaround detailed here instead: https://stackoverflow.com/questions/57345539/navigator-canshare-in-typescript-permissions-denied
 
   const handleToggleFavorited = () => {
     setIsFavorited(prevIsFavorited => !isFavorited);
@@ -53,7 +53,7 @@ export default function PostCard( { post }: PostCardProps ) {
 
   //TODO add proper icons (in src/public folder) so that share action on Kakao/kakaostory/naver is accompanied by our logo
   //TODO add a custom share pop up for devices with width small enough to be mobile which dont qualify for navigator.share (would much rather create a custom share feature than just have them use copy button)
-  const handleMobileShare = async () => {
+  const handleNativeMobileShare = async () => {
       navigator
       .share({
         //title: "title of post!", //mozilla: "the title may be ignored"
@@ -73,7 +73,6 @@ export default function PostCard( { post }: PostCardProps ) {
   //https://github.com/jcoreio/material-ui-popup-state
   return (
     <Card >
-      {isMobile ? 'canshare' : 'cant share'}
       <Box sx={{ px:2, height:60, display:'flex', flexDirection: "row", alignItems:"center", justifyContent:"center", }}>
         <AccountCircleIcon sx={{mx:1}} />
         <Link to={`/users/${post.userProfile.username}`} variant="subtitle1" color="text.primary" component={RouterLink}>
@@ -99,11 +98,11 @@ export default function PostCard( { post }: PostCardProps ) {
         <IconButton onClick={handleToggleFavorited}>
           {isFavorited ? <BookmarkIcon /> : <BookmarkBorderIcon/>}
         </IconButton>
-        {isMobile && 
-          <IconButton sx={{}} onClick={handleMobileShare}>
+        {canNativeMobileShare && 
+          <IconButton sx={{}} onClick={handleNativeMobileShare}>
             <IosShareIcon />
           </IconButton>}
-        {!isMobile &&
+        {!canNativeMobileShare &&
           <DesktopCopyButton postID={post.postID}/>}
       </Box>
     </Card>

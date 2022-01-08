@@ -26,7 +26,6 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
 const Search = styled('div')(({ theme }) => ({
   position: 'relative', //so SearchIconWrapper can be placed absolutely within
   height: '20',
-  backgroundColor:'green',
   maxWidth:'100%',
   borderRadius:10,
   zIndex:2,
@@ -70,7 +69,6 @@ const StyledInputBase = styled(InputBase)(({ theme  }) => ({
     maxWidth: '100',
     height:'3ch',
     border:1,
-    backgroundColor: 'black',
   },
   width:'90%', //TODO pass searchInput as prop and make width 100% when searchInput.lenght==0
 }));
