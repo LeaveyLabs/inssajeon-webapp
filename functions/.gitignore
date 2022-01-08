@@ -10,3 +10,4 @@ node_modules/
 
 # Debug files 
 firebase-debug.log
+*?-debug.log

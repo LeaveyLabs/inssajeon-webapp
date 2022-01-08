@@ -1,5 +1,5 @@
-import { TAGSET_TYPE_ERROR, TAG_TYPE_ERROR } from "../../strings/apiConstLibrary";
-import { EntityFactory, IndexedStringSet, jsonToStringSet, stringSetToJson, validatedObject } from "../jsonFormat";
+import { TAG_TYPE_ERROR } from "../../strings/apiConstLibrary";
+import { EntityFactory, validatedObject } from "../jsonFormat";
 
 export interface TagEntity {
     tagString: string,
