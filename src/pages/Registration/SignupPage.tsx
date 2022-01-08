@@ -1,7 +1,7 @@
 import { Link as RouterLink } from 'react-router-dom';
 // @mui
-import { styled } from '@mui/material/styles';
-import { Box, Card, Link, Container, Typography } from '@mui/material';
+import { styled, useTheme } from '@mui/material/styles';
+import { Box, Link, Typography, Stack, Container, Card } from '@mui/material';
 // hooks
 import useAuth from 'src/hooks/useAuth';
 import useResponsive from 'src/hooks/useResponsive';
@@ -9,114 +9,84 @@ import useResponsive from 'src/hooks/useResponsive';
 import { PAGE_PATHS } from 'src/routing/paths';
 // components
 import Page from '../Page';
-import Image from 'src/components/misc/Image';
-// sections
-import SignupForm from 'src/components/auth/SignupForm';
-import ClickwableWideLogo from 'src/components/misc/ClickableWideLogo';
+import ClickwableWideLogoLarge from 'src/components/misc/ClickableWideLogoLarge';
+import SignupForm from '../../components/auth/SignupForm';
 
 // ----------------------------------------------------------------------
 
-const RootStyle = styled('div')(({ theme }) => ({
-  [theme.breakpoints.up('tablet')]: {
-    display: 'flex',
-  },
-}));
 
-const HeaderStyle = styled('header')(({ theme }) => ({
-  top: 0,
-  zIndex: 9,
-  lineHeight: 0,
-  width: '100%',
-  display: 'flex',
-  alignItems: 'center',
-  position: 'absolute',
-  padding: theme.spacing(3),
-  justifyContent: 'space-between',
-  [theme.breakpoints.up('tablet')]: {
-    alignItems: 'flex-start',
-    padding: theme.spacing(7, 5, 0, 7),
-  },
-}));
-
-const SectionStyle = styled(Card)(({ theme }) => ({
-  width: '100%',
-  maxWidth: 464,
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  margin: theme.spacing(2, 0, 2, 2),
-}));
-
-const ContentStyle = styled('div')(({ theme }) => ({
+const MobileStyle = styled(Container)(({ theme }) => ({
   maxWidth: 480,
-  margin: 'auto',
+  padding: theme.spacing(3, 3),
+  height: '100%',
   display: 'flex',
-  minHeight: '100vh',
   flexDirection: 'column',
   justifyContent: 'center',
-  padding: theme.spacing(12, 0),
+}));
+
+const DesktopStyle = styled(Container)(({ theme }) => ({
+  maxWidth: 480,
+  height: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
 }));
 
 // ----------------------------------------------------------------------
+
+function SignupContent() {
+  return (
+      <Box >
+        <Stack direction="row" alignItems="center" justifyContent="center" sx={{ mb: 4, }}>
+          <Typography variant="h1" gutterBottom sx={{mb:0}}>
+            인싸되기
+          </Typography>
+        </Stack>
+        <SignupForm />
+        <Typography variant="body2" align="center" sx={{ mt: 3 }}>
+          가입하시면, 인싸전의&nbsp;
+          <Link variant="subtitle2" component={RouterLink} to={PAGE_PATHS.page.terms}>
+            이용약관
+          </Link>
+          과 {''}
+          <Link variant="subtitle2" component={RouterLink} to={PAGE_PATHS.page.privacy}>
+            개인정보취급방침
+          </Link>
+          에 동의하시는 겁니다.
+        </Typography>
+        <Typography variant="body2" align="center" sx={{ mt: 3 }}>
+          계정이 이미 있습니까?{' '}
+          <Link variant="subtitle2" component={RouterLink} to={PAGE_PATHS.auth.login}>
+            로그인하세요
+          </Link>
+        </Typography>
+      </Box>
+  )
+}
 
 export default function SignupPage() {
-  //const { method } = useAuth();
+  const { method } = useAuth();
+  const isMobile = useResponsive('down', 'tablet'); //TODO why is it taking so long to be repsonsive here?
+  const theme = useTheme()
 
-  const tabletUp = useResponsive('up', 'tablet');
-
+  //HEIGHT: 100% REALLY CHANGES HOW ITEMS ARE POSITIONED VERTICALLY. FIXED PAGES NEED HEIGHT: 100%.
   return (
-    <Page title="가입">
-      <RootStyle>
-        <HeaderStyle>
-          <ClickwableWideLogo />
-          {tabletUp && (
-            <Typography variant="body2" sx={{ mt: { md: -2 } }}>
-              Already have an account? {''}
-              <Link variant="subtitle2" component={RouterLink} to={PAGE_PATHS.auth.login}>
-                Login
-              </Link>
-            </Typography>
-          )}
-        </HeaderStyle>
-
-        <Container>
-          <ContentStyle>
-            <Box sx={{ mb: 5, display: 'flex', alignItems: 'center' }}>
-              <Box sx={{ flexGrow: 1 }}>
-                <Typography variant="h4" gutterBottom>
-                  Get started absolutely free.
-                </Typography>
-                <Typography sx={{ color: 'text.secondary' }}>
-                  Free forever. No credit card needed.
-                </Typography>
-              </Box>
-            </Box>
-
-            <SignupForm />
-
-            <Typography variant="body2" align="center" sx={{ color: 'text.secondary', mt: 3 }}>
-              By registering, I agree to Minimal&nbsp;
-              <Link underline="always" color="text.primary" href="#">
-                Terms of Service
-              </Link>
-              {''} and {''}
-              <Link underline="always" color="text.primary" href="#">
-                Privacy Policy
-              </Link>
-              .
-            </Typography>
-
-            {!tabletUp && (
-              <Typography variant="body2" sx={{ mt: 3, textAlign: 'center' }}>
-                Already have an account?{' '}
-                <Link variant="subtitle2" to={PAGE_PATHS.auth.login} component={RouterLink}>
-                  Login
-                </Link>
-              </Typography>
-            )}
-          </ContentStyle>
-        </Container>
-      </RootStyle>
+    <Page sx={{height:'100%'}} title="로그인"> 
+      {isMobile ?
+        <MobileStyle>
+          <ClickwableWideLogoLarge/>
+          <Box sx={{flexGrow:1}}/>
+          <SignupContent/>
+          <Box sx={{flexGrow:1}}/>
+        </MobileStyle>
+      : //!isMobile
+        <DesktopStyle>
+          <Card sx={{padding: theme.spacing(3, 3), }}>
+            <ClickwableWideLogoLarge sx={{mb:10}}/>
+            <SignupContent/>
+          </Card>
+        </DesktopStyle>
+      }
     </Page>
   );
 }

@@ -11,7 +11,8 @@ export const PAGE_PATHS = {
   auth: {
     login: '/login',
     signup: '/signup',
-    reset: '/reset-password',
+    forgot: '/forgot-password',
+    reset: '/reset-password', 
   },
   page: {
     comingSoon: '/coming-soon',

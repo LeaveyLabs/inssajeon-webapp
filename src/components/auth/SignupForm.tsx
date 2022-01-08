@@ -9,14 +9,14 @@ import useAuth from 'src/hooks/useAuth';
 //import useIsMountedRef from '../../../hooks/useIsMountedRef'; TODO wut is this
 
 // components
+import Iconify from '../misc/Iconify';
 
 // ----------------------------------------------------------------------
 
 type InitialValues = {
   email: string;
   password: string;
-  firstName: string;
-  lastName: string;
+  passwordConfirmation: string,
   afterSubmit?: string;
 };
 
@@ -26,23 +26,29 @@ export default function SignupForm() {
   //const isMountedRef = useIsMountedRef();
 
   const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
 
   const RegisterSchema = Yup.object().shape({
-    firstName: Yup.string()
-      .min(2, 'Too Short!')
-      .max(50, 'Too Long!')
-      .required('First name required'),
-    lastName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Last name required'),
-    email: Yup.string().email('Email must be a valid email address').required('Email is required'),
-    password: Yup.string().required('Password is required'),
+    email: Yup
+      .string()
+      .email('올바른 이메일 주소 입력하세요')
+      .required('필수'),
+    password: Yup
+      .string()
+      .required('필수')
+      .min(8, '8글자 이상')
+      .max(20, '20글자 이하'),
+    passwordConfirmation: Yup
+      .string()
+      .required('필수')
+      .oneOf([Yup.ref('password'), null], '비밀번혀가 서로 맞지 않습니다'),
   });
 
   const formik = useFormik<InitialValues>({
     initialValues: {
-      firstName: '',
-      lastName: '',
       email: '',
       password: '',
+      passwordConfirmation: '',
     },
     validationSchema: RegisterSchema,
     onSubmit: async (values, { setErrors, setSubmitting }) => {
@@ -55,59 +61,61 @@ export default function SignupForm() {
     },
   });
 
-  const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
-
   return (
     <FormikProvider value={formik}>
-      <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+      <Form autoComplete="off" noValidate>
         <Stack spacing={3}>
-          {errors.afterSubmit && <Alert severity="error">{errors.afterSubmit}</Alert>}
-
-          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-            <TextField
-              fullWidth
-              label="First name"
-              {...getFieldProps('firstName')}
-              error={Boolean(touched.firstName && errors.firstName)}
-              helperText={touched.firstName && errors.firstName}
-            />
-
-            <TextField
-              fullWidth
-              label="Last name"
-              {...getFieldProps('lastName')}
-              error={Boolean(touched.lastName && errors.lastName)}
-              helperText={touched.lastName && errors.lastName}
-            />
-          </Stack>
+          {formik.errors.afterSubmit && <Alert severity="error">{formik.errors.afterSubmit}</Alert>}
 
           <TextField
             fullWidth
             autoComplete="username"
             type="email"
-            label="Email address"
-            {...getFieldProps('email')}
-            error={Boolean(touched.email && errors.email)}
-            helperText={touched.email && errors.email}
+            label="이메일 주소"
+            id="password"
+            {...formik.getFieldProps('email')}
+            error={Boolean(formik.touched.email && formik.errors.email)}
+            helperText={formik.touched.email && formik.errors.email}
           />
 
           <TextField
             fullWidth
-            autoComplete="current-password"
+            id="password"
+            autoComplete="password"
             type={showPassword ? 'text' : 'password'}
-            label="Password"
-            {...getFieldProps('password')}
+            label="비밀번호"
+            {...formik.getFieldProps('password')}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton edge="end" onClick={() => setShowPassword((prev) => !prev)}>
-                    {/* <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} /> */}
+                    <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
                   </IconButton>
                 </InputAdornment>
               ),
             }}
-            error={Boolean(touched.password && errors.password)}
-            helperText={touched.password && errors.password}
+            error={Boolean(formik.touched.password && formik.errors.password)}
+            helperText={formik.touched.password && formik.errors.password}
+          />
+
+          <TextField
+            fullWidth
+            id="passwordConfirmation"
+            autoComplete="passwordConfirmation"
+            type={showPasswordConfirmation ? 'text' : 'password'}
+            label="비밀번호 확인"
+            {...formik.getFieldProps('passwordConfirmation')}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton edge="end" onClick={() => setShowPasswordConfirmation((prev) => !prev)}>
+                    <Iconify icon={showPasswordConfirmation ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+            error={Boolean(formik.touched.passwordConfirmation && formik.errors.passwordConfirmation)}
+            helperText={formik.touched.passwordConfirmation && formik.errors.passwordConfirmation}
           />
 
           <LoadingButton
@@ -115,9 +123,9 @@ export default function SignupForm() {
             size="large"
             type="submit"
             variant="contained"
-            loading={isSubmitting}
+            loading={formik.isSubmitting}
           >
-            Register
+            가입하기
           </LoadingButton>
         </Stack>
       </Form>

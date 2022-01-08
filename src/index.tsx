@@ -12,7 +12,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 // contexts
 import { SidebarProvider } from './contexts/SidebarContext';
-import { AuthProvider } from './contexts/FirebaseContext';
+import { AuthProvider } from './contexts/AuthContext';
 //
 import App from './App';
 import reportWebVitals from './reportWebVitals';

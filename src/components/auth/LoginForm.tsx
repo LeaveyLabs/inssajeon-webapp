@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 import { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useFormik, Form, FormikProvider } from 'formik';
 // @mui
 import {
@@ -23,23 +23,28 @@ import Iconify from '../misc/Iconify';
 
 // ----------------------------------------------------------------------
 
-type InitialValues = {
+type LoginFormValues = {
   email: string;
   password: string;
   remember: boolean;
-  afterSubmit?: string;
+  afterSubmit?: string; //for setting an error if login fails
 };
 
 export default function LoginForm() {
+  let navigate = useNavigate();
   const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
 
   const LoginSchema = Yup.object().shape({
-    email: Yup.string().email('Email must be a valid email address').required('Email is required'),
-    password: Yup.string().required('Password is required'),
+    email: Yup
+      .string()
+      .required('필수'),
+    password: Yup
+      .string()
+      .required('필수'),
   });
 
-  const formik = useFormik<InitialValues>({
+  const formik = useFormik<LoginFormValues>({
     initialValues: {
       email: '',
       password: '',
@@ -52,6 +57,8 @@ export default function LoginForm() {
         // if (isMountedRef.current) {
         //   setSubmitting(false);
         // }
+        //TODO 'welcome back!' dialogue
+        //TODO handle the case where 'remember me' is checked
       } catch (error) {
         console.error(error);
         resetForm();
@@ -63,34 +70,35 @@ export default function LoginForm() {
     },
   });
 
-  const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
-
   const handleShowPassword = () => {
     setShowPassword((show) => !show);
   };
 
   return (
     <FormikProvider value={formik}>
-      <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+      <Form noValidate >
         <Stack spacing={3}>
-          {errors.afterSubmit && <Alert severity="error">{errors.afterSubmit}</Alert>}
+          {formik.errors.afterSubmit && <Alert severity="error">{formik.errors.afterSubmit}</Alert>}
 
           <TextField
             fullWidth
-            autoComplete="username"
+            id="username"
+            autoComplete="username"  //?? look more into later https://mui.com/api/text-field/
             type="email"
-            label="Email address"
-            {...getFieldProps('email')}
-            error={Boolean(touched.email && errors.email)}
-            helperText={touched.email && errors.email}
+            label="이메일 주소"
+            {...formik.getFieldProps('email')}
+            disabled={formik.isSubmitting}
+            error={Boolean(formik.touched.email && formik.errors.email)}
+            helperText={formik.touched.email && formik.errors.email}
           />
 
           <TextField
             fullWidth
-            autoComplete="current-password"
+            id="password"
+            autoComplete="password"
             type={showPassword ? 'text' : 'password'}
-            label="Password"
-            {...getFieldProps('password')}
+            label="비밀번호"
+            {...formik.getFieldProps('password')}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -100,19 +108,19 @@ export default function LoginForm() {
                 </InputAdornment>
               ),
             }}
-            error={Boolean(touched.password && errors.password)}
-            helperText={touched.password && errors.password}
+            error={Boolean(formik.touched.password && formik.errors.password)}
+            helperText={formik.touched.password && formik.errors.password}
           />
         </Stack>
 
         <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
           <FormControlLabel
-            control={<Checkbox {...getFieldProps('remember')} checked={values.remember} />}
-            label="Remember me"
+            control={<Checkbox {...formik.getFieldProps('remember')} checked={formik.values.remember} />}
+            label="나를 기억하기"
           />
 
-          <Link component={RouterLink} variant="subtitle2" to={PAGE_PATHS.auth.reset}>
-            Forgot password?
+          <Link component={RouterLink} variant="subtitle2" to={PAGE_PATHS.auth.forgot}>
+            비밀번호를 잊으셨습니까?
           </Link>
         </Stack>
 
@@ -121,9 +129,9 @@ export default function LoginForm() {
           size="large"
           type="submit"
           variant="contained"
-          loading={isSubmitting}
+          loading={formik.isSubmitting}
         >
-          Login
+          로그인
         </LoadingButton>
       </Form>
     </FormikProvider>

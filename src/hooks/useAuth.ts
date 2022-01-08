@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 //
-import { AuthContext } from '../contexts/FirebaseContext';
+import { AuthContext } from '../contexts/AuthContext';
 
 // ----------------------------------------------------------------------
 

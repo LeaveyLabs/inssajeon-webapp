@@ -84,6 +84,11 @@ function AuthProvider({ children }: { children: ReactNode }) {
 
   const register = (email: string, password: string) => {
     createUserWithEmailAndPassword(firebaseAuth, email, password)
+      .then((userCredential) => {
+        // Signed in 
+        const user = userCredential.user;
+        // ...
+      })
   }
 
   //this function is only called on page after signup
@@ -94,11 +99,11 @@ function AuthProvider({ children }: { children: ReactNode }) {
         await ProfileInteraction.createProfile(userInfo, firebaseAuth.currentUser.uid);
         setProfile(userInfo)
       } catch (e) {
-        console.error(e);
+        throw(e);
       }
     }
     else {
-      console.error("Auth info must exist in order to create a profile!")
+      throw new Error("Auth info must exist in order to create a profile!")
     }
   } 
 

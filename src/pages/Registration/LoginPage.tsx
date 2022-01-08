@@ -1,7 +1,7 @@
 import { Link as RouterLink } from 'react-router-dom';
 // @mui
-import { styled } from '@mui/material/styles';
-import { Box, Card, Link, Container, Typography, Stack, Alert } from '@mui/material';
+import { styled, useTheme } from '@mui/material/styles';
+import { Box, Link, Typography, Stack, Container, Card } from '@mui/material';
 // hooks
 import useAuth from 'src/hooks/useAuth';
 import useResponsive from 'src/hooks/useResponsive';
@@ -9,106 +9,73 @@ import useResponsive from 'src/hooks/useResponsive';
 import { PAGE_PATHS } from 'src/routing/paths';
 // components
 import Page from '../Page';
-import Image from 'src/components/misc/Image';
-import SignupForm from 'src/components/auth/SignupForm';
-import ClickwableWideLogo from 'src/components/misc/ClickableWideLogo';
+import ClickwableWideLogoLarge from 'src/components/misc/ClickableWideLogoLarge';
 import LoginForm from '../../components/auth/LoginForm';
 
 // ----------------------------------------------------------------------
 
-const RootStyle = styled('div')(({ theme }) => ({
-  [theme.breakpoints.up('tablet')]: {
-    display: 'flex',
-  },
-}));
 
-const HeaderStyle = styled('header')(({ theme }) => ({
-  top: 0,
-  zIndex: 9,
-  lineHeight: 0,
-  width: '100%',
-  display: 'flex',
-  alignItems: 'center',
-  position: 'absolute',
-  padding: theme.spacing(3),
-  justifyContent: 'space-between',
-  [theme.breakpoints.up('tablet')]: {
-    alignItems: 'flex-start',
-    padding: theme.spacing(7, 5, 0, 7),
-  },
-}));
-
-const SectionStyle = styled(Card)(({ theme }) => ({
-  width: '100%',
-  maxWidth: 464,
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  margin: theme.spacing(2, 0, 2, 2),
-}));
-
-const ContentStyle = styled('div')(({ theme }) => ({
+const MobileStyle = styled(Container)(({ theme }) => ({
   maxWidth: 480,
-  margin: 'auto',
+  padding: theme.spacing(3, 3),
+  height: '100%',
   display: 'flex',
-  minHeight: '100vh',
   flexDirection: 'column',
   justifyContent: 'center',
-  padding: theme.spacing(12, 0),
+}));
+
+const DesktopStyle = styled(Container)(({ theme }) => ({
+  maxWidth: 520,
+  height: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
 }));
 
 // ----------------------------------------------------------------------
 
-export default function Login() {
-  const { method } = useAuth();
-
-  const tabletUp = useResponsive('up', 'tablet');
-
+function LoginContent() {
   return (
-    <Page title="로그인">
-      <Container maxWidth={'fullscreen'}>
-      <RootStyle>
-        <HeaderStyle>
-          <ClickwableWideLogo />
-          {tabletUp && (
-            <Typography variant="body2" sx={{ mt: { md: -2 } }}>
-              Don’t have an account? {''}
-              <Link variant="subtitle2" component={RouterLink} to={PAGE_PATHS.auth.signup}>
-                Get started
-              </Link>
-            </Typography>
-          )}
-        </HeaderStyle>
+      <Box >
+        <Stack direction="row" alignItems="center" justifyContent="center" sx={{ mb: 4, }}>
+          <Typography variant="h1" gutterBottom sx={{mb:0}}>
+            로그인
+          </Typography>
+        </Stack>
+        <LoginForm />
+        <Typography variant="body2" align="center" sx={{ mt: 3 }}>
+          계정이 없습니까?{' '}
+          <Link variant="subtitle2" component={RouterLink} to={PAGE_PATHS.auth.signup}>
+            가입하세요
+          </Link>
+        </Typography>
+      </Box>
+  )
+}
 
-        <Container maxWidth="tablet">
-          <ContentStyle>
-            <Stack direction="row" alignItems="center" sx={{ mb: 5 }}>
-              <Box sx={{ flexGrow: 1 }}>
-                <Typography variant="h4" gutterBottom>
-                  Sign in to Minimal
-                </Typography>
-                <Typography sx={{ color: 'text.secondary' }}>Enter your details below.</Typography>
-              </Box>
-            </Stack>
+export default function LoginPage() {
+  const { method } = useAuth();
+  const isMobile = useResponsive('down', 'tablet'); //TODO why is it taking so long to be repsonsive here?
+  const theme = useTheme()
 
-            <Alert severity="info" sx={{ mb: 3 }}>
-              Use email : <strong>demo@minimals.cc</strong> / password :<strong> demo1234</strong>
-            </Alert>
-
-            <LoginForm />
-
-            {!tabletUp && (
-              <Typography variant="body2" align="center" sx={{ mt: 3 }}>
-                Don’t have an account?{' '}
-                <Link variant="subtitle2" component={RouterLink} to={PAGE_PATHS.auth.signup}>
-                  Get started
-                </Link>
-              </Typography>
-            )}
-          </ContentStyle>
-        </Container>
-      </RootStyle>
-      </Container>
+  //HEIGHT: 100% REALLY CHANGES HOW ITEMS ARE POSITIONED VERTICALLY. FIXED PAGES NEED HEIGHT: 100%.
+  return (
+    <Page sx={{height:'100%'}} title="로그인"> 
+      {isMobile ?
+        <MobileStyle>
+          <ClickwableWideLogoLarge/>
+          <Box sx={{flexGrow:1}}/>
+          <LoginContent/>
+          <Box sx={{flexGrow:1}}/>
+        </MobileStyle>
+      : //!isMobile
+        <DesktopStyle>
+          <Card sx={{padding: theme.spacing(3, 3), }}>
+            <ClickwableWideLogoLarge sx={{mb:10}}/>
+            <LoginContent/>
+          </Card>
+        </DesktopStyle>
+      }
     </Page>
   );
 }

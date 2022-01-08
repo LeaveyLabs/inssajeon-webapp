@@ -1,7 +1,8 @@
 import { Navigate, useRoutes } from 'react-router-dom';
 // layouts
 import DashboardLayout from '../layouts/dashboard';
-import PlainLayout from '../layouts/plain';
+import PlainLayout from 'src/layouts/PlainLayout';
+import EmptyLayout from 'src/layouts/EmptyLayout';
 // PAGES
 // Feeds
 import HomePage from '../pages/Feeds/HomePage';
@@ -27,6 +28,7 @@ import FAQPage from '../pages/Information/FAQPage';
 // Registration
 import SignupPage from '../pages/Registration/SignupPage';
 import ResetPasswordPage from '../pages/Registration/ResetPasswordPage';
+import ForgotPasswordPage from 'src/pages/Registration/ForgotPasswordPage';
 import LoginPage from '../pages/Registration/LoginPage';
 
 // Charts
@@ -84,11 +86,12 @@ export default function Router() {
       ],
     },
     //guestUser only routes
-    { path: '/', children: [
+    { path: '/', element:<EmptyLayout/>, children: [
         { path: "*", element: <Navigate to={PAGE_PATHS.auth.signup} replace />, index:true },
         { path: PAGE_PATHS.auth.signup, element: <SignupPage /> },
         { path: PAGE_PATHS.auth.login, element: <LoginPage/> },
-        { path: PAGE_PATHS.auth.reset, element: <ResetPasswordPage/> },
+        { path: PAGE_PATHS.auth.forgot, element: <ForgotPasswordPage/> },
+        { path: PAGE_PATHS.auth.reset, element: <ResetPasswordPage/> }, //TODO this can only be accessed from the link firebase sends them
       ],
     },
     //registeredUser only routes
