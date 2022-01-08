@@ -4,7 +4,7 @@ import { styled, alpha } from '@mui/material/styles';
 import { useTheme } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
-import { ClickAwayListener } from '@mui/material';
+import { ClickAwayListener, Container } from '@mui/material';
 // components
 //TODO: finish the blur/focus issues with the clear search button
 //TODO: improve the shrink transition onBlur for searchbar.
@@ -25,7 +25,8 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative', //so SearchIconWrapper can be placed absolutely within
-  height: 'auto',
+  height: '20',
+  backgroundColor:'green',
   maxWidth:'100%',
   borderRadius:10,
   zIndex:2,
@@ -66,9 +67,12 @@ const StyledInputBase = styled(InputBase)(({ theme  }) => ({
   '& .MuiInputBase-input': {
     padding: theme.spacing(1, 1, 1, 0),
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    width: '100%',
+    maxWidth: '100',
     height:'3ch',
+    border:1,
+    backgroundColor: 'black',
   },
+  width:'90%', //TODO pass searchInput as prop and make width 100% when searchInput.lenght==0
 }));
 
 export default function Searchbar(  ) {
@@ -78,19 +82,15 @@ export default function Searchbar(  ) {
 
   let handleBlur = () => {
     setSearchInput('')
-    if (inputRef.current) { //a typescript check that the ref is indeed defined
-      inputRef.current.focus();
-      console.log('woo!')
-    }
   }
 
   let handleClear = () => {
     setSearchInput('')
-    console.log('hi')
-    console.log(inputRef.current)
     if (inputRef.current) { //a typescript check that the ref is indeed defined
-      inputRef.current.focus();
+      inputRef.current.focus(); //TODO focus the input on handleClear
     }
+    console.log(searchInput)
+    console.log('clear')
   }
 
   //*if we dont have the clickaway listener, then if the user taps on close button then taps on home screen, searchbar will not dismiss*/}
@@ -100,10 +100,10 @@ export default function Searchbar(  ) {
         <SearchIconWrapper>
           <SearchIcon fontSize='large' color='primary'  />
         </SearchIconWrapper>
-        <StyledInputBase type='search' ref={inputRef} autoComplete='off' value={searchInput} onChange={event => setSearchInput(event.target.value)} onBlur={handleBlur} placeholder="겸색..." fullWidth id='search-input' />
-        {/* { searchInput.length !== 0 &&
+        <StyledInputBase type='text' ref={inputRef} autoComplete='off' value={searchInput} onChange={event => setSearchInput(event.target.value)} placeholder="겸색..." id='search-input' />
+        { searchInput.length !== 0 &&
           <ClearSearchButton handleClear={handleClear}/>
-        } */}
+        } 
       </Search>
     </ClickAwayListener>
   );
