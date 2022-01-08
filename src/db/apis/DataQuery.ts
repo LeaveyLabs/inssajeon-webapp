@@ -210,7 +210,7 @@ DataQuery.searchPostByPostID = async (id:string) : Promise<Array<PostEntity>> =>
  */
 DataQuery.searchUserByUserID = async (id:string) : Promise<Array<UserEntity>> => {
     /*
-    Query posts with an identical userID.
+    Query users with an identical userID.
     Among these, call firebase to return all the valid users.
     */
     const userIDQuery = query(userDatabase, where(USER_USERID_HEADER, "==", id));

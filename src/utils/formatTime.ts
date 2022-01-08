@@ -27,7 +27,7 @@ export function fDate(date: Date | string | number) {
   if(dayDiff < 7) return `${dayDiff}일 전`;
 
   /* Otherwise, return the specific date. */
-  return format(new Date(date), 'dd일 mm월 yyyy년');
+  return format(new Date(date), 'yyyy년 MM월 dd일');
 }
 
 
