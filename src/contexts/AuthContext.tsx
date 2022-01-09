@@ -10,7 +10,7 @@ import { ActionMap, AuthState, AuthUser, FirebaseContextType } from './authTypes
 import { DataQuery } from 'src/db/apis/DataQuery';
 import { UserEntity } from 'src/db/entities/users/UserEntity';
 import { ProfileInteraction } from '../db/apis/ProfileInteraction';
-import { UserInfoEntity } from 'src/db/entities/users/UserInfoEntity';
+import { UserProfileEntity } from '../db/entities/users/UserProfileEntity';
 //utils
 import { v4 as uuidv4 } from 'uuid';
 
@@ -71,8 +71,8 @@ function AuthProvider({ children }: { children: ReactNode }) {
           } 
           else { //user account does not exist, so create it here
             const defaultUsername: string = 'inssa'+ uuidv4().slice(0,4);
-            const userProfile: UserInfoEntity = {username: defaultUsername, bio: '', picPath: '', inssajeom: 0 }; 
-            ProfileInteraction.createProfile(userProfile, firebaseAuthedUser.uid) //create firestore account associated with the same firebase auth uid
+            const userProfile: UserProfileEntity = {username: defaultUsername, bio: '', picPath: '', inssajeom: 0 }; 
+            ProfileInteraction.createAccount(userProfile, firebaseAuthedUser.uid) //create firestore account associated with the same firebase auth uid
             .then(() => {
               DataQuery.searchUserByUserID(firebaseAuthedUser.uid) //TODO remove this extra firebase call if needed later on
               .then((userInfo: UserEntity[]) => {
