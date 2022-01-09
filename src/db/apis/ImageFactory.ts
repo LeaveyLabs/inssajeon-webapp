@@ -2,7 +2,6 @@ import { IMG_DIR, IMG_ERROR_SIZE, IMG_ERROR_UNSUPPORTED_EXT, IMG_ERROR_URL, MAX_
 import { imgDatabase } from "./dbRefs";
 import { v4 as uuidv4 } from 'uuid';
 import { deleteObject, ref, uploadBytes } from "@firebase/storage";
-import { readFile, readFileSync } from "fs";
 import { getDownloadURL } from "firebase/storage";
 
 type Path = string;

@@ -1,9 +1,9 @@
-import { UserAccountEntity } from "../entities/users/UserAccountEntity";
+import { UserSettingsEntity } from "../entities/users/UserSettingsEntity";
 
 export const USER_USERID_HEADER = "id";
 // export const USER_ACCOUNT_HEADER = "account";
 // export const USER_ACTIVITY_HEADER = "activity";
-export const USER_PROFILE_HEADER = "info";
+export const USER_PROFILE_HEADER = "profile";
 export const USER_TYPE_ERROR = "Incorrect formatting of User data.";
 
 export const USERIDSET_TYPE_ERROR = "Incorrect formatting of UserIDSet data.";
@@ -11,7 +11,7 @@ export const USERIDSET_TYPE_ERROR = "Incorrect formatting of UserIDSet data.";
 // export const ACCOUNT_SIGNINMETHOD_HEADER = "activity";
 // export const ACCOUNT_EMAILFREQUENCY_HEADER = "emailFrequency";
 export const ACCOUNT_TYPE_ERROR = "Incorrect formatting of Account data.";
-export const ACCOUNT_DEFAULT_SETTINGS:UserAccountEntity = {
+export const ACCOUNT_DEFAULT_SETTINGS:UserSettingsEntity = {
     signInMethod: 0, 
     emailFrequency: 1,
 }
@@ -21,6 +21,10 @@ export const ACCOUNT_DEFAULT_SETTINGS:UserAccountEntity = {
 // export const ACTIVITY_SUBMISSIONS_HEADER = "userSubmissions";
 export const ACTIVITY_TYPE_ERROR = "Incorrect formatting of Activity data.";
 export const ACTIVITY_UPVOTE_ERROR = "Could not add an upvote."
+
+
+export const USER_METRICS_TYPE_ERROR = "Incorrect formatting of UserMetrics data.";
+export const POST_METRICS_TYPE_ERROR = "Incorrect formatting of PostMetrics data.";
 
 // export const PROFILE_USERNAME_HEADER = "username";
 // export const PROFILE_BIO_HEADER = "bio";
@@ -66,9 +70,9 @@ export const POST_FLAGS_PROPERTY = "flags";
 export const POST_SHARES_PROPERTY = "shares";
 
 export const USER_DIR = "users";
-export const USER_USERNAME_PROPERTY = "info.username";
-export const USER_BIO_PROPERTY = "info.bio";
-export const USER_PIC_PATH_PROPERTY = "info.picPath";
+export const USER_USERNAME_PROPERTY = "profile.username";
+export const USER_BIO_PROPERTY = "profile.bio";
+export const USER_PIC_PATH_PROPERTY = "profile.picPath";
 export const USER_UPVOTES_PROPERTY = "activity.upvotes";
 export const USER_DOWNVOTES_PROPERTY = "activity.downvotes";
 export const USER_FAVORITES_PROPERTY = "activity.downvotes";

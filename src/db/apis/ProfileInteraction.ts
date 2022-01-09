@@ -1,6 +1,6 @@
 import { deleteDoc, doc, setDoc, updateDoc } from "@firebase/firestore";
 import { Timestamp } from "firebase/firestore";
-import { UserInfoEntity } from "../entities/users/UserInfoEntity";
+import { UserProfileEntity } from "../entities/users/UserProfileEntity";
 import { UserEntity, UserFactory } from "../entities/users/UserEntity";
 import { ACCOUNT_DEFAULT_SETTINGS, PROFILE_BIO_UPDATE_ERROR, PROFILE_PIC_UPDATE_ERROR, PROFILE_USERNAME_UPDATE_ERROR, PROFILE_USER_CREATION_ERROR, PROFILE_USER_DELETION_ERROR, USER_BIO_PROPERTY, USER_PIC_PATH_PROPERTY, USER_USERNAME_PROPERTY } from "../strings/apiConstLibrary";
 import { userDatabase } from "./dbRefs";
@@ -10,22 +10,26 @@ import { PostInteraction } from "./PostInteraction";
 export const ProfileInteraction = function () {};
 
 /**
- * @param  {UserInfoEntity} userInfo
+ * @param  {UserProfileEntity} userInfo
  * @param  {UserID} userID
  * @returns void
  * @decription add a new profile with a custom userID in the database
  */
-ProfileInteraction.createProfile = async (userInfo:UserInfoEntity, customID:string) : Promise<void> => {
+ProfileInteraction.createAccount = async (userInfo:UserProfileEntity, 
+    customID:string) : Promise<void> => {
     const userFromProfile:UserEntity = {
         id: customID,
-        info: userInfo,
-        account: ACCOUNT_DEFAULT_SETTINGS,
+        profile: userInfo,
+        settings: ACCOUNT_DEFAULT_SETTINGS,
         activity: {
             upvotes: [],
             downvotes: [],
             submissions: [],
             favorites: [],
             lastLogin: Timestamp.fromDate(new Date()),
+        },
+        metrics: {
+            inssajeom: 0,
         }
     }
     

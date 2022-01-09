@@ -3,9 +3,9 @@ import { PostEntity } from "../../../src/db/entities/posts/PostEntity";
 import { WordEntity } from "../../../src/db/entities/words/WordEntity";
 import { v4 as uuidv4 } from 'uuid';
 import { deleteDoc, doc, setDoc } from "firebase/firestore"; 
-import { postDatabase, userDatabase, wordDatabase } from "../../../src/db/apis/dbRefs";
-import { createRandomPostWithID, createRandomUser, createRandomUserWithID, createRandomWord } from "../entities/entityCreation";
+import { createRandomPostWithID, createRandomUser, createRandomUserWithID } from "../entities/entityCreation";
 import { TagEntity } from "../../../src/db/entities/tags/TagEntity";
+import { postDatabase, userDatabase, wordDatabase } from "../../../src/db/apis/dbRefs";
 
 export interface Verifier {
     users: Set<UserEntity>,
@@ -36,7 +36,7 @@ export const executeInDatabase = async (testFunc:VerifierFunction) : Promise<voi
             postSet.add(newPost);
             /* Create a user for this post */
             const newUser = createRandomUserWithID(newPost.userID);
-            newUser.info = newPost.userProfile;
+            newUser.profile = newPost.userProfile;
             newUser.activity = {
                 upvotes: [],
                 downvotes: [],

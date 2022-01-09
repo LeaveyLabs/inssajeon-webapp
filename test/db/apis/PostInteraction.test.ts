@@ -2,8 +2,8 @@ import { DataQuery } from "../../../src/db/apis/DataQuery";
 import { PostInteraction } from "../../../src/db/apis/PostInteraction";
 import { ProfileInteraction } from "../../../src/db/apis/ProfileInteraction";
 import { PostEntity } from "../../../src/db/entities/posts/PostEntity";
-import { UserInfoEntity } from "../../../src/db/entities/users/UserInfoEntity";
-import { createRandomPost, createRandomUser, createRandomUserInfo } from "../entities/entityCreation";
+import { UserProfileEntity } from "../../../src/db/entities/users/UserProfileEntity";
+import { createRandomPost, createRandomUserInfo } from "../entities/entityCreation";
 import { UserEntity } from "../../../src/db/entities/users/UserEntity";
 
 describe("testing PostInteraction", () => {
@@ -22,8 +22,8 @@ describe("testing PostInteraction", () => {
         await PostInteraction.createPost(post.postID, post);
         expect((await DataQuery.searchPostByPostID(post.postID)).length).toBe(1);
 
-        const info:UserInfoEntity = createRandomUserInfo();
-        await ProfileInteraction.createProfile(info, info.username);
+        const info:UserProfileEntity = createRandomUserInfo();
+        await ProfileInteraction.createAccount(info, info.username);
         await PostInteraction.upvotePost(info.username, post.postID);
 
         await PostInteraction.removePost(post.postID);
