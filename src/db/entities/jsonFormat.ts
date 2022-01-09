@@ -1,12 +1,12 @@
 import { PostEntity } from './posts/PostEntity';
 import { WordEntity } from './words/WordEntity';
-import { UserAccountEntity } from './users/UserAccountEntity';
+import { UserSettingsEntity } from './users/UserSettingsEntity';
 import { UserActivityEntity } from './users/UserActivityEntity';
-import { UserInfoEntity } from './users/UserInfoEntity';
+import { UserProfileEntity } from './users/UserProfileEntity';
 import { UserEntity } from './users/UserEntity';
 import { TagEntity } from './tags/TagEntity';
 
-export type Entity = UserAccountEntity | UserActivityEntity | UserEntity | PostEntity | UserInfoEntity | WordEntity | TagEntity;
+export type Entity = UserSettingsEntity | UserActivityEntity | UserEntity | PostEntity | UserProfileEntity | WordEntity | TagEntity;
 
 /* Represents a sorted set indexed by order */
 export interface IndexedStringSet {

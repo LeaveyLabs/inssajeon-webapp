@@ -1,10 +1,10 @@
 import { DocumentSnapshot, getDocs } from "firebase/firestore"; 
-import { userDatabase } from "../../../src/db/apis/dbRefs";
 import { DataQuery, PostOrder, ProfileOrder, WordOrder } from "../../../src/db/apis/DataQuery";
 import { executeInDatabase, Verifier } from "./dbTestEnv";
 import { PostEntity, PostFactory } from "../../../src/db/entities/posts/PostEntity";
 import { WordEntity } from "../../../src/db/entities/words/WordEntity";
 import { UserEntity } from "../../../src/db/entities/users/UserEntity";
+import { userDatabase } from "../../../src/db/apis/dbRefs";
 
 describe("testing DataQuery", () => {
     it("checking if firebase is initialized", async () => {
@@ -19,7 +19,8 @@ describe("testing DataQuery", () => {
             If they exist, then expect their result to be equal to the one on the database.
             */
             for(const user of userList) {
-                const queryResult = await DataQuery.searchUserByUserInfo(user.info, ProfileOrder.Alphabetical);
+                const queryResult = await DataQuery.searchUserByUserProfile(user.profile, 
+                    ProfileOrder.Alphabetical);
                 expect(queryResult.length).toBeGreaterThan(0);
                 queryResult.forEach((result) => expect(result).toStrictEqual(user));
             }
@@ -27,7 +28,8 @@ describe("testing DataQuery", () => {
     }, 30000);
    it("malformed profiles should not be present", async () => {
     await executeInDatabase(async (verifier:Verifier) : Promise<void> => {
-        const queryResult = await DataQuery.searchUserByUserInfo({username: "a"}, ProfileOrder.Alphabetical);
+        const queryResult = await DataQuery.searchUserByUserProfile(
+            {username: "a"}, ProfileOrder.Alphabetical);
         expect(queryResult.length).toBe(0);
     });
    }, 30000);
@@ -40,11 +42,10 @@ describe("testing DataQuery", () => {
         */
         for(const user of userList) {
             const modifiedInfo = {
-                username: user.info.username,
-                bio: user.info.bio,
-                inssajeom: user.info.inssajeom,
+                username: user.profile.username,
+                bio: user.profile.bio,
             }
-            const queryResult = await DataQuery.searchUserByUserInfo(modifiedInfo, ProfileOrder.Alphabetical);
+            const queryResult = await DataQuery.searchUserByUserProfile(modifiedInfo, ProfileOrder.Alphabetical);
             expect(queryResult.length).toBeGreaterThan(0);
             queryResult.forEach((result) => expect(result).toStrictEqual(user));
         }

@@ -1,15 +1,17 @@
 import { USER_TYPE_ERROR } from "../../strings/apiConstLibrary";
-import { UserInfoEntity, UserInfoFactory } from './UserInfoEntity';
+import { UserProfileEntity, UserProfileFactory } from './UserProfileEntity';
 import { UserActivityEntity, UserActivityFactory } from './UserActivityEntity';
-import { UserAccountEntity, UserAccountFactory } from './UserAccountEntity';
+import { UserSettingsEntity, UserSettingsFactory } from './UserSettingsEntity';
 import { EntityFactory, IDictionary, validatedObject } from "../jsonFormat";
+import { UserMetricsEntity, UserMetricsFactory } from "./UserMetricsEntity";
 
 /* Holds all data owned by an 인싸전 User */
 export interface UserEntity extends IDictionary<Object> {
     readonly id: string;
-    info: UserInfoEntity;
+    profile: UserProfileEntity;
     activity: UserActivityEntity;
-    account: UserAccountEntity;
+    settings: UserSettingsEntity;
+    metrics: UserMetricsEntity;
 };
 
 /* Converts between JSON strings and User Objects */
@@ -27,9 +29,10 @@ UserFactory.toExportJson = (user:UserEntity) : Object => {
     */
     const o:UserEntity = {
         id: user.id, 
-        info: UserInfoFactory.toExportJson(user.info),
+        profile: UserProfileFactory.toExportJson(user.profile),
         activity: UserActivityFactory.toExportJson(user.activity), 
-        account: UserAccountFactory.toExportJson(user.account),
+        settings: UserSettingsFactory.toExportJson(user.settings),
+        metrics: UserMetricsFactory.toExportJson(user.metrics),
     };
     return validatedObject(o, USER_TYPE_ERROR);
 };
@@ -46,9 +49,10 @@ UserFactory.fromExportJson = (json:any) : UserEntity => {
     */
     const user:UserEntity = {
         id: json.id, 
-        info: UserInfoFactory.fromExportJson(json.info),
+        profile: UserProfileFactory.fromExportJson(json.profile),
         activity: UserActivityFactory.fromExportJson(json.activity),
-        account: UserAccountFactory.fromExportJson(json.account),
-    }
+        settings: UserSettingsFactory.fromExportJson(json.settings),
+        metrics: UserMetricsFactory.fromExportJson(json.metrics),
+    };
     return validatedObject(user, USER_TYPE_ERROR) as UserEntity;
 };

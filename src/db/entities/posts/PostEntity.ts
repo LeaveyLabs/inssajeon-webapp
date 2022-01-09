@@ -1,8 +1,9 @@
 import { Timestamp } from 'firebase/firestore';
 import { POST_TYPE_ERROR } from '../../strings/apiConstLibrary';
 import { EntityFactory, IDictionary, validatedObject } from '../jsonFormat';
-import { UserInfoEntity, UserInfoFactory } from '../users/UserInfoEntity';
+import { UserProfileEntity, UserProfileFactory } from '../users/UserProfileEntity';
 import { StringListFactory } from '../StringList';
+import { PostMetricsEntity, PostMetricsFactory } from './PostMetricsEntity';
 
 export interface PostEntity extends IDictionary<Object> {
     readonly postID: string;
@@ -12,16 +13,12 @@ export interface PostEntity extends IDictionary<Object> {
     readonly quote: string;
     readonly timestamp: Timestamp;
     readonly tags: Array<string>;
-    trendscore: number;    
-    userProfile: UserInfoEntity;
+    readonly metrics: PostMetricsEntity;
+    readonly userProfile: UserProfileEntity;
     upvotes: Array<string>;
     downvotes: Array<string>;
     shares: Array<string>;
     flags: Array<string>;
-    upvoteCount: number;
-    downvoteCount: number;
-    shareCount: number;
-    flagCount: number;
 }
 
 export const PostFactory:EntityFactory = function () {};
@@ -44,20 +41,15 @@ PostFactory.toExportJson = (post:PostEntity) : Object => {
         timestamp: new Timestamp(
             (post.timestamp as Timestamp).seconds,
             (post.timestamp as Timestamp).nanoseconds),
-        trendscore: Number(post.trendscore),
-
-        tags: StringListFactory.toExportJson(post.tags), 
-        userProfile: UserInfoFactory.toExportJson(post.userProfile),
+        tags: StringListFactory.toExportJson(post.tags),
+        metrics: PostMetricsFactory.toExportJson(post.metrics),
+        userProfile: UserProfileFactory.toExportJson(post.userProfile),
         upvotes: StringListFactory.toExportJson(post.upvotes),
         downvotes: StringListFactory.toExportJson(post.downvotes),
         shares: StringListFactory.toExportJson(post.shares),
         flags: StringListFactory.toExportJson(post.flags),
+    };
 
-        upvoteCount: Number(post.upvoteCount),
-        downvoteCount: Number(post.downvoteCount),
-        shareCount: Number(post.shareCount),
-        flagCount: Number(post.flagCount),
-    }
     return validatedObject(o, POST_TYPE_ERROR);
 };
 
@@ -80,19 +72,13 @@ PostFactory.fromExportJson = (json:any) : PostEntity => {
         timestamp: new Timestamp(
             (json.timestamp as Timestamp).seconds,
             (json.timestamp as Timestamp).nanoseconds),
-        trendscore: Number(json.trendscore),
-
         tags: StringListFactory.fromExportJson(json.tags), 
-        userProfile: UserInfoFactory.fromExportJson(json.userProfile),
+        metrics: PostMetricsFactory.fromExportJson(json.metrics),
+        userProfile: UserProfileFactory.fromExportJson(json.userProfile),
         upvotes: StringListFactory.fromExportJson(json.upvotes),
         downvotes: StringListFactory.fromExportJson(json.downvotes),
         shares: StringListFactory.fromExportJson(json.shares),
         flags: StringListFactory.fromExportJson(json.flags),
-
-        upvoteCount: Number(json.upvoteCount),
-        downvoteCount: Number(json.downvoteCount),
-        shareCount: Number(json.shareCount),
-        flagCount: Number(json.flagCount),
-    }
+    };
     return validatedObject(post, POST_TYPE_ERROR) as PostEntity;
 };

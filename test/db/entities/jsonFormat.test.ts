@@ -3,13 +3,14 @@ jsonToStringSet, entitySetToJson, jsonToEntitySet,
 hasNullProperties, validatedObject, EntityFactory} from "../../../src/db/entities/jsonFormat";
 import { PostFactory } from "../../../src/db/entities/posts/PostEntity";
 import { TagFactory } from "../../../src/db/entities/tags/TagEntity";
-import { UserAccountFactory } from "../../../src/db/entities/users/UserAccountEntity";
+import { UserSettingsFactory } from "../../../src/db/entities/users/UserSettingsEntity";
 import { UserActivityFactory } from "../../../src/db/entities/users/UserActivityEntity";
 import { UserFactory } from "../../../src/db/entities/users/UserEntity";
-import { UserInfoFactory } from "../../../src/db/entities/users/UserInfoEntity";
+import { UserProfileFactory } from "../../../src/db/entities/users/UserProfileEntity";
 import { WordFactory } from "../../../src/db/entities/words/WordEntity";
 import { USER_TYPE_ERROR } from "../../../src/db/strings/apiConstLibrary";
-import { createRandomAccount, createRandomUserActivity, createRandomPost, createRandomTag, createRandomUser, createRandomUserInfo, createRandomWord } from "./entityCreation";
+import { createRandomAccount, createRandomUserActivity, createRandomPost, createRandomTag, createRandomUser, createRandomUserInfo, createRandomWord, createRandomMetrics } from "./entityCreation";
+import { UserMetricsFactory } from "../../../src/db/entities/users/UserMetricsEntity";
 
 /* stringSetToJson */
 describe("testing stringSetToJson", () => {
@@ -84,9 +85,10 @@ describe("testing entitySetToJson and jsonToEntitySet", () => {
             {entity: createRandomPost, factory: PostFactory},
             {entity: createRandomTag, factory: TagFactory},
             {entity: createRandomUserActivity, factory: UserActivityFactory},
-            {entity: createRandomUserInfo, factory: UserInfoFactory},
-            {entity: createRandomAccount, factory: UserAccountFactory},
-            {entity: createRandomWord, factory: WordFactory}
+            {entity: createRandomUserInfo, factory: UserProfileFactory},
+            {entity: createRandomAccount, factory: UserSettingsFactory},
+            {entity: createRandomWord, factory: WordFactory},
+            {entity: createRandomMetrics, factory: UserMetricsFactory},
         ];
 
         for(const arg of args) {

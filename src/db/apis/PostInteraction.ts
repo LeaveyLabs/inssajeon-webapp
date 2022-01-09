@@ -1,4 +1,4 @@
-import { arrayRemove, arrayUnion, deleteDoc, doc, Timestamp, increment, setDoc, updateDoc } from "firebase/firestore";
+import { arrayRemove, arrayUnion, deleteDoc, doc, Timestamp, increment, setDoc, updateDoc, CollectionReference } from "firebase/firestore";
 import { PostEntity, PostFactory } from "../entities/posts/PostEntity";
 import { WordEntity } from "../entities/words/WordEntity";
 import { DataQuery, WordOrder } from "./DataQuery";
@@ -142,23 +142,29 @@ PostInteraction.createPost = async (postID:string, post:any) : Promise<void> => 
         quote: post.quote,
         timestamp: Timestamp.fromDate(new Date()),
         tags: post.tags,
-        trendscore: 0,
+        metrics: {
+            upvoteCount: 0,
+            downvoteCount: 0,
+            shareCount: 0,
+            flagCount: 0,
+            trendscore: 0,
+        },
         userProfile: post.userProfile,
         upvotes: [],
         downvotes: [],
         shares: [],
         flags: [],
-        upvoteCount: 0,
-        downvoteCount: 0,
-        shareCount: 0,
-        flagCount: 0,
-    }        
+    };
 
     try { PostFactory.fromExportJson(dbSafePost); }
     catch (e) { throw e; }
 
     try { await setDoc(doc(postDatabase, postID), PostFactory.toExportJson(dbSafePost)); }
     catch (e) { throw new Error(`Could not add post ${postID} to database.`); }
+
+    try { await updateDoc(doc(userDatabase, dbSafePost.userID),
+        {[USER_SUBMISSIONS_PROPERTY]: arrayUnion(postID)}); }
+    catch (e) { console.log(`Could not add post to ${dbSafePost.userID}'s submissions.`); }
 
     const matchWords = await DataQuery.searchWordByWord(dbSafePost.word, WordOrder.Trendscore);
     if(matchWords.length === 0) {

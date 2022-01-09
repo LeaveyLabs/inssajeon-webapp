@@ -1,5 +1,5 @@
 import { MAX_QUERY, POST_POSTID_HEADER, POST_TAGS_HEADER, USER_PROFILE_HEADER, USER_USERID_HEADER } from "../strings/apiConstLibrary";
-import { DocumentSnapshot, getDocs, limit, orderBy, Query, query, QueryConstraint, startAfter, where } from "firebase/firestore"; 
+import { CollectionReference, DocumentSnapshot, getDocs, limit, orderBy, Query, query, QueryConstraint, startAfter, where } from "firebase/firestore"; 
 import { postDatabase, userDatabase, wordDatabase } from "./dbRefs";
 import { UserEntity, UserFactory } from "../entities/users/UserEntity";
 import { PostEntity, PostFactory } from "../entities/posts/PostEntity";
@@ -45,13 +45,14 @@ const profileOrderQuery:Array<QueryConstraint> = [
  * @param  {any} profile - profile to search (any missing paramters should be empty strings)
  * @param {ProfileOrder} ordering - order to return the results in
  * @param {DocumentSnapshot[]} lastDoc - last document read by the query
+ * @param {CollectionReference} db - specifiying db env (optional)
  * @returns Promise<Array<User>> is a list of users that match the profile
  * @description queries the database for any users with a matching profile
  * and updates "lastDoc" with the last document read by the query
  */
- DataQuery.searchUserByUserInfo = async (profile:any, ordering:ProfileOrder,
+ DataQuery.searchUserByUserProfile = async (profile:any, ordering:ProfileOrder,
     lastDoc?:DocumentSnapshot[])
-    : Promise<Array<UserEntity>> => {
+    :Promise<Array<UserEntity>> => {
     /*
     Filter out all empty string fields, and convert them into query fields.
     */
@@ -76,7 +77,8 @@ const profileOrderQuery:Array<QueryConstraint> = [
     Call firebase to filter out and return a list of valid users.
     */
     const profileQuery = query(userDatabase, ...queryFields);
-    const queryResult = await firebaseEntityQuery<UserEntity>(profileQuery, UserFactory, lastDoc);
+    const queryResult = await firebaseEntityQuery<UserEntity>(
+        profileQuery, UserFactory, lastDoc);
     return queryResult;
 };
 
@@ -96,17 +98,19 @@ const postOrderQuery:Array<QueryConstraint> = [
  * @param  {string} tag - tag to search
  * @param {PostOrder} ordering - ordering of posts to return the results in
  * @param {DocumentSnapshot[]} lastDoc - previous document to start after
+ * @param {CollectionReference} db - specifiying db env (optional)
  * @returns Promise<Array<Post>> - posts that match that tag
  * @description queries the firebase database to find all posts with a tag
  * updates the "lastDoc" with the last document read
  */
 DataQuery.searchPostByTag = async (tag: string, ordering:PostOrder, 
     lastDoc?:DocumentSnapshot[])
-    : Promise<Array<PostEntity>> => {
+    :Promise<Array<PostEntity>> => {
     /*
     Query all posts with an identical tag. 
     */
-    const queryFields:Array<QueryConstraint> = [where(POST_TAGS_HEADER, "array-contains", tag)];
+    const queryFields:Array<QueryConstraint> = [
+        where(POST_TAGS_HEADER, "array-contains", tag)];
     /*
     Order the query and limit the total results.
     Order after the last result if necessary.
@@ -120,13 +124,16 @@ DataQuery.searchPostByTag = async (tag: string, ordering:PostOrder,
     Among these queries, call firebase to return all the valid posts.
     */
     const tagQuery = query(postDatabase, ...queryFields);
-    const tagQueryResult = await firebaseEntityQuery<PostEntity>(tagQuery, PostFactory, lastDoc);
+    const tagQueryResult = await firebaseEntityQuery<PostEntity>(
+        tagQuery, PostFactory, lastDoc);
     return tagQueryResult;
 };
 
 /**
  * @param  {string} word
  * @param  {PostOrder} ordering
+ * @param {DocumentSnapshot[]} lastDoc? - previous document to start after
+ * @param {CollectionReference} db - specifiying db env (optional)
  * @returns Promise
  */
 DataQuery.searchPostByWord = async (word:string, ordering:PostOrder, 
@@ -134,7 +141,8 @@ DataQuery.searchPostByWord = async (word:string, ordering:PostOrder,
     /*
     Query all posts with an identical tag. 
     */
-    const queryFields:Array<QueryConstraint> = [where("word", "==", word)];
+    const queryFields:Array<QueryConstraint> = [
+        where("word", "==", word)];
     /*
     Order the query and limit the total results.
     Order after the last document if necessary.
@@ -148,7 +156,8 @@ DataQuery.searchPostByWord = async (word:string, ordering:PostOrder,
     Call firebase with these query fields.
     */
     const wordQuery = query(postDatabase, ...queryFields);
-    const wordQueryResult = await firebaseEntityQuery<WordEntity>(wordQuery, PostFactory, lastDoc);
+    const wordQueryResult = await firebaseEntityQuery<WordEntity>(
+        wordQuery, PostFactory, lastDoc);
     return wordQueryResult;
 };
 
@@ -166,6 +175,7 @@ const wordOrderQuery:Array<QueryConstraint> = [
  * @param  {string} word
  * @param  {WordOrder} ordering
  * @param  {DocumentSnapshot[]} lastDoc?
+ * @param {CollectionReference} db - specifiying db env (optional)
  * @returns Promise
  */
 DataQuery.searchWordByWord = async (word:string, ordering:WordOrder, 
@@ -173,7 +183,8 @@ DataQuery.searchWordByWord = async (word:string, ordering:WordOrder,
     /*
     Query all posts with an identical tag. 
     */
-    const queryFields:Array<QueryConstraint> = [where("wordString", "==", word)];
+    const queryFields:Array<QueryConstraint> = [
+        where("wordString", "==", word)];
     /*
     Order the query and limit the total results.
     */
@@ -186,12 +197,14 @@ DataQuery.searchWordByWord = async (word:string, ordering:WordOrder,
     Call firebase with these query fields.
     */
     const wordQuery = query(wordDatabase, ...queryFields);
-    const wordQueryResult = await firebaseEntityQuery<WordEntity>(wordQuery, WordFactory, lastDoc);
+    const wordQueryResult = await firebaseEntityQuery<WordEntity>(
+        wordQuery, WordFactory, lastDoc);
     return wordQueryResult;
 };
 
 /**
  * @param  {PostID} id
+ * @param {CollectionReference} db - specifiying db env (optional)
  * @returns Promise
  */
 DataQuery.searchPostByPostID = async (id:string) : Promise<Array<PostEntity>> => {
@@ -200,12 +213,14 @@ DataQuery.searchPostByPostID = async (id:string) : Promise<Array<PostEntity>> =>
     Among these, call firebase to return all the valid posts.
     */
     const postIDQuery = query(postDatabase, where(POST_POSTID_HEADER, "==", id));
-    const postIDQueryResult = await firebaseEntityQuery<PostEntity>(postIDQuery, PostFactory);
+    const postIDQueryResult = await firebaseEntityQuery<PostEntity>(
+        postIDQuery, PostFactory);
     return postIDQueryResult;
 };
 
 /**
  * @param  {UserID} id
+ * @param {CollectionReference} db - specifiying db env (optional)
  * @returns Promise
  */
 DataQuery.searchUserByUserID = async (id:string) : Promise<Array<UserEntity>> => {
@@ -214,13 +229,15 @@ DataQuery.searchUserByUserID = async (id:string) : Promise<Array<UserEntity>> =>
     Among these, call firebase to return all the valid users.
     */
     const userIDQuery = query(userDatabase, where(USER_USERID_HEADER, "==", id));
-    const userIDQueryResult = await firebaseEntityQuery<UserEntity>(userIDQuery, UserFactory);
+    const userIDQueryResult = await firebaseEntityQuery<UserEntity>(
+        userIDQuery, UserFactory);
     return userIDQueryResult;
 };
 
 /**
  * @param  {PostOrder} ordering
  * @param  {DocumentSnapshot[]} lastDoc?
+ * @param {CollectionReference} db - specifiying db env (optional)
  * @returns Promise
  */
 DataQuery.getAllPosts = async (ordering:PostOrder, 
@@ -232,7 +249,8 @@ DataQuery.getAllPosts = async (ordering:PostOrder,
     }
     const orderedQuery = query(postDatabase, ...queryFields);
     /* Query the database for this order */
-    return await firebaseEntityQuery<PostEntity>(orderedQuery, PostFactory, lastDoc);
+    return await firebaseEntityQuery<PostEntity>(
+        orderedQuery, PostFactory, lastDoc);
 }
 
 const nearWords = (word:string) => {
