@@ -1,4 +1,4 @@
-import { MAX_QUERY, POST_POSTID_HEADER, POST_TAGS_HEADER, USER_PROFILE_HEADER, USER_USERID_HEADER } from "../strings/apiConstLibrary";
+import { MAX_QUERY, POST_POSTID_HEADER, POST_TAGS_HEADER, POST_TRENDSCORE_PROPERTY, POST_UPVOTECOUNT_PROPERTY, USER_PROFILE_HEADER, USER_USERID_HEADER } from "../strings/apiConstLibrary";
 import { CollectionReference, DocumentSnapshot, getDocs, limit, orderBy, Query, query, QueryConstraint, startAfter, where } from "firebase/firestore"; 
 import { postDatabase, userDatabase, wordDatabase } from "./dbRefs";
 import { UserEntity, UserFactory } from "../entities/users/UserEntity";
@@ -14,7 +14,7 @@ async function firebaseEntityQuery<Type> (query:Query, factory:EntityFactory,
     const entityQueryResult = await getDocs(query);
 
     /* Prune any invalid entity results. */
-    const validEntityResults:Array<Type> = []
+    const validEntityResults:Array<Type> = [];
     entityQueryResult.forEach((result) => {
         try { 
             /* Attempt to use the factory to generate a valid entity. */
@@ -45,7 +45,6 @@ const profileOrderQuery:Array<QueryConstraint> = [
  * @param  {any} profile - profile to search (any missing paramters should be empty strings)
  * @param {ProfileOrder} ordering - order to return the results in
  * @param {DocumentSnapshot[]} lastDoc - last document read by the query
- * @param {CollectionReference} db - specifiying db env (optional)
  * @returns Promise<Array<User>> is a list of users that match the profile
  * @description queries the database for any users with a matching profile
  * and updates "lastDoc" with the last document read by the query
@@ -89,8 +88,8 @@ export enum PostOrder {
 };
 
 const postOrderQuery:Array<QueryConstraint> = [
-    orderBy("trendscore", "desc"),
-    orderBy("upvoteCount", "desc"),
+    orderBy(POST_TRENDSCORE_PROPERTY, "desc"),
+    orderBy(POST_UPVOTECOUNT_PROPERTY, "desc"),
     orderBy("timestamp", "desc"),
 ];
 
@@ -98,7 +97,6 @@ const postOrderQuery:Array<QueryConstraint> = [
  * @param  {string} tag - tag to search
  * @param {PostOrder} ordering - ordering of posts to return the results in
  * @param {DocumentSnapshot[]} lastDoc - previous document to start after
- * @param {CollectionReference} db - specifiying db env (optional)
  * @returns Promise<Array<Post>> - posts that match that tag
  * @description queries the firebase database to find all posts with a tag
  * updates the "lastDoc" with the last document read
@@ -133,7 +131,6 @@ DataQuery.searchPostByTag = async (tag: string, ordering:PostOrder,
  * @param  {string} word
  * @param  {PostOrder} ordering
  * @param {DocumentSnapshot[]} lastDoc? - previous document to start after
- * @param {CollectionReference} db - specifiying db env (optional)
  * @returns Promise
  */
 DataQuery.searchPostByWord = async (word:string, ordering:PostOrder, 
@@ -175,7 +172,6 @@ const wordOrderQuery:Array<QueryConstraint> = [
  * @param  {string} word
  * @param  {WordOrder} ordering
  * @param  {DocumentSnapshot[]} lastDoc?
- * @param {CollectionReference} db - specifiying db env (optional)
  * @returns Promise
  */
 DataQuery.searchWordByWord = async (word:string, ordering:WordOrder, 
@@ -204,7 +200,6 @@ DataQuery.searchWordByWord = async (word:string, ordering:WordOrder,
 
 /**
  * @param  {PostID} id
- * @param {CollectionReference} db - specifiying db env (optional)
  * @returns Promise
  */
 DataQuery.searchPostByPostID = async (id:string) : Promise<Array<PostEntity>> => {
@@ -220,7 +215,6 @@ DataQuery.searchPostByPostID = async (id:string) : Promise<Array<PostEntity>> =>
 
 /**
  * @param  {UserID} id
- * @param {CollectionReference} db - specifiying db env (optional)
  * @returns Promise
  */
 DataQuery.searchUserByUserID = async (id:string) : Promise<Array<UserEntity>> => {
@@ -237,7 +231,6 @@ DataQuery.searchUserByUserID = async (id:string) : Promise<Array<UserEntity>> =>
 /**
  * @param  {PostOrder} ordering
  * @param  {DocumentSnapshot[]} lastDoc?
- * @param {CollectionReference} db - specifiying db env (optional)
  * @returns Promise
  */
 DataQuery.getAllPosts = async (ordering:PostOrder, 

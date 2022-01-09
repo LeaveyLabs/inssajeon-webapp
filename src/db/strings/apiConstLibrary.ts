@@ -68,6 +68,9 @@ export const POST_UPVOTES_PROPERTY = "upvotes";
 export const POST_DOWNVOTES_PROPERTY = "downvotes";
 export const POST_FLAGS_PROPERTY = "flags";
 export const POST_SHARES_PROPERTY = "shares";
+export const POST_TRENDSCORE_PROPERTY = "metrics.trendscore";
+export const POST_UPVOTECOUNT_PROPERTY = "metrics.upvoteCount";
+
 
 export const USER_DIR = "users";
 export const USER_USERNAME_PROPERTY = "profile.username";
