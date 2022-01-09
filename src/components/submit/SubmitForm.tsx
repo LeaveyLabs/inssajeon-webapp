@@ -85,7 +85,13 @@ export default function SubmitForm( {handleClose} : SubmitFormProps) {
           quote: values.quote,
           timestamp: Timestamp.fromDate(new Date()),
           tags: values.tags,
-          trendscore: 0, //TOODO update
+          metrics: {
+            trendscore: 0,
+            upvoteCount: 0,
+            downvoteCount: 0,
+            shareCount: 0,
+            flagCount: 0,
+          }, //TOODO update
           userProfile: { //TODO update 
             username: "0",
             bio: "0",
@@ -96,10 +102,6 @@ export default function SubmitForm( {handleClose} : SubmitFormProps) {
           downvotes: [],
           shares: [],
           flags: [],
-          upvoteCount: 0,
-          downvoteCount: 0,
-          shareCount: 0,
-          flagCount: 0,
         }
         await PostInteraction.createPost(postID, post);    
         setIsSuccessDialogOpen(true);
