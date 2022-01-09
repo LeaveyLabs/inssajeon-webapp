@@ -23,7 +23,7 @@ export const helloWorld = functions.https.onRequest((request, response) => {
   response.send("Hello from Firebase!");
 });
 
-export const onPostUpdate = functions.firestore.document("posts/{postId}")
+export const onPostUpdate = functions.firestore.document("posts/{postID}")
     .onUpdate(async (change) => {
       // Retrieve the current and previous value
       const data = change.after.data();
@@ -59,3 +59,9 @@ export const onPostUpdate = functions.firestore.document("posts/{postId}")
       }, {merge: true});
     });
 
+export const onPostCreate = functions.firestore.document("posts/{postID}")
+    .onCreate(async (change) => {
+      return change.ref.set({
+        timestamp: admin.firestore.Timestamp.fromDate(new Date()),
+      }, {merge: true});
+    });
