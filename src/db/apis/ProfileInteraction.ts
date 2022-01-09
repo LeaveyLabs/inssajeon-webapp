@@ -39,6 +39,8 @@ ProfileInteraction.createAccount = async (userInfo:UserProfileEntity,
     try { await setDoc(doc(userDatabase, customID), 
         UserFactory.toExportJson(userFromProfile)); }
     catch (e) { throw new Error(PROFILE_USER_CREATION_ERROR); }
+      
+    //can i add a finally(return userFromProfile) here?
 }
 
 /**

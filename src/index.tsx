@@ -12,7 +12,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 // contexts
 import { SidebarProvider } from './contexts/SidebarContext';
-//import { AuthProvider } from "./contexts/AuthContext";
+import { AuthProvider } from './contexts/AuthContext';
 //
 import App from './App';
 import reportWebVitals from './reportWebVitals';
@@ -22,13 +22,13 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
   <StrictMode>
     <HelmetProvider>
-      {/* <AuthProvider> */}
+      <AuthProvider>
         <SidebarProvider>
           <BrowserRouter>
             <App />
           </BrowserRouter>
         </SidebarProvider>
-      {/* </AuthProvider> */}
+      </AuthProvider>
     </HelmetProvider>
   </StrictMode>,
   document.getElementById('root')

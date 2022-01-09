@@ -162,7 +162,6 @@ export default function SubmitForm( {handleClose} : SubmitFormProps) {
               fullWidth
               multiline
               minRows={3}
-              maxRows={5}
               id="definition"
               type="text"
               placeholder="정확한 정의가 아니어도 괜찮아요"
@@ -176,7 +175,6 @@ export default function SubmitForm( {handleClose} : SubmitFormProps) {
               fullWidth
               multiline
               minRows={3}
-              maxRows={5}
               id="quote"
               type="text"
               placeholder="여기는 도움이 되는 예문을 쓰세요"

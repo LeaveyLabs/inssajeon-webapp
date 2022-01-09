@@ -20,7 +20,7 @@ import {
 //
 import Searchbar from './Searchbar';
 import DropSearchbar from './DropSearchbar';
-import ClickwableWideLogo from '../../../components/ClickableWideLogo';
+import ClickwableWideLogo from '../../../components/misc/ClickableWideLogo';
 import AutocompleteSearch from './AutocompleteSearch';
 
 // ----------------------------------------------------------------------
@@ -44,6 +44,7 @@ type NavbarProps = {
   onOpenSidebar: VoidFunction;
   handleDialogOpen: VoidFunction
 };
+//TODO: kevin's suggestions: remove shadow from fab button, and tighten navbar to align with width of posts on desktop 
 
 export default function Navbar({ onOpenSidebar, handleDialogOpen }: NavbarProps) {
   const isDesktop = useResponsive('up', 'desktop');

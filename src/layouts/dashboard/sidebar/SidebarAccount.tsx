@@ -19,31 +19,34 @@ const RootStyle = styled('div')(({ theme }) => ({
 
 export default function SidebarAccount( ) {
   return (
-    <Link underline="none" color="inherit">
-      <RootStyle>
-        <Badge badgeContent={2} color="error">
-          <Avatar
-            src=""
-            alt="Rayan Moran"
-          />
-        </Badge>
-        <Box
-          sx={{
-            ml: 2,
-            transition: (theme) =>
-              theme.transitions.create('width', {
-                duration: theme.transitions.duration.shorter,
-              }),
-          }}
-        >
-          <Typography variant="subtitle2" noWrap>
-            username
-          </Typography>
-          <Typography variant="body2" noWrap sx={{ color: 'text.secondary' }}>
-            extra text
-          </Typography>
-        </Box>
-      </RootStyle>
-    </Link>
+    <Box sx={{pt: 3, pb: 2, px: 2.5,flexShrink: 0, }}>
+      <Link underline="none" color="inherit">
+        <RootStyle>
+          <Badge badgeContent={2} color="error">
+            <Avatar
+              src=""
+              alt="Rayan Moran"
+            />
+          </Badge>
+          <Box
+            sx={{
+              ml: 2,
+              transition: (theme) =>
+                theme.transitions.create('width', {
+                  duration: theme.transitions.duration.shorter,
+                }),
+            }}
+          >
+            <Typography variant="subtitle2" noWrap>
+              username
+            </Typography>
+            <Typography variant="body2" noWrap sx={{ color: 'text.secondary' }}>
+              extra text
+            </Typography>
+          </Box>
+        </RootStyle>
+      </Link>
+    </Box>
+
   );
 }

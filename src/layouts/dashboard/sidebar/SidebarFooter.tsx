@@ -1,33 +1,33 @@
 // @mui
-import { Stack, Button, Typography, IconButton } from '@mui/material';
-import { Link } from 'react-router-dom'
+import { Stack, Button, Typography, IconButton, Link } from '@mui/material';
 // assets
 import InstagramIcon from '@mui/icons-material/Instagram';
+//utils
+import { PAGE_PATHS } from 'src/routing/paths';
 
 // ----------------------------------------------------------------------
 
 export default function SidebarFooter() {
   return (
     <Stack
-      spacing={3}
-      sx={{ px: 5, pb: 5, mt: 10, width: 1, textAlign: 'center', display: 'block' }}
+      spacing={0}
+      sx={{ px: 5, pb: 3, mt: 10, width: 1, textAlign: 'center', display: 'block' }}
     >
       {/* <Button variant="contained">Documentation</Button> */}
       {/* <Link href="/" underline="hover">click</Link>
       <RouterLink to="/">asdf</RouterLink> */}
-      <a target="_blank" href="https://www.instagram.com/inssajeon/" rel="noreferrer">
+      <a target="_blank" href="https://www.instagram.com/inssajeon/" rel="noopener">
         <IconButton>
           <InstagramIcon />
         </IconButton>
       </a>
       <div>
-        <Typography component={Link} to={'/terms'} variant="body2" sx={{ color: 'text.secondary', textDecoration:'none' }}>
-          이용약관
+        <Typography display='inline' variant="body2" sx={{ color: 'text.secondary'}}>
+          <Link target="_blank" rel="noopener" href={PAGE_PATHS.page.terms}>이용약관</Link>
+          {' | '}
+          <Link target="_blank" rel="noopener" href={PAGE_PATHS.page.privacy}>개인정보처리방침</Link>
         </Typography><br/>
-        <Typography component={Link} to={'/privacy'} variant="body2" sx={{ color: 'text.secondary', textDecoration:'none' }}>
-          개인정보처리방침
-        </Typography>
-        <Typography variant="body2" sx={{ color: 'text.secondary', textDecoration:'none' }}>
+        <Typography display='inline' variant="body2" sx={{ color: 'text.secondary'}}>
           @Inssajeon 2022
         </Typography>
       </div>
