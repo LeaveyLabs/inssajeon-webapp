@@ -6,10 +6,9 @@ import { Stack, TextField, IconButton, InputAdornment, Alert } from '@mui/materi
 import { LoadingButton } from '@mui/lab';
 // hooks
 import useAuth from 'src/hooks/useAuth';
-//import useIsMountedRef from '../../../hooks/useIsMountedRef'; TODO wut is this
-
 // components
 import Iconify from '../misc/Iconify';
+import TransitionAlert from './TransitionAlert';
 
 // ----------------------------------------------------------------------
 
@@ -17,21 +16,18 @@ type InitialValues = {
   email: string;
   password: string;
   passwordConfirmation: string,
-  afterSubmit?: string;
 };
 
 export default function SignupForm() {
-  const { register } = useAuth();
-
-  //const isMountedRef = useIsMountedRef();
-
+  const { signup,  } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
+  const [signupError, setSignupError] = useState('');
 
   const RegisterSchema = Yup.object().shape({
     email: Yup
       .string()
-      .email('올바른 이메일 주소 입력하세요')
+      .email('올바른 이메일 주소 입력하세요') //TODO check if already exists
       .required('필수'),
     password: Yup
       .string()
@@ -51,28 +47,36 @@ export default function SignupForm() {
       passwordConfirmation: '',
     },
     validationSchema: RegisterSchema,
-    onSubmit: async (values, { setErrors, setSubmitting }) => {
-      try {
-        await register(values.email, values.password);
-        //setSubmitting(false);
-      } catch (error) {
-        console.error(error);
-      }
-    },
-  });
+    onSubmit: async (values, { setErrors, setSubmitting, resetForm, setFieldValue, setFieldTouched }) => {
+      signup(values.email, values.password)
+      .then(() => {
+        resetForm();
+        //TODO push to "setup profile username" like reddit does
+      })
+      .catch((error: any) => {
+        setSignupError(error.message)
+        setFieldValue('password', '');
+        setFieldValue('passwordConfirmation', '');
+        setFieldTouched('password', false);
+        setFieldTouched('passwordConfirmation', false);
+      })
+      .finally(() => {
+        setSubmitting(false);
+      })
+    }
+  })
 
   return (
     <FormikProvider value={formik}>
       <Form autoComplete="off" noValidate>
         <Stack spacing={3}>
-          {formik.errors.afterSubmit && <Alert severity="error">{formik.errors.afterSubmit}</Alert>}
-
+          {signupError.length>0 && formik.touched.password===false && <TransitionAlert errorMessage={signupError} onClose={() => setSignupError('')}/>}
           <TextField
             fullWidth
             autoComplete="username"
             type="email"
             label="이메일 주소"
-            id="password"
+            id="email"
             {...formik.getFieldProps('email')}
             error={Boolean(formik.touched.email && formik.errors.email)}
             helperText={formik.touched.email && formik.errors.email}

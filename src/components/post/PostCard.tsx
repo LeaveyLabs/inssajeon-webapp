@@ -75,7 +75,7 @@ export default function PostCard( { post }: PostCardProps ) {
     <Card >
       <Box sx={{ px:2, height:60, display:'flex', flexDirection: "row", alignItems:"center", justifyContent:"center", }}>
         <AccountCircleIcon sx={{mx:1}} />
-        <Link to={`/users/${post.userProfile.username}`} variant="subtitle1" color="text.primary" component={RouterLink}>
+        <Link to={`/profile/${post.userProfile.username}`} variant="subtitle1" color="text.primary" component={RouterLink}>
             {post.userProfile.username}
           </Link>
         <CircleIcon sx={{ color:'gray',fontSize: 4, ml:2 }}/>

@@ -54,18 +54,16 @@ export default function LoginForm() {
     onSubmit: async (values, { setErrors, setSubmitting, resetForm }) => {
       try {
         await login(values.email, values.password);
-        // if (isMountedRef.current) {
-        //   setSubmitting(false);
-        // }
+        setSubmitting(false);
         //TODO 'welcome back!' dialogue
         //TODO handle the case where 'remember me' is checked
-      } catch (error) {
-        console.error(error);
+        //TODO push to home page
+      } catch (error: any) {
         resetForm();
-        // if (isMountedRef.current) {
-        //   setSubmitting(false);
-        //   setErrors({ afterSubmit: error.message });
-        // }
+        setSubmitting(false);
+        if (error.message) {
+          setErrors({ afterSubmit: error.message });
+        }
       }
     },
   });

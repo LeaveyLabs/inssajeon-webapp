@@ -11,101 +11,102 @@ import { DataQuery } from 'src/db/apis/DataQuery';
 import { UserEntity } from 'src/db/entities/users/UserEntity';
 import { ProfileInteraction } from '../db/apis/ProfileInteraction';
 import { UserInfoEntity } from 'src/db/entities/users/UserInfoEntity';
+//utils
+import { v4 as uuidv4 } from 'uuid';
 
 // ----------------------------------------------------------------------
 
-const initialState: AuthState = {
-  isAuthenticated: false,
-  isInitialized: false,
-  user: null
-};
+// const initialState: AuthState = {
+//   isAuthenticated: false,
+//   isInitialized: false,
+//   user: null,
+//   userAuth: null,
+// };
 
-enum Types {
-  Initial = 'INITIALISE'
-}
+// enum Types {
+//   Initial = 'INITIALISE'
+// }
 
-type FirebaseAuthPayload = {
-  [Types.Initial]: {
-    isAuthenticated: boolean;
-    user: AuthUser;
-  };
-};
+// type FirebaseAuthPayload = {
+//   [Types.Initial]: {
+//     isAuthenticated: boolean;
+//     userAuth: AuthUser;
+//   };
+// };
 
-type FirebaseActions = ActionMap<FirebaseAuthPayload>[keyof ActionMap<FirebaseAuthPayload>];
+// type FirebaseActions = ActionMap<FirebaseAuthPayload>[keyof ActionMap<FirebaseAuthPayload>];
 
-const reducer = (state: AuthState, action: FirebaseActions) => {
-  if (action.type === 'INITIALISE') {
-    const { isAuthenticated, user } = action.payload;
-    return {
-      ...state,
-      isAuthenticated,
-      isInitialized: true,
-      user
-    };
-  }
+// const reducer = (authState: AuthState, user: UserEntity, action: FirebaseActions) => {
+//   if (action.type === 'INITIALISE') {
+//     const { isAuthenticated, userAuth } = action.payload;
+//     return {
+//       ...authState, //WHY DO WE HAVE DIS
+//       isAuthenticated,
+//       isInitialized: true,
+//       userAuth
+//     };
+//   }
 
-  return state;
-};
+//   return authState;
+// };
 
 //const AuthContext = createContext<FirebaseContextType | null>(null); //TODO finish these authType checks. also need to edit authTypes.ts
 const AuthContext = createContext<any>(null); 
 
 function AuthProvider({ children }: { children: ReactNode }) {
-  const [profile, setProfile] = useState<any>();
-  const [state, dispatch] = useReducer(reducer, initialState);
+  // const [state, dispatch] = useReducer(reducer, initialState); //auth-related properties of user only
+  const [user, setUser] = useState<any>(null);
+  const [isInitialized, setIsInitialized] = useState(false);
 
-  useEffect(
+  useEffect( //TODO i dont think i handle errors well here, fix this later. not urgent.
     () =>
-      onAuthStateChanged(firebaseAuth, async user => {
-        if (user) {
-          let UserInfo: UserEntity[] = await DataQuery.searchUserByUserID(user.uid)
-          if (UserInfo.length === 1) {
-            setProfile(UserInfo[0])
+      onAuthStateChanged(firebaseAuth, async firebaseAuthedUser => { //first called when firebase calls, then anytime auth state changes hereafter
+        console.log("onauthstatechanged:" + firebaseAuthedUser)
+        if (firebaseAuthedUser) {
+          let userInfo: UserEntity[] = await DataQuery.searchUserByUserID(firebaseAuthedUser.uid);
+          if (userInfo.length === 1) { //which it should, unless the user JUST registered for an account
+            let newuser = {auth: firebaseAuthedUser, nonauth: userInfo[0]};
+            setUser(newuser);
+            setIsInitialized(false);
+          } 
+          else { //user account does not exist, so create it here
+            const defaultUsername: string = 'inssa'+ uuidv4().slice(0,4);
+            const userProfile: UserInfoEntity = {username: defaultUsername, bio: '', picPath: '', inssajeom: 0 }; 
+            ProfileInteraction.createProfile(userProfile, firebaseAuthedUser.uid) //create firestore account associated with the same firebase auth uid
+            .then(() => {
+              DataQuery.searchUserByUserID(firebaseAuthedUser.uid) //TODO remove this extra firebase call if needed later on
+              .then((userInfo: UserEntity[]) => {
+                let newuser = {auth: firebaseAuthedUser, nonauth: userInfo[0]};
+                setUser(newuser);
+                setIsInitialized(false);
+              }); 
+            })
           }
-          //no explicit handling of errors here.
-
-          dispatch({ //a user is now signed in.
-            type: Types.Initial,
-            payload: { isAuthenticated: true, user }
-          });
-        } else { //a user is now signed out.
-          dispatch({
-            type: Types.Initial,
-            payload: { isAuthenticated: false, user: null }
-          });
+        } else { //firebaseAuthedUser is null, meaning user is now signed out.
+          setUser(null);
+          setIsInitialized(false);
         }
       }),
-    [dispatch] //even though dispatch doesnt change and adding it to the dependency array here doesnt really do anything, it's needed for eslint checks because it's a variable that's referenced within useEffect
-  );            //so, in reality, this useEffect only gets run on component mount, aka the listener only gets run on component mount.
+    [ ] 
+  );
 
   const login = (email: string, password: string) => {
     signInWithEmailAndPassword(firebaseAuth, email, password);
   }
 
-  const register = (email: string, password: string) => {
-    createUserWithEmailAndPassword(firebaseAuth, email, password)
-      .then((userCredential) => {
-        // Signed in 
-        const user = userCredential.user;
-        // ...
+  const signup = (email: string, password: string) => {
+    return createUserWithEmailAndPassword(firebaseAuth, email, password)
+      .catch((error) => {
+        var errorCode = error.code;
+        if (errorCode === 'auth/email-already-in-use') {
+          throw(new Error( "입력하신 이메일을 쓰는 계정이 이미 있습니다."))
+        } else if (errorCode === 'auth/invalid-email') {
+          throw(new Error( "올바른 이메일 입력하세요."))
+        } else {
+          throw(new Error( "가입하는 데 오류가 발생했어요. 다른 이메일으로 시도해보세요."))
+        }
       })
   }
-
-  //this function is only called on page after signup
-  const createProfile = async (username: string, bio: string, picPath: string) => { //after user creates an auth account, they're immediately directed to "createProfile" page, which they MUST complete. completing this page creates their firestore account
-    if (firebaseAuth.currentUser) {
-      const userInfo: UserInfoEntity = {username: username, bio: bio, picPath: picPath, inssajeom: 0 }; //set picpath to -1 if no image available
-      try {
-        await ProfileInteraction.createProfile(userInfo, firebaseAuth.currentUser.uid);
-        setProfile(userInfo)
-      } catch (e) {
-        throw(e);
-      }
-    }
-    else {
-      throw new Error("Auth info must exist in order to create a profile!")
-    }
-  } 
 
   const logout = async () => {
     signOut(firebaseAuth);
@@ -131,33 +132,25 @@ function AuthProvider({ children }: { children: ReactNode }) {
     }
   } 
 
-  const auth = { ...state.user };
+  const updateProfile = () => {
+    //TODO
+  }
 
   return (
     <AuthContext.Provider
       value={{
-        ...state,
-        method: 'firebase',
-        user: {
-          id: auth.uid,
-          email: auth.email,
-          password: auth.password,
-          username: profile?.username || '',
-          bio: profile?.bio || '',
-          picPath: profile?.picPath || '',
-          inssajeom: profile?.inssajeom || 0,
-        },
+        user,
+        isInitialized,
         login,
-        register,
-        createProfile,
+        signup,
         logout,
         resetPassword,
         updateEmail,
         updatePassword,
-        updateProfile: () => {}
+        updateProfile,
       }}
     >
-      {children /* consider only displaying children if !isLoading as shown in inssajeon-webapp-old*/ } 
+      {children} 
     </AuthContext.Provider>
   );
 }

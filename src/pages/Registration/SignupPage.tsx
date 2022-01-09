@@ -25,7 +25,7 @@ const MobileStyle = styled(Container)(({ theme }) => ({
 }));
 
 const DesktopStyle = styled(Container)(({ theme }) => ({
-  maxWidth: 480,
+  maxWidth: 520,
   height: '100%',
   display: 'flex',
   flexDirection: 'column',
@@ -38,27 +38,19 @@ function SignupContent() {
   return (
       <Box >
         <Stack direction="row" alignItems="center" justifyContent="center" sx={{ mb: 4, }}>
-          <Typography variant="h1" gutterBottom sx={{mb:0}}>
-            인싸되기
-          </Typography>
+          <Typography variant="h1" gutterBottom sx={{mb:0}}>인싸되기</Typography>
         </Stack>
         <SignupForm />
         <Typography variant="body2" align="center" sx={{ mt: 3 }}>
           가입하시면, 인싸전의&nbsp;
-          <Link variant="subtitle2" component={RouterLink} to={PAGE_PATHS.page.terms}>
-            이용약관
-          </Link>
+          <Link variant="subtitle2" target="_blank" rel="noopener" href={PAGE_PATHS.page.terms}>이용약관</Link>
           과 {''}
-          <Link variant="subtitle2" component={RouterLink} to={PAGE_PATHS.page.privacy}>
-            개인정보취급방침
-          </Link>
+          <Link variant="subtitle2" target="_blank" rel="noopener" href={PAGE_PATHS.page.privacy}>개인정보취급방침</Link>
           에 동의하시는 겁니다.
         </Typography>
         <Typography variant="body2" align="center" sx={{ mt: 3 }}>
           계정이 이미 있습니까?{' '}
-          <Link variant="subtitle2" component={RouterLink} to={PAGE_PATHS.auth.login}>
-            로그인하세요
-          </Link>
+          <Link variant="subtitle2" component={RouterLink} to={PAGE_PATHS.auth.login}>로그인하세요</Link>
         </Typography>
       </Box>
   )
