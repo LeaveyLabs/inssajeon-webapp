@@ -1,7 +1,7 @@
 
-import { Outlet } from 'react-router-dom';
 // @mui
 import { styled } from '@mui/material/styles';
+import { Outlet } from 'react-router-dom';
 // ----------------------------------------------------------------------
 
 const MainStyle = styled('main')(({ theme }) => ({

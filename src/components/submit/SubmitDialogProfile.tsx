@@ -1,6 +1,6 @@
 // @mui
+import { Avatar, Box, Link, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { Box, Link, Typography, Avatar, Badge } from '@mui/material';
 import useAuth from 'src/hooks/useAuth';
 
 // ----------------------------------------------------------------------

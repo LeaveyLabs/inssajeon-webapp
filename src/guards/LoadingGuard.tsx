@@ -1,8 +1,8 @@
 import { ReactNode } from 'react';
+// pages
+import LoadingPage from 'src/pages/Misc/LoadingPage';
 // hooks
 import useAuth from '../hooks/useAuth';
-// pages
-import LoadingPage from 'src/pages/Misc/LoadingPage'
 // components
 
 // ----------------------------------------------------------------------

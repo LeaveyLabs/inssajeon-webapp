@@ -1,34 +1,25 @@
-import { useState, useRef } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
 // @mui
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+import CircleIcon from '@mui/icons-material/Circle';
 import IosShareIcon from '@mui/icons-material/IosShare';
 import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
-import CircleIcon from '@mui/icons-material/Circle';
 import {
-  Box,
-  Link,
-  Card,
-  Stack,
-  Divider,
-  Typography,
-  IconButton,
+  Box, Card, Divider, IconButton, Link, Stack, Typography
 } from '@mui/material';
-import { green, pink, red } from '@mui/material/colors';
-//hooks
-import useIsMobile from 'src/hooks/useIsMobile';
+import { red } from '@mui/material/colors';
+import { useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 // utils
 // import { fDate } from '../../../../utils/formatTime';
 // import { fShortenNumber } from '../../../../utils/formatNumber';
-
 // // components
-import PostMoreButton from 'src/components/post/PostMoreButton'
-import VotePanel from './VotePanel';
-import DesktopCopyButton from './DesktopCopyButton';
+import PostMoreButton from 'src/components/post/PostMoreButton';
 import { PostEntity } from 'src/db/entities/posts/PostEntity';
 import { fDate } from 'src/utils/formatTime';
+import DesktopCopyButton from './DesktopCopyButton';
+import VotePanel from './VotePanel';
 
 // ----------------------------------------------------------------------
 

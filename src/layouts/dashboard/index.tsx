@@ -1,25 +1,17 @@
-import { useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Container } from '@mui/material';
 // @mui
 import { styled } from '@mui/material/styles';
-import { Box, Container, DialogTitle, FormGroup, Fab } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
-// hooks
-import useCollapseSidebar from '../../hooks/useCollapseSidebar';
-import useResponsive from 'src/hooks/useResponsive';
-//components
-import DialogAnimate from 'src/components/animate/DialogAnimate'
+import { useState } from 'react';
+import { Outlet } from 'react-router-dom';
 import SubmitDialog from 'src/components/submit/SubmitDialog';
-import Navbar from './navbar';
-import Sidebar from './sidebar';
+import useResponsive from 'src/hooks/useResponsive';
 import FloatingSubmitButton from '../../components/submit/FloatingSubmitButton';
 // config
 import {
-  SIDEBAR_WIDTH_DESKTOP,
-  NAVBAR_HEIGHT,
+  NAVBAR_HEIGHT, SIDEBAR_WIDTH_DESKTOP
 } from '../../config';
-//
-
+import Navbar from './navbar';
+import Sidebar from './sidebar';
 
 // ----------------------------------------------------------------------
 
@@ -34,9 +26,6 @@ const MainStyle = styled('main')(({ theme }) => ({
 }));
 
 // ----------------------------------------------------------------------
-
-// ----------------------------------------------------------------------
-
 
 export default function DashboardLayout() {
   //const { isCollapse } = useCollapseSidebar();

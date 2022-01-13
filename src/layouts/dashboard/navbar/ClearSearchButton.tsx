@@ -1,8 +1,8 @@
 
 // @mui;
-import { useTheme } from '@mui/material/styles';
 import ClearIcon from '@mui/icons-material/Clear';
-import {IconButton} from '@mui/material'
+import { IconButton } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 interface ClearSearchButtonProps {
   handleClear: VoidFunction

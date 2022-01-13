@@ -1,10 +1,10 @@
-import { useState, ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-// hooks
-import useAuth from '../hooks/useAuth';
 // pages
 import LoginPage from 'src/pages/Auth/LoginPage';
-import LoadingPage from 'src/pages/Misc/LoadingPage'
+import LoadingPage from 'src/pages/Misc/LoadingPage';
+// hooks
+import useAuth from '../hooks/useAuth';
 // components
 
 // ----------------------------------------------------------------------

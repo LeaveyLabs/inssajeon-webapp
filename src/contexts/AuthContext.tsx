@@ -1,15 +1,15 @@
 /* eslint-disable import/no-duplicates */
-import { createContext, ReactNode, useEffect, useReducer, useState } from 'react';
-//firebase
-import { firebaseAuth } from 'src/firebase';
-import { onAuthStateChanged, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateEmail as updateUserEmail, updatePassword as updateUserPassword, sendPasswordResetEmail, User, UserCredential, useDeviceLanguage } from "firebase/auth";
+import { createUserWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signOut, updateEmail as updateUserEmail, updatePassword as updateUserPassword, User, UserCredential } from "firebase/auth";
+import { createContext, ReactNode, useEffect, useState } from 'react';
 //db
 import { DataQuery } from 'src/db/apis/DataQuery';
 import { UserEntity } from 'src/db/entities/users/UserEntity';
-import { ProfileInteraction } from '../db/apis/ProfileInteraction';
-import { UserProfileEntity } from '../db/entities/users/UserProfileEntity';
+//firebase
+import { firebaseAuth } from 'src/firebase';
 //utils
 import { v4 as uuidv4 } from 'uuid';
+import { ProfileInteraction } from '../db/apis/ProfileInteraction';
+import { UserProfileEntity } from '../db/entities/users/UserProfileEntity';
 
 // ----------------------------------------------------------------------
 

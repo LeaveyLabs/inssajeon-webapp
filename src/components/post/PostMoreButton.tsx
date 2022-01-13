@@ -1,9 +1,9 @@
-import * as React from 'react';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { IconButton } from '@mui/material';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-import { IconButton } from '@mui/material';
+import PopupState, { bindMenu, bindTrigger } from 'material-ui-popup-state';
+import * as React from 'react';
 
 export default function PostMoreButton() {
   return (

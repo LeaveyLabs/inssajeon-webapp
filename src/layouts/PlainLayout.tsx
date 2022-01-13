@@ -1,12 +1,12 @@
 
-import { Outlet } from 'react-router-dom';
+import { AppBar, Box, Container, Toolbar } from '@mui/material';
 // @mui
 import { styled } from '@mui/material/styles';
-import { Container, Box, AppBar, Toolbar, } from '@mui/material';
-// config
-import { NAVBAR_HEIGHT } from 'src/config';
+import { Outlet } from 'react-router-dom';
 // components
 import ClickwableWideLogo from 'src/components/misc/ClickableWideLogo';
+// config
+import { NAVBAR_HEIGHT } from 'src/config';
 
 // ----------------------------------------------------------------------
 

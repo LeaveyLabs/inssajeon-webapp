@@ -1,7 +1,6 @@
-import { m } from 'framer-motion';
+import { SxProps } from '@mui/material';
 // @mui
-import { alpha, styled } from '@mui/material/styles';
-import { Box, SxProps } from '@mui/material';
+import { styled } from '@mui/material/styles';
 //
 import ClickableWideLogo from 'src/components/misc/ClickableWideLogo';
 

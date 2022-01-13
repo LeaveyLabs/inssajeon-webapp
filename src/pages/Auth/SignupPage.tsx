@@ -1,18 +1,16 @@
-import { Link as RouterLink } from 'react-router-dom';
-import { useState } from 'react';
+import { Box, Card, Container, Link, Stack, Typography } from '@mui/material';
 // @mui
 import { styled, useTheme } from '@mui/material/styles';
-import { Box, Link, Typography, Stack, Container, Card } from '@mui/material';
-// hooks
-import useAuth from 'src/hooks/useAuth';
+import { useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
+import CreateProfileForm from 'src/components/auth/CreateProfileForm';
+import ClickwableWideLogoLarge from 'src/components/misc/ClickableWideLogoLarge';
 import useResponsive from 'src/hooks/useResponsive';
 // routes
 import { PAGE_PATHS } from 'src/routing/paths';
+import SignupForm from '../../components/auth/SignupForm';
 // components
 import Page from '../Page';
-import ClickwableWideLogoLarge from 'src/components/misc/ClickableWideLogoLarge';
-import SignupForm from '../../components/auth/SignupForm';
-import CreateProfileForm from 'src/components/auth/CreateProfileForm';
 
 // ----------------------------------------------------------------------
 

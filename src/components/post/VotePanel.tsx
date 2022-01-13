@@ -1,17 +1,17 @@
-import { useState, useRef } from 'react';
+import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
+import ArrowCircleDownTwoToneIcon from '@mui/icons-material/ArrowCircleDownTwoTone';
 // @mui
 import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 import ArrowCircleUpTwoToneIcon from '@mui/icons-material/ArrowCircleUpTwoTone';
-import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
-import ArrowCircleDownTwoToneIcon from '@mui/icons-material/ArrowCircleDownTwoTone';
-import { Container, Grid, Box, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { green, pink } from '@mui/material/colors';
+import { useState } from 'react';
 //utils
 import { fDecimal } from 'src/utils/formatNumber';
 // // components
 import VoteButtonAnimate from '../animate/VoteButtonAnimate';
 
-// interface Props {
+// interface Props
 //   post: Post;
 // }
 

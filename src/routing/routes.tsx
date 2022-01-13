@@ -1,16 +1,17 @@
+import { ElementType, lazy, Suspense } from 'react';
 import { Navigate, useRoutes } from 'react-router-dom';
-import { Suspense, lazy, ElementType } from 'react';
-// layouts
-import DashboardLayout from '../layouts/dashboard';
-import PlainLayout from 'src/layouts/PlainLayout';
-import EmptyLayout from 'src/layouts/EmptyLayout';
-//extra
-import { PAGE_PATHS } from './paths';
-import LoadingPage from 'src/pages/Misc/LoadingPage';
-//guards
 import AuthGuard from 'src/guards/AuthGuard';
 import GuestGuard from 'src/guards/GuestGuard';
+import EmptyLayout from 'src/layouts/EmptyLayout';
+import PlainLayout from 'src/layouts/PlainLayout';
+import LoadingPage from 'src/pages/Misc/LoadingPage';
 
+import DashboardLayout from '../layouts/dashboard';
+import { PAGE_PATHS } from './paths';
+
+//guards
+// layouts
+//extra
 // ----------------------------------------------------------------------
 
 //loadable is depcreated but gets the job done for a loadingpage
@@ -100,7 +101,7 @@ export default function Router() {
 // Feeds
 const HomePage = Loadable(lazy(() => import('../pages/Feeds/HomePage')));
 const UsersPage = Loadable(lazy(() => import('../pages/Feeds/UsersPage')));
-const ExplorePage = Loadable(lazy(() => import('../pages/Feeds/ExplorePage')));
+//const ExplorePage = Loadable(lazy(() => import('../pages/Feeds/ExplorePage')));
 const WordsPage = Loadable(lazy(() => import('../pages/Feeds/WordsPage')));
 const CategoriesPage = Loadable(lazy(() => import('../pages/Feeds/CategoriesPage')));
 const PostPage = Loadable(lazy(() => import('../pages/Feeds/PostPage')));
@@ -125,8 +126,8 @@ const AboutPage = Loadable(lazy(() => import( '../pages/Information/AboutPage') 
 const FAQPage = Loadable(lazy(() => import( '../pages/Information/FAQPage') ));
 
 // Charts
-const ChartsPage = Loadable(lazy(() => import( '../pages/Charts/ChartsPage') ));
+//const ChartsPage = Loadable(lazy(() => import( '../pages/Charts/ChartsPage') ));
 
-// Account
-const SettingsPage = Loadable(lazy(() => import( '../pages/Account/SettingsPage') ));
+// Accounto
 const ComingSoonPage = Loadable(lazy(() => import( '../pages/Misc/ComingSoonPage') ));
+const SettingsPage = Loadable(lazy(() => import( '../pages/Account/SettingsPage') ));

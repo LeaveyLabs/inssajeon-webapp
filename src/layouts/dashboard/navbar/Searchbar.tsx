@@ -1,10 +1,9 @@
-import { useState, useEffect, useRef } from 'react';
-// @mui
-import { styled, alpha } from '@mui/material/styles';
-import { useTheme } from '@mui/material/styles';
-import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
-import { ClickAwayListener, Container } from '@mui/material';
+import { ClickAwayListener } from '@mui/material';
+import InputBase from '@mui/material/InputBase';
+// @mui
+import { alpha, styled } from '@mui/material/styles';
+import { useRef, useState } from 'react';
 // components
 //TODO: finish the blur/focus issues with the clear search button
 //TODO: improve the shrink transition onBlur for searchbar.
@@ -74,7 +73,6 @@ const StyledInputBase = styled(InputBase)(({ theme  }) => ({
 }));
 
 export default function Searchbar(  ) {
-  let theme = useTheme()
   let [searchInput, setSearchInput] = useState('');
   let inputRef = useRef<HTMLInputElement>()
 

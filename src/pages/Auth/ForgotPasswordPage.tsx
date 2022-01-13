@@ -1,21 +1,17 @@
 //react
-import { useState } from 'react';
-
-import { Link as RouterLink } from 'react-router-dom';
+import { Box, Button, Card, Container, Stack, Typography } from '@mui/material';
 // @mui
 import { styled, useTheme } from '@mui/material/styles';
-import { Box, Stack, Link, Container, Typography, Button, Card } from '@mui/material';
-import { SentIcon } from 'src/assets';
-// hooks
-import useAuth from 'src/hooks/useAuth';
+import { useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
+import ForgotPasswordForm from 'src/components/auth/ForgotPasswordForm';
+import ClickwableWideLogoLarge from 'src/components/misc/ClickableWideLogoLarge';
 import useResponsive from 'src/hooks/useResponsive';
 // routes
 import { PAGE_PATHS } from 'src/routing/paths';
 // components
 import Page from '../Page';
-import Image from 'src/components/misc/Image';
-import ForgotPasswordForm from 'src/components/auth/ForgotPasswordForm';
-import ClickwableWideLogoLarge from 'src/components/misc/ClickableWideLogoLarge';
+
 
 const MobileStyle = styled(Container)(({ theme }) => ({
   maxWidth: 480,

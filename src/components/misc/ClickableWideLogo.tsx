@@ -1,7 +1,7 @@
-import { Link as RouterLink } from 'react-router-dom';
 // @mui
 import { Box, BoxProps } from '@mui/material';
-import { ReactComponent as WideLogoSVG } from 'src/assets/logos/logo-wide.svg'
+import { Link as RouterLink } from 'react-router-dom';
+import { ReactComponent as WideLogoSVG } from 'src/assets/logos/logo-wide.svg';
 
 // ----------------------------------------------------------------------
 

@@ -1,12 +1,9 @@
 // @mui
-import { Container, Typography, Stack } from '@mui/material';
-// hooks
-import { useEffect, useState } from 'react';
-// components
-import Page from '../Page';
 import Feed from 'src/components/feed/Feed';
 //firebase
 import { DataQuery, PostOrder } from '../../db/apis/DataQuery';
+// components
+import Page from '../Page';
 // ----------------------------------------------------------------------
 
 export default function WordsPage() {

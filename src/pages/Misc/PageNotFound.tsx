@@ -1,13 +1,13 @@
-import { m } from 'framer-motion';
-import { Link as RouterLink } from 'react-router-dom';
+import { Box, Button, Container, Typography } from '@mui/material';
 // @mui
 import { styled } from '@mui/material/styles';
-import { Box, Button, Typography, Container } from '@mui/material';
-// components
-import Page from '../Page';
-import { MotionContainer, varBounce } from '../../components/animate';
+import { m } from 'framer-motion';
+import { Link as RouterLink } from 'react-router-dom';
 // assets
 import { PageNotFoundIllustration } from '../../assets';
+import { MotionContainer, varBounce } from '../../components/animate';
+// components
+import Page from '../Page';
 
 // ----------------------------------------------------------------------
 

@@ -1,9 +1,9 @@
 // @mui
+import { Avatar, Badge, Box, Button, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { Box, Link, Typography, Avatar, Badge, Button } from '@mui/material';
-import useAuth from '../../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { PAGE_PATHS } from 'src/routing/paths';
+import useAuth from '../../../hooks/useAuth';
 
 // ----------------------------------------------------------------------
 
