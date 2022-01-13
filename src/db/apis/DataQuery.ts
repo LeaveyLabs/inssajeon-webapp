@@ -246,6 +246,24 @@ DataQuery.getAllPosts = async (ordering:PostOrder,
         orderedQuery, PostFactory, lastDoc);
 }
 
+/**
+ * @param  {WordOrder} ordering
+ * @param  {DocumentSnapshot[]} lastDoc?
+ * @returns Promise
+ */
+DataQuery.getAllWords = async (ordering:WordOrder,
+    lastDoc?:DocumentSnapshot[]) : Promise<Array<WordEntity>> => {
+    /* Order the words as specified, up to the limit of words */
+    const queryFields = [wordOrderQuery[ordering], limit(MAX_QUERY)];
+    if(lastDoc !== undefined && lastDoc.length > 0) {
+        queryFields.push(startAfter(lastDoc[lastDoc.length-1]));
+    }
+    const orderedQuery = query(wordDatabase, ...queryFields);
+    /* Query the database for this order */
+    return await firebaseEntityQuery<WordEntity>(
+        orderedQuery, WordFactory, lastDoc);
+}
+
 const nearWords = (word:string) => {
     throw Error("Not implemented");
 }
