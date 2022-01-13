@@ -44,8 +44,15 @@ export default function Feed( { getNewPosts }: Props ) {
     fetchPosts()
   }, []); //TODO call useEffect to query more posts whenever almost all posts have been rendered
 
-  //TODO code to handle rendering another 10 posts as user scrolls down (should be able to find this online)
+  useEffect(() => { //sort posts -- TODO change this when we stop reading "all posts from firebase" at once
+    if (posts) {
+      posts.sort((a: PostEntity, b: PostEntity) => {
+        return a.metrics.trendscore - b.metrics.trendscore; //return negative value if first element is smaller. smaller elements first
+      })
+    }
+  }, [posts])
 
+  //TODO code to handle rendering another 10 posts as user scrolls down (should be able to find this online)
   //TODO look into lists vs stack: is stack really the best way to display posts as you scroll down?
   return (
     <div>
