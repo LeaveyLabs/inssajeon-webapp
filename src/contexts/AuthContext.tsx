@@ -104,7 +104,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   const logout = async () => {
-    signOut(firebaseAuth);
+    return signOut(firebaseAuth);
   };
 
   const resetPassword = async (email: string) => {

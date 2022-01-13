@@ -17,6 +17,10 @@ import ProfilePage from '../pages/Feeds/ProfilePage';
 // Misc
 import PageNotFound from '../pages/Misc/PageNotFound';
 
+//guards
+import AuthGuard from 'src/guards/AuthGuard';
+import GuestGuard from 'src/guards/GuestGuard';
+
 // FTUX
 
 // Information
@@ -72,7 +76,7 @@ export default function Router() {
           ]
         },
         { path: 'profile', children: [  //TODO: 'profile' and 'me' must be an unallowed username
-            { path: 'me', element: <MyProfilePage /> }, //**registeredUser only route
+            { path: 'me', element: <AuthGuard><MyProfilePage/></AuthGuard> }, //**registeredUser only route
             { path: ':id', element: <ProfilePage /> }, //TODO auto navigate to 'me' if :id matches registeredUser's id
           ] 
         },
@@ -86,7 +90,7 @@ export default function Router() {
       ],
     },
     //guestUser only routes
-    { path: '/', element:<EmptyLayout/>, children: [
+    { path: '/', element:<GuestGuard><EmptyLayout/></GuestGuard>, children: [
         { path: "*", element: <Navigate to={PAGE_PATHS.auth.signup} replace />, index:true },
         { path: PAGE_PATHS.auth.signup, element: <SignupPage /> },
         { path: PAGE_PATHS.auth.login, element: <LoginPage/> },
@@ -95,7 +99,7 @@ export default function Router() {
       ],
     },
     //registeredUser only routes
-    { path: 'myaccount', children: [
+    { path: 'myaccount', element:<AuthGuard><EmptyLayout/></AuthGuard>, children: [
         { path: "*", element: <Navigate to="settings" replace />, index:true },
         { path: 'settings', element: <PlainLayout/>, children: [
           { path: "*", element: <Navigate to="" replace />, index:true },
