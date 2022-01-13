@@ -26,10 +26,10 @@ import AboutPage from '../pages/Information/AboutPage';
 import FAQPage from '../pages/Information/FAQPage';
 
 // Registration
-import SignupPage from '../pages/Registration/SignupPage';
-import ResetPasswordPage from '../pages/Registration/ResetPasswordPage';
-import ForgotPasswordPage from 'src/pages/Registration/ForgotPasswordPage';
-import LoginPage from '../pages/Registration/LoginPage';
+import SignupPage from '../pages/Auth/SignupPage';
+import ResetPasswordPage from '../pages/Auth/ResetPasswordPage';
+import ForgotPasswordPage from 'src/pages/Auth/ForgotPasswordPage';
+import LoginPage from '../pages/Auth/LoginPage';
 
 // Charts
 import ChartsPage from '../pages/Charts/ChartsPage';

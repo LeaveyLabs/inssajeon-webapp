@@ -2,10 +2,7 @@
 import { createContext, ReactNode, useEffect, useReducer, useState } from 'react';
 //firebase
 import { firebaseAuth } from 'src/firebase';
-import { onAuthStateChanged, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateEmail as updateUserEmail, updatePassword as updateUserPassword, sendPasswordResetEmail } from "firebase/auth";
-// @types
-import { ActionMap, AuthState, AuthUser, FirebaseContextType } from './authTypes';
-
+import { onAuthStateChanged, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateEmail as updateUserEmail, updatePassword as updateUserPassword, sendPasswordResetEmail, User, UserCredential, useDeviceLanguage } from "firebase/auth";
 //db
 import { DataQuery } from 'src/db/apis/DataQuery';
 import { UserEntity } from 'src/db/entities/users/UserEntity';
@@ -16,46 +13,27 @@ import { v4 as uuidv4 } from 'uuid';
 
 // ----------------------------------------------------------------------
 
-// const initialState: AuthState = {
-//   isAuthenticated: false,
-//   isInitialized: false,
-//   user: null,
-//   userAuth: null,
-// };
+type AuthedUser = {
+  auth: User; //firebase auth user
+  nonauth: UserEntity; //firestore user
+}
 
-// enum Types {
-//   Initial = 'INITIALISE'
-// }
+export type AuthContextType = {
+  isInitialized: boolean;
+  authedUser: AuthedUser | null;
+  login: (email: string, password: string) => Promise<UserCredential>;
+  signup: (email: string, password: string) => Promise<UserCredential>;
+  logout: () => Promise<void>;
+  resetPassword: (email: string) => Promise<void>;
+  updateEmail: (email: string) => Promise<void>; // why void?
+  updatePassword: (password: string) => Promise<void>; // why void?
+};
 
-// type FirebaseAuthPayload = {
-//   [Types.Initial]: {
-//     isAuthenticated: boolean;
-//     userAuth: AuthUser;
-//   };
-// };
 
-// type FirebaseActions = ActionMap<FirebaseAuthPayload>[keyof ActionMap<FirebaseAuthPayload>];
-
-// const reducer = (authState: AuthState, user: UserEntity, action: FirebaseActions) => {
-//   if (action.type === 'INITIALISE') {
-//     const { isAuthenticated, userAuth } = action.payload;
-//     return {
-//       ...authState, //WHY DO WE HAVE DIS
-//       isAuthenticated,
-//       isInitialized: true,
-//       userAuth
-//     };
-//   }
-
-//   return authState;
-// };
-
-//const AuthContext = createContext<FirebaseContextType | null>(null); //TODO finish these authType checks. also need to edit authTypes.ts
-const AuthContext = createContext<any>(null); 
+const AuthContext = createContext<AuthContextType | null>(null); 
 
 function AuthProvider({ children }: { children: ReactNode }) {
-  // const [state, dispatch] = useReducer(reducer, initialState); //auth-related properties of user only
-  const [user, setUser] = useState<any>(null);
+  const [authedUser, setAuthedUser] = useState<AuthedUser | null>(null);
   const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect( //TODO i dont think i handle errors well here, fix this later. not urgent.
@@ -65,9 +43,9 @@ function AuthProvider({ children }: { children: ReactNode }) {
         if (firebaseAuthedUser) {
           let userInfo: UserEntity[] = await DataQuery.searchUserByUserID(firebaseAuthedUser.uid);
           if (userInfo.length === 1) { //which it should, unless the user JUST registered for an account
-            let newuser = {auth: firebaseAuthedUser, nonauth: userInfo[0]};
-            setUser(newuser);
-            setIsInitialized(false);
+            let newuser : AuthedUser = {auth: firebaseAuthedUser, nonauth: userInfo[0]};
+            setAuthedUser(newuser);
+            setIsInitialized(true);
           } 
           else { //user account does not exist, so create it here
             const defaultUsername: string = 'inssa'+ uuidv4().slice(0,4);
@@ -76,22 +54,39 @@ function AuthProvider({ children }: { children: ReactNode }) {
             .then(() => {
               DataQuery.searchUserByUserID(firebaseAuthedUser.uid) //TODO remove this extra firebase call if needed later on
               .then((userInfo: UserEntity[]) => {
-                let newuser = {auth: firebaseAuthedUser, nonauth: userInfo[0]};
-                setUser(newuser);
-                setIsInitialized(false);
+                let newuser : AuthedUser = {auth: firebaseAuthedUser, nonauth: userInfo[0]};
+                setAuthedUser(newuser);
+                setIsInitialized(true);
               }); 
             })
           }
         } else { //firebaseAuthedUser is null, meaning user is now signed out.
-          setUser(null);
-          setIsInitialized(false);
+          setAuthedUser(null);
+          setIsInitialized(true);
         }
       }),
     [ ] 
   );
 
   const login = (email: string, password: string) => {
-    signInWithEmailAndPassword(firebaseAuth, email, password);
+    return signInWithEmailAndPassword(firebaseAuth, email, password)
+      .catch((error) => {
+        var errorCode = error.code;
+        if (errorCode === 'auth/invalid-email') {
+          throw(new Error( "올바른 이메일 입력하세요."))
+        } else if (errorCode === 'auth/user-disabled') {
+          throw(new Error( "이 사용자가 disabled."))
+        } else if (errorCode === 'auth/user-not-found') {
+          throw(new Error( "입력하신 이메일을 쓰는 계정이 없습니다. 가입하세요."))
+        } else if (errorCode === 'auth/wrong-password') {
+          throw(new Error( "비밀번로가 맞지 않습니다."))
+        } else if (errorCode === 'auth/too-many-requests') {
+          throw(new Error( "chill tf out lmao."))
+        } 
+        else {
+          throw(new Error( "로그인하는 데 오류가 발생했어요. 또 다시 시도해보세요."))
+        }
+      });
   }
 
   const signup = (email: string, password: string) => {
@@ -113,7 +108,17 @@ function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const resetPassword = async (email: string) => {
-    sendPasswordResetEmail(firebaseAuth, email);
+    return sendPasswordResetEmail(firebaseAuth, email)
+      .catch((error) => {
+        const errorCode = error.code;
+        if (errorCode === 'auth/user-not-found') {
+          throw(new Error( "입력하신 이메일을 쓰는 계정이 없습니다."))
+        } else if (errorCode === 'auth/invalid-email') {
+          throw(new Error( "올바른 이메일 입력하세요."))
+        } else {
+          throw(new Error( "오류가 발생했어요. 다른 이메일으로 시도해보세요."))
+        }
+      });
   };
 
   const updateEmail = async (email: string) => {
@@ -124,7 +129,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
-  const updatePassword = (password: string) => {
+  const updatePassword = async (password: string) => {
     if (firebaseAuth.currentUser) {
       updateUserPassword(firebaseAuth.currentUser, password)
     } else {
@@ -132,14 +137,10 @@ function AuthProvider({ children }: { children: ReactNode }) {
     }
   } 
 
-  const updateProfile = () => {
-    //TODO
-  }
-
   return (
     <AuthContext.Provider
       value={{
-        user,
+        authedUser,
         isInitialized,
         login,
         signup,
@@ -147,7 +148,6 @@ function AuthProvider({ children }: { children: ReactNode }) {
         resetPassword,
         updateEmail,
         updatePassword,
-        updateProfile,
       }}
     >
       {children} 

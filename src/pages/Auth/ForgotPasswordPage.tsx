@@ -43,7 +43,7 @@ type ContentProps = {
 
 //TODO add forgotEmail and signupEmailConfirmation functionality to authentication process
 
-function ForgotPasswordContent( {email, sent, setEmail, setSent} : ContentProps) {
+function ForgotPasswordContent( {sent, setSent} : ContentProps) {
   return (
     <Box sx={{ maxWidth: 480 }} >
       {!sent ? (
@@ -72,17 +72,9 @@ function ForgotPasswordContent( {email, sent, setEmail, setSent} : ContentProps)
         </>
       ) : (
         <Box sx={{ textAlign: 'center' }}>
-          <Typography variant="h3" gutterBottom>
-            성공
-          </Typography>
-          <Typography>
-            확인 이메일 보냈습니다.
-            <br />
-            이메일 없으면,&nbsp;
-            <strong>{email}</strong>
-            과 관현된 계정이 존재하지 않습니다.
-          </Typography>
-
+          <Typography variant="h3" gutterBottom>성공</Typography>
+          <Typography>확인 이메일 보냈습니다.</Typography>
+          <Typography>이메일 못 찾으면, 입력하신 이메일과 관련된 계정이 존재하지 않습니다.</Typography>
           <Button
             size="large"
             variant="contained"
@@ -101,7 +93,6 @@ function ForgotPasswordContent( {email, sent, setEmail, setSent} : ContentProps)
 // ----------------------------------------------------------------------
 
 export default function ForgotPasswordPage() {
-  const { method } = useAuth();
   const isMobile = useResponsive('down', 'tablet'); //TODO why is it taking so long to be repsonsive here?
   const theme = useTheme()
   const [email, setEmail] = useState('');

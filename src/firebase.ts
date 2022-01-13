@@ -17,5 +17,7 @@ const firebaseApp = initializeApp({
     measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID
 })
 
-export const firebaseAuth = getAuth(firebaseApp)
+const firebaseAuth = getAuth(firebaseApp)
+firebaseAuth.languageCode = 'kr';
+export { firebaseAuth };
 export default firebaseApp

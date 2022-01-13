@@ -87,7 +87,7 @@ export default function PostCard( { post }: PostCardProps ) {
         <PostMoreButton/>
       </Box>
       <Divider variant="middle" />
-      <Stack spacing={3} sx={{ p: 3 }}>
+      <Stack  spacing={3} sx={{ p: 3, whiteSpace: 'pre-line'}}> {/*whitespace: pre-line generates newline for firebase strings*/}
         <Typography variant="h1">{post.word}</Typography>
         <Typography variant="body1">{post.definition}</Typography>
         <Typography variant="body3">{post.quote}</Typography>

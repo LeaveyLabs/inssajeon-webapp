@@ -17,6 +17,7 @@ import { v4 as uuidv4 } from "uuid";
 import { PostEntity } from "../../db/entities/posts/PostEntity"
 import { Timestamp } from "firebase/firestore";
 import { PostInteraction } from "../../db/apis/PostInteraction"
+import { PAGE_PATHS } from 'src/routing/paths';
 // ----------------------------------------------------------------------
 
 interface Tag {
@@ -116,7 +117,7 @@ export default function SubmitForm( {handleClose} : SubmitFormProps) {
     formik.resetForm();
     sessionStorage.removeItem(FORM_SESSION_STORAGE_ID)
     handleClose();
-    navigate(`/post/${postID}`, { replace: true }); //navigate to that submitted post
+    navigate(`${PAGE_PATHS.dashboard.post}/${postID}`); //navigate to that submitted post
     //TODO: "click to share with friends!" icon
   }
 
@@ -179,7 +180,7 @@ export default function SubmitForm( {handleClose} : SubmitFormProps) {
               minRows={3}
               id="quote"
               type="text"
-              placeholder="여기는 도움이 되는 예문을 쓰세요"
+              placeholder="A: 어쩌고 저쩌고"
               label="인용 또는 예문"
               disabled={formik.isSubmitting}
               {...formik.getFieldProps('quote')}

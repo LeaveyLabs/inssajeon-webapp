@@ -3,7 +3,7 @@ import { Navigate, useLocation } from 'react-router-dom';
 // hooks
 import useAuth from '../hooks/useAuth';
 // pages
-import LoginPage from 'src/pages/Registration/LoginPage';
+import LoginPage from 'src/pages/Auth/LoginPage';
 import LoadingPage from 'src/pages/Misc/LoadingPage'
 // components
 
@@ -14,7 +14,7 @@ type AuthGuardProps = {
 };
 
 export default function AuthGuard({ children }: AuthGuardProps) {
-  const { user, isInitialized } = useAuth();
+  const { authedUser, isInitialized } = useAuth();
   const { pathname } = useLocation();
   const [requestedLocation, setRequestedLocation] = useState<string | null>(null);
 
@@ -22,7 +22,7 @@ export default function AuthGuard({ children }: AuthGuardProps) {
     return <LoadingPage />;
   }
 
-  if (!user) {
+  if (!authedUser) {
     if (pathname !== requestedLocation) {
       setRequestedLocation(pathname);
     }

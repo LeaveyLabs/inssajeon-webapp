@@ -6,7 +6,6 @@ import { useFormik, Form, FormikProvider } from 'formik';
 import {
   Link,
   Stack,
-  Alert,
   Checkbox,
   TextField,
   IconButton,
@@ -19,7 +18,10 @@ import { PAGE_PATHS } from 'src/routing/paths';
 // hooks
 import useAuth from 'src/hooks/useAuth';
 // components
+import TransitionAlert from './TransitionAlert';
 import Iconify from '../misc/Iconify';
+import { browserLocalPersistence, browserSessionPersistence, setPersistence } from 'firebase/auth';
+import { firebaseAuth } from 'src/firebase';
 
 // ----------------------------------------------------------------------
 
@@ -27,13 +29,13 @@ type LoginFormValues = {
   email: string;
   password: string;
   remember: boolean;
-  afterSubmit?: string; //for setting an error if login fails
 };
 
 export default function LoginForm() {
   let navigate = useNavigate();
   const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
+  const [loginError, setLoginError] = useState('');
 
   const LoginSchema = Yup.object().shape({
     email: Yup
@@ -51,20 +53,22 @@ export default function LoginForm() {
       remember: true,
     },
     validationSchema: LoginSchema,
-    onSubmit: async (values, { setErrors, setSubmitting, resetForm }) => {
+    onSubmit: async (values, { setFieldValue, setFieldTouched, setSubmitting, resetForm }) => {
       try {
         await login(values.email, values.password);
-        setSubmitting(false);
-        //TODO 'welcome back!' dialogue
-        //TODO handle the case where 'remember me' is checked
-        //TODO push to home page
-      } catch (error: any) {
+        await setPersistence(firebaseAuth, values.remember ? browserLocalPersistence : browserSessionPersistence)
+        navigate(PAGE_PATHS.dashboard.home, { replace: true });
         resetForm();
-        setSubmitting(false);
+      } catch (error: any) {
         if (error.message) {
-          setErrors({ afterSubmit: error.message });
+          setLoginError(error.message)
         }
       }
+      setFieldValue('password', '');
+      setFieldValue('email', '');
+      setFieldTouched('password', false);
+      setFieldTouched('email', false);
+      setSubmitting(false);
     },
   });
 
@@ -76,12 +80,12 @@ export default function LoginForm() {
     <FormikProvider value={formik}>
       <Form noValidate >
         <Stack spacing={3}>
-          {formik.errors.afterSubmit && <Alert severity="error">{formik.errors.afterSubmit}</Alert>}
+          {loginError.length>0 && formik.touched.email===false && <TransitionAlert errorMessage={loginError} onClose={() => setLoginError('')}/>}
 
           <TextField
             fullWidth
-            id="username"
-            autoComplete="username"  //?? look more into later https://mui.com/api/text-field/
+            id="email"
+            autoComplete="email"  //?? look more into later https://mui.com/api/text-field/
             type="email"
             label="이메일 주소"
             {...formik.getFieldProps('email')}
@@ -118,7 +122,7 @@ export default function LoginForm() {
           />
 
           <Link component={RouterLink} variant="subtitle2" to={PAGE_PATHS.auth.forgot}>
-            비밀번호를 잊으셨습니까?
+            건망증 오늘따라 심해요?
           </Link>
         </Stack>
 

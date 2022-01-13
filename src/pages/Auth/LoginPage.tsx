@@ -10,7 +10,7 @@ import { PAGE_PATHS } from 'src/routing/paths';
 // components
 import Page from '../Page';
 import ClickwableWideLogoLarge from 'src/components/misc/ClickableWideLogoLarge';
-import SignupForm from '../../components/auth/SignupForm';
+import LoginForm from '../../components/auth/LoginForm';
 
 // ----------------------------------------------------------------------
 
@@ -34,30 +34,27 @@ const DesktopStyle = styled(Container)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-function SignupContent() {
+function LoginContent() {
   return (
       <Box >
         <Stack direction="row" alignItems="center" justifyContent="center" sx={{ mb: 4, }}>
-          <Typography variant="h1" gutterBottom sx={{mb:0}}>인싸되기</Typography>
+          <Typography variant="h1" gutterBottom sx={{mb:0}}>
+            로그인싸
+          </Typography>
         </Stack>
-        <SignupForm />
+        <LoginForm />
         <Typography variant="body2" align="center" sx={{ mt: 3 }}>
-          가입하시면, 인싸전의&nbsp;
-          <Link variant="subtitle2" target="_blank" rel="noopener" href={PAGE_PATHS.page.terms}>이용약관</Link>
-          과 {''}
-          <Link variant="subtitle2" target="_blank" rel="noopener" href={PAGE_PATHS.page.privacy}>개인정보취급방침</Link>
-          에 동의하시는 겁니다.
-        </Typography>
-        <Typography variant="body2" align="center" sx={{ mt: 3 }}>
-          계정이 이미 있습니까?{' '}
-          <Link variant="subtitle2" component={RouterLink} to={PAGE_PATHS.auth.login}>로그인하세요</Link>
+          계정이 없습니까?{' '}
+          <Link variant="subtitle2" component={RouterLink} to={PAGE_PATHS.auth.signup}>
+            가입하세요
+          </Link>
         </Typography>
       </Box>
   )
 }
 
-export default function SignupPage() {
-  const { method } = useAuth();
+export default function LoginPage() {
+  const {  } = useAuth();
   const isMobile = useResponsive('down', 'tablet'); //TODO why is it taking so long to be repsonsive here?
   const theme = useTheme()
 
@@ -68,14 +65,14 @@ export default function SignupPage() {
         <MobileStyle>
           <ClickwableWideLogoLarge/>
           <Box sx={{flexGrow:1}}/>
-          <SignupContent/>
+          <LoginContent/>
           <Box sx={{flexGrow:1}}/>
         </MobileStyle>
       : //!isMobile
         <DesktopStyle>
           <Card sx={{padding: theme.spacing(3, 3), }}>
             <ClickwableWideLogoLarge sx={{mb:10}}/>
-            <SignupContent/>
+            <LoginContent/>
           </Card>
         </DesktopStyle>
       }
