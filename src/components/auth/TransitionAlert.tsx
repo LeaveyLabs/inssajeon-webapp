@@ -1,4 +1,5 @@
 import CloseIcon from '@mui/icons-material/Close';
+import { SxProps } from '@mui/material';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
@@ -7,14 +8,15 @@ import * as React from 'react';
 
 interface Props {
   errorMessage: any;
-  onClose: VoidFunction;
+  onClose?: VoidFunction;
+  sx?: SxProps;
 }
 
-export default function TransitionAlert( {errorMessage, onClose} : Props ) {
+export default function TransitionAlert( {errorMessage, onClose, sx} : Props ) {
   const [open, setOpen] = React.useState(true);
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box sx={{ width: 'auto', ...sx }}>
       <Collapse in={open}>
         <Alert
           severity='error'
@@ -26,7 +28,7 @@ export default function TransitionAlert( {errorMessage, onClose} : Props ) {
               onClick={() => {
                 setOpen(false);
                 setTimeout (() => {
-                  onClose();
+                  if (onClose) onClose();
                 }, 1000)
               }}
             >

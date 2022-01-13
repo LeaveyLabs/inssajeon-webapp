@@ -1,16 +1,16 @@
 //react
+import { useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
+//mui
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import CircleIcon from '@mui/icons-material/Circle';
 import IosShareIcon from '@mui/icons-material/IosShare';
-import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
 import {
   Avatar,
   Box, Card, Divider, IconButton, Link, Stack, Typography
 } from '@mui/material';
-import { red } from '@mui/material/colors';
-import { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { styled } from '@mui/material';
 // components
 import PostMoreButton from 'src/components/post/PostMoreButton';
 import { PostEntity } from 'src/db/entities/posts/PostEntity';
@@ -22,7 +22,8 @@ import { fDate } from 'src/utils/formatTime';
 import getAvatarColor from 'src/utils/getAvatarColor';
 import DesktopCopyButton from './DesktopCopyButton';
 import VotePanel from './VotePanel';
-import { deepOrange } from '@mui/material/colors';
+import TrendingIcons from './TrendingIcons';
+import { PostInteraction } from 'src/db/apis/PostInteraction';
 
 // ----------------------------------------------------------------------
 
@@ -32,12 +33,7 @@ interface PostCardProps {
 
 export default function PostCard( { post }: PostCardProps ) {
   const { authedUser } = useAuth();
-  const [isUpvoted, setIsUpvoted] = useState(authedUser ? post.upvotes.includes(authedUser.nonauth.id) : false);
-  const [isDownvoted, setIsDownvoted] = useState(authedUser ? post.downvotes.includes(authedUser.nonauth.id) : false);
   const [isFavorited, setIsFavorited] = useState(authedUser?.nonauth.activity.favorites.includes(post.postID));
-  const [isFlagged, setIsFlagged] = useState(authedUser ? post.flags.includes(authedUser.nonauth.id) : false);
-  const [upvotes, setUpvotes] = useState(post.metrics.upvoteCount);
-  const [downvotes, setDownvotes] = useState(post.metrics.downvoteCount);
 
   let canNativeMobileShare = 'canShare' in navigator; //checks if user's device has a native share functionality
   //window.navigator.canShare() //this is the 'proper' way according to mozilla to check if canShare, but im getting errors using this method. use this workaround detailed here instead: https://stackoverflow.com/questions/57345539/navigator-canshare-in-typescript-permissions-denied
@@ -46,45 +42,41 @@ export default function PostCard( { post }: PostCardProps ) {
 
   }
 
-  const handleToggleFavorited = () => {
+  const handleToggleFavorited = async () => {
     if (!authedUser) {
       handleSignupDialog()
-    } else {
-      setIsFavorited(prevIsFavorited => !isFavorited);
-      //TODO firebase call
-    }
-  }
-
-  const handleFlagged = () => {
-    if (!authedUser) {
-      handleSignupDialog()
-    } else if (isFlagged) {
-      //TODO "you already flagged this"
-    } else {
-      setIsFlagged(true);
-      //TODO openFlagDialogue
+    } else if (isFavorited) {
+      try {
+        await PostInteraction.unfavoritePost(authedUser.nonauth.id, post.postID)
+        setIsFavorited(prevIsFavorited => !isFavorited);
+      } catch (error: any) {
+        console.error(error.message);
+      }
+    } else { //!isFavorited
+      try {
+        await PostInteraction.favoritePost(authedUser.nonauth.id, post.postID)
+        setIsFavorited(prevIsFavorited => !isFavorited);
+      } catch (error: any) {
+        console.error(error.message);
+      }
     }
   }
 
   //TODO add proper icons (in src/public folder) so that share action on Kakao/kakaostory/naver is accompanied by our logo
   //TODO add a custom share popup for devices with width small enough to be mobile which dont qualify for navigator.share (would much rather create a custom share feature than just have them use copy button)
   const handleNativeMobileShare = async () => {
-      navigator
-      .share({
+    try {
+      await navigator.share({
         //title: "title of post!", //mozilla: "the title may be ignored"
         //text: 'Check out this post on 인싸전!', using the text property makes the share image go away :( so leave it off
         url: `https://inssajeon.com/post/${post.postID}`,
       })
-      .then(() => {
-        //TODO increase share count by one
-      })
-      .catch(error => {
-        console.error('Something went wrong sharing. error: ', error);
-      });
-    
+      //await PostInteraction.sharePost(post.postID);
+    } catch (error: any) {
+      console.error('Something went wrong sharing. error: ', error);
+    }
   }
 
-  //notes on custom hook for menu: https://github.com/jcoreio/material-ui-popup-state
   return (
     <Card >
       <Box sx={{ px:2, height:60, display:'flex', flexDirection: "row", alignItems:"center", justifyContent:"center", }}>
@@ -92,9 +84,9 @@ export default function PostCard( { post }: PostCardProps ) {
         <Link to={`${PAGE_PATHS.dashboard.profile}/${post.userProfile.username}`} variant="subtitle1" color="text.primary" component={RouterLink}>{post.userProfile.username}</Link>
         <CircleIcon sx={{ color:'gray',fontSize: 4, ml:2 }}/>
         <Typography variant="caption" sx={{ mx:2,color: 'text.secondary' }}>{fDate((post.timestamp.toDate()))}</Typography>
-        {upvotes > 0 && <LocalFireDepartmentIcon sx={{ color: red[500] }}/>}
+        <TrendingIcons post={post} />
         <Box sx={{ flexGrow: 1 }} />
-        <PostMoreButton/>
+        <PostMoreButton post={post} />
       </Box>
       <Divider variant="middle" />
       <Stack  spacing={3} sx={{ p: 3, whiteSpace: 'pre-line'}}> {/*whitespace: pre-line generates newline for firebase strings*/}
@@ -103,7 +95,7 @@ export default function PostCard( { post }: PostCardProps ) {
         <Typography variant="body3">{post.quote}</Typography>
       </Stack>
       <Box sx={{ p:2, height:60, display:'flex', flexDirection: "row", alignItems:"center", justifyContent:"center", }}>
-        <VotePanel/>
+        <VotePanel post={post}/>
         <Box sx={{ flexGrow: 1 }} />
         <IconButton onClick={handleToggleFavorited}>
           {isFavorited ? <BookmarkIcon /> : <BookmarkBorderIcon/>}

@@ -6,73 +6,132 @@ import ArrowCircleUpTwoToneIcon from '@mui/icons-material/ArrowCircleUpTwoTone';
 import { Box, Typography } from '@mui/material';
 import { green, pink } from '@mui/material/colors';
 import { useState } from 'react';
+import { PostInteraction } from 'src/db/apis/PostInteraction';
+import { PostEntity } from 'src/db/entities/posts/PostEntity';
+import useAuth from 'src/hooks/useAuth';
 //utils
 import { fDecimal } from 'src/utils/formatNumber';
 // // components
-import VoteButtonAnimate from '../animate/VoteButtonAnimate';
+import VoteButton from './VoteButton';
+import TransitionAlert from '../auth/TransitionAlert';
 
-// interface Props
-//   post: Post;
-// }
+interface VotePanelProps {
+  post: PostEntity;
+}
 
-export default function VotePanel(/*{ post }: Props*/) {
-  //const { user } = useAuth();
-  const [isUpvoted, setIsUpvoted] = useState(false);
-  const [isDownvoted, setIsDownvoted] = useState(false);
-  const [upvotes, setUpvotes] = useState(0);
-  const [downvotes, setDownvotes] = useState(0);
+export default function VotePanel( {post} : VotePanelProps) {
+  const { authedUser } = useAuth();
+  const [isVoting, setIsVoting] = useState(false);
+  const [isAlert, setIsAlert] = useState(false);
+  const [upvotes, setUpvotes] = useState(post.upvotes.length);
+  const [downvotes, setDownvotes] = useState(post.downvotes.length);
+  const [isUpvoted, setIsUpvoted] = useState(authedUser ? post.upvotes.includes(authedUser.nonauth.id) : false);
+  const [isDownvoted, setIsDownvoted] = useState(authedUser ? post.downvotes.includes(authedUser.nonauth.id) : false);
 
-  const handleToggleUpvote = () => {
-    if (isUpvoted) { //unupvote
-      setIsUpvoted(false);
-      setUpvotes((prevUpvotes) => prevUpvotes - 1);
-    }
-    else if (isDownvoted) { //undownvote and upvote
-      setIsDownvoted(false);
-      setDownvotes((prevDownvotes) => prevDownvotes - 1);
-      setIsUpvoted(true);
-      setUpvotes((prevUpvotes) => prevUpvotes + 1);
-    }
-    else { //upvote
-      setIsUpvoted(true);
-      setUpvotes((prevUpvotes) => prevUpvotes + 1);
-    }
+  const handleSignupDialog = () => {
+
   }
 
-  const handleToggleDownvote = () => {
-    if (isDownvoted) { //undownvote
-      setIsDownvoted(false);
-      setDownvotes((prevDownvotes) => prevDownvotes - 1);
+  const handleToggleUpvote = async () => {
+    setIsVoting(true);
+    if (!authedUser) {
+      handleSignupDialog()
+    } else if (isUpvoted) { //unupvote
+      try {
+        setIsUpvoted(false);
+        setUpvotes((prevUpvotes) => prevUpvotes - 1);
+        await PostInteraction.unvotePost(authedUser.nonauth.id, post.postID);
+      } catch (error: any) {
+        setIsAlert(true)
+        console.error(error.message)
+      }
+    }
+    else if (isDownvoted) { //undownvote and upvote
+      try {
+        setIsDownvoted(false);
+        setDownvotes((prevDownvotes) => prevDownvotes - 1);
+        setIsUpvoted(true);
+        setUpvotes((prevUpvotes) => prevUpvotes + 1);
+        await PostInteraction.unvotePost(authedUser.nonauth.id, post.postID);
+        await PostInteraction.upvotePost(authedUser.nonauth.id, post.postID);
+      } catch (error: any) {
+        setIsAlert(true)
+        console.error(error.message)
+      }
+    }
+    else { //upvote
+      try {
+        setUpvotes((prevUpvotes) => prevUpvotes + 1);
+        setIsUpvoted(true);
+        await PostInteraction.upvotePost(authedUser.nonauth.id, post.postID);
+      } catch (error: any) {
+        setIsAlert(true)
+        console.error(error.message)
+      }
+    }
+    setIsVoting(false);
+  }
+
+  const handleToggleDownvote = async () => {
+    setIsVoting(true);
+    if (!authedUser) {
+      handleSignupDialog()
+    } else  if (isDownvoted) { //undownvote
+      try {
+        setIsDownvoted(false);
+        setDownvotes((prevDownvotes) => prevDownvotes - 1);
+        await PostInteraction.unvotePost(authedUser.nonauth.id, post.postID);
+      } catch (error: any) {
+        setIsAlert(true)
+        console.error(error.message)
+      }
     }
     else if (isUpvoted) { //unupvote and downvote
-      setIsUpvoted(false);
-      setUpvotes((prevUpvotes) => prevUpvotes - 1);
-      setIsDownvoted(true);
-      setDownvotes((prevDownvotes) => prevDownvotes + 1);
+      try {
+        setIsUpvoted(false);
+        setUpvotes((prevUpvotes) => prevUpvotes - 1);
+        setIsDownvoted(true);
+        setDownvotes((prevDownvotes) => prevDownvotes + 1);
+        await PostInteraction.unvotePost(authedUser.nonauth.id, post.postID);
+        await PostInteraction.downvotePost(authedUser.nonauth.id, post.postID);
+      } catch (error: any) {
+        setIsAlert(true)
+        console.error(error.message)
+      }
     }
     else { //downvote
-      setIsDownvoted(true);
-      setDownvotes((prevDownvotes) => prevDownvotes + 1);
+      try {
+        setIsDownvoted(true);
+        setDownvotes((prevDownvotes) => prevDownvotes + 1);
+        await PostInteraction.downvotePost(authedUser.nonauth.id, post.postID);
+      } catch (error: any) {
+        setIsAlert(true)
+        console.error(error.message)
+      }
     }
+    setIsVoting(false);
   }
 
   return (
     <>
       <Box sx={{display: 'flex', justifyContent:'center', height:30, width:30 }}>
-        <VoteButtonAnimate onClick={handleToggleUpvote}>
-          {isUpvoted ? <ArrowCircleUpTwoToneIcon sx={{ fontSize:35, color: green[500] }}/> : <ArrowCircleUpIcon sx={{}}fontSize="medium" /> }
-        </VoteButtonAnimate>
+        <VoteButton disabled={isVoting} onClick={handleToggleUpvote}>
+          {isUpvoted ? <ArrowCircleUpTwoToneIcon sx={{ fontSize:35, color: green[500] }}/> : <ArrowCircleUpIcon fontSize="medium" /> }
+        </VoteButton>
       </Box>
       <Box sx={{display: 'flex', justifyContent:'center', alignItems:'center', height:40, width:'auto', minWidth:25, marginX:'3px' }}>
         <Typography >
-          {fDecimal(upvotes-downvotes)  /*fShortenNumber(likes)*/}
+          {fDecimal(upvotes-downvotes)}
         </Typography>
       </Box>
       <Box sx={{display: 'flex', justifyContent:'center', height:30, width:30, }}>
-        <VoteButtonAnimate onClick={handleToggleDownvote} >
+        <VoteButton disabled={isVoting} onClick={handleToggleDownvote} >
           {isDownvoted ? <ArrowCircleDownTwoToneIcon sx={{ fontSize:35, color: pink[500] }} /> : <ArrowCircleDownIcon fontSize="medium" /> }
-        </VoteButtonAnimate>
+        </VoteButton>
       </Box>
+      {isAlert &&
+        <TransitionAlert errorMessage={"오류가 발생했습니다."} onClose={()=>setIsAlert(false)} sx={{ ml: 2 }}/>
+      }
     </>
   );
 }
