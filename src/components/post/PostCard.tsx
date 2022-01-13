@@ -23,6 +23,7 @@ import DesktopCopyButton from './DesktopCopyButton';
 import VotePanel from './VotePanel';
 import TrendingIcons from './TrendingIcons';
 import { PostInteraction } from 'src/db/apis/PostInteraction';
+import UnstyledWhenDisabledIconButton from './UnstyledWhenDisabledIconButton';
 
 // ----------------------------------------------------------------------
 
@@ -32,7 +33,8 @@ interface PostCardProps {
 
 export default function PostCard( { post }: PostCardProps ) {
   const { authedUser } = useAuth();
-  const [isFavorited, setIsFavorited] = useState(authedUser?.nonauth.activity.favorites.includes(post.postID));
+  const [isInteracting, setIsInteracting] = useState(false);
+  const [isFavorited, setIsFavorited] = useState(authedUser ? authedUser.nonauth.activity.favorites.includes(post.postID) : false);
 
   let canNativeMobileShare = 'canShare' in navigator; //checks if user's device has a native share functionality
   //window.navigator.canShare() //this is the 'proper' way according to mozilla to check if canShare, but im getting errors using this method. use this workaround detailed here instead: https://stackoverflow.com/questions/57345539/navigator-canshare-in-typescript-permissions-denied
@@ -42,38 +44,46 @@ export default function PostCard( { post }: PostCardProps ) {
   }
 
   const handleToggleFavorited = async () => {
+    setIsInteracting(true);
     if (!authedUser) {
       handleSignupDialog()
     } else if (isFavorited) {
       try {
-        await PostInteraction.unfavoritePost(authedUser.nonauth.id, post.postID)
         setIsFavorited(prevIsFavorited => !isFavorited);
+        await PostInteraction.unfavoritePost(authedUser.nonauth.id, post.postID)
       } catch (error: any) {
         console.error(error.message);
+        setIsFavorited(prevIsFavorited => !isFavorited);
       }
     } else { //!isFavorited
       try {
-        await PostInteraction.favoritePost(authedUser.nonauth.id, post.postID)
         setIsFavorited(prevIsFavorited => !isFavorited);
+        await PostInteraction.favoritePost(authedUser.nonauth.id, post.postID)
       } catch (error: any) {
         console.error(error.message);
+        setIsFavorited(prevIsFavorited => !isFavorited);
       }
     }
+    setIsInteracting(false);
   }
 
   //TODO add proper icons (in src/public folder) so that share action on Kakao/kakaostory/naver is accompanied by our logo
   //TODO add a custom share popup for devices with width small enough to be mobile which dont qualify for navigator.share (would much rather create a custom share feature than just have them use copy button)
   const handleNativeMobileShare = async () => {
+    setIsInteracting(true);
     try {
       await navigator.share({
         //title: "title of post!", //mozilla: "the title may be ignored"
         //text: 'Check out this post on 인싸전!', using the text property makes the share image go away :( so leave it off
         url: `https://inssajeon.com/post/${post.postID}`,
       })
-      //await PostInteraction.sharePost(post.postID);
+      if (authedUser) {
+        await PostInteraction.sharePost(authedUser.nonauth.id, post.postID);
+      }
     } catch (error: any) {
       console.error('Something went wrong sharing. error: ', error);
     }
+    setIsInteracting(false);
   }
 
   return (
@@ -96,15 +106,15 @@ export default function PostCard( { post }: PostCardProps ) {
       <Box sx={{ p:2, height:60, display:'flex', flexDirection: "row", alignItems:"center", justifyContent:"center", }}>
         <VotePanel post={post}/>
         <Box sx={{ flexGrow: 1 }} />
-        <IconButton onClick={handleToggleFavorited}>
+        <UnstyledWhenDisabledIconButton disabled={isInteracting} onClick={handleToggleFavorited}>
           {isFavorited ? <BookmarkIcon /> : <BookmarkBorderIcon/>}
-        </IconButton>
+        </UnstyledWhenDisabledIconButton>
         {canNativeMobileShare && 
-          <IconButton sx={{}} onClick={handleNativeMobileShare}>
+          <UnstyledWhenDisabledIconButton disabled={isInteracting} onClick={handleNativeMobileShare}>
             <IosShareIcon />
-          </IconButton>}
+          </UnstyledWhenDisabledIconButton>}
         {!canNativeMobileShare &&
-          <DesktopCopyButton postID={post.postID}/>}
+          <DesktopCopyButton isDisabled={isInteracting} postID={post.postID}/>}
       </Box>
     </Card>
   );
