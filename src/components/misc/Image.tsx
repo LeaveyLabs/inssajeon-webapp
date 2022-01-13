@@ -1,7 +1,7 @@
-import { LazyLoadImage, LazyLoadImageProps } from 'react-lazy-load-image-component';
+import { Box, BoxProps, SxProps } from '@mui/material';
 // @mui
 import { Theme } from '@mui/material/styles';
-import { Box, BoxProps, SxProps } from '@mui/material';
+import { LazyLoadImage, LazyLoadImageProps } from 'react-lazy-load-image-component';
 
 // ----------------------------------------------------------------------
 

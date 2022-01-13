@@ -2,20 +2,27 @@ import { m } from 'framer-motion';
 import { forwardRef, ReactNode } from 'react';
 // @mui
 import { Box, IconButton, IconButtonProps } from '@mui/material';
+import { styled } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
-const VoteButtonAnimate = forwardRef<HTMLButtonElement, IconButtonProps>(
+const VoteIconButton = styled(IconButton)(({ theme }) => ({
+  '&.Mui-disabled':	{
+    color: theme.palette.grey[600],
+  },
+}));
+
+const VoteButton = forwardRef<HTMLButtonElement, IconButtonProps>(
   ({ children, size = 'medium', ...other }, ref) => (
     <AnimateWrap size={size}>
-      <IconButton size={size} disableRipple={true}  ref={ref} {...other} >
+      <VoteIconButton size={size} disableRipple={true}  ref={ref} {...other} >
         {children}
-      </IconButton>
+      </VoteIconButton>
     </AnimateWrap>
   )
 );
 
-export default VoteButtonAnimate;
+export default VoteButton;
 
 // ----------------------------------------------------------------------
 

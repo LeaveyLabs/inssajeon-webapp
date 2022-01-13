@@ -1,11 +1,11 @@
-import * as Yup from 'yup';
-import { useState } from 'react';
-import { useFormik, Form, FormikProvider } from 'formik';
-// @mui
-import { Stack, TextField, IconButton, InputAdornment, Alert } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+// @mui
+import { IconButton, InputAdornment, Stack, TextField } from '@mui/material';
+import { Form, FormikProvider, useFormik } from 'formik';
+import { useState } from 'react';
 // hooks
 import useAuth from 'src/hooks/useAuth';
+import * as Yup from 'yup';
 // components
 import Iconify from '../misc/Iconify';
 import TransitionAlert from './TransitionAlert';
@@ -18,7 +18,12 @@ type InitialValues = {
   passwordConfirmation: string,
 };
 
-export default function SignupForm() {
+
+type SignupFormProps = {
+  goToCreateProfile: VoidFunction;
+}
+
+export default function SignupForm( {goToCreateProfile} : SignupFormProps) {
   const { signup,  } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
@@ -47,11 +52,11 @@ export default function SignupForm() {
       passwordConfirmation: '',
     },
     validationSchema: RegisterSchema,
-    onSubmit: async (values, { setErrors, setSubmitting, resetForm, setFieldValue, setFieldTouched }) => {
+    onSubmit: async (values, { setSubmitting, resetForm, setFieldValue, setFieldTouched }) => {
       signup(values.email, values.password)
       .then(() => {
         resetForm();
-        //TODO push to "setup profile username" like reddit does
+        goToCreateProfile();
       })
       .catch((error: any) => {
         setSignupError(error.message)

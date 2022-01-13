@@ -1,24 +1,20 @@
-import { ReactNode } from 'react';
-import { NavLink as RouterLink } from 'react-router-dom';
-// @mui
-import { alpha, styled } from '@mui/material/styles';
 import {
   Box,
   Link,
-  LinkProps,
-  ListItemText,
-  ListItemIcon,
-  ListItemButton,
-  ListItemButtonProps,
+  LinkProps, ListItemButton,
+  ListItemButtonProps, ListItemIcon, ListItemText
 } from '@mui/material';
-// config
-import {
-  SIDEBAR_ROOT_ITEM_HEIGHT,
-  SIDEBAR_SUB_ITEM_HEIGHT,
-  SIDEBAR_ICON_ITEM_SIZE,
-} from '../../../../config';
+// @mui
+import { alpha, styled } from '@mui/material/styles';
+import { ReactNode } from 'react';
+import { NavLink as RouterLink } from 'react-router-dom';
 //
 import Iconify from '../../../../components/misc/Iconify';
+// config
+import {
+  SIDEBAR_ICON_ITEM_SIZE, SIDEBAR_ROOT_ITEM_HEIGHT,
+  SIDEBAR_SUB_ITEM_HEIGHT
+} from '../../../../config';
 // type
 import { NavItemProps } from './type';
 

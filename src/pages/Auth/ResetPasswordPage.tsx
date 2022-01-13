@@ -1,22 +1,16 @@
 //react
-import { useState } from 'react';
-
-import { Link as RouterLink } from 'react-router-dom';
+import { Box, Button, Container, Typography } from '@mui/material';
 // @mui
 import { styled } from '@mui/material/styles';
-import { Box, Card, Link, Container, Typography, Button } from '@mui/material';
+import { useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import { SentIcon } from 'src/assets';
-// hooks
-import useAuth from 'src/hooks/useAuth';
-import useResponsive from 'src/hooks/useResponsive';
+import ResetPasswordForm from 'src/components/auth/ResetPasswordForm';
 // routes
 import { PAGE_PATHS } from 'src/routing/paths';
 // components
 import Page from '../Page';
-import Image from 'src/components/misc/Image';
-import SignupForm from 'src/components/auth/SignupForm';
-import ClickwableWideLogo from 'src/components/misc/ClickableWideLogo';
-import ResetPasswordForm from 'src/components/auth/ResetPasswordForm';
+
 
 // ----------------------------------------------------------------------
 

@@ -17,11 +17,11 @@ export const PostInteraction = function () {};
 PostInteraction.upvotePost = async (userID:string, postID:string) : Promise<void> => {
     try { 
         await updateDoc(doc(userDatabase, userID), 
-        {USER_UPVOTES_PROPERTY: arrayUnion(postID),
-        USER_DOWNVOTES_PROPERTY: arrayRemove(postID)});
+        {[USER_UPVOTES_PROPERTY]: arrayUnion(postID),
+        [USER_DOWNVOTES_PROPERTY]: arrayRemove(postID)});
         await updateDoc(doc(postDatabase, postID), 
-        {POST_UPVOTES_PROPERTY: arrayUnion(userID),
-        POST_DOWNVOTES_PROPERTY: arrayRemove(userID)}); 
+        {[POST_UPVOTES_PROPERTY]: arrayUnion(userID),
+        [POST_DOWNVOTES_PROPERTY]: arrayRemove(userID)}); 
     }
     catch (e) { throw new Error("Could not add upvote to post"); }
 }

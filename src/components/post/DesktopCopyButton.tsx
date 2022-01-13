@@ -1,12 +1,12 @@
-import * as React from 'react';
-import { useState } from 'react';
-//mui
-import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
+import ContentCopy from '@mui/icons-material/ContentCopy';
 import { IconButton } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import {CopyToClipboard} from 'react-copy-to-clipboard';
-import ContentCopy from '@mui/icons-material/ContentCopy';
+//mui
+import Tooltip, { tooltipClasses, TooltipProps } from '@mui/material/Tooltip';
 import Zoom from '@mui/material/Zoom';
+import * as React from 'react';
+import { useState } from 'react';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />

@@ -1,7 +1,7 @@
+// @mui
+import { Collapse, List } from '@mui/material';
 import { useState } from 'react';
 import { matchPath, useLocation } from 'react-router-dom';
-// @mui
-import { List, Collapse } from '@mui/material';
 //
 import { NavItemRoot, NavItemSub } from './NavItem';
 import { NavListProps } from './type';

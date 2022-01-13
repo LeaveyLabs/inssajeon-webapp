@@ -11,7 +11,6 @@ import { StrictMode } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 // contexts
-import { SidebarProvider } from './contexts/SidebarContext';
 import { AuthProvider } from './contexts/AuthContext';
 //
 import App from './App';
@@ -23,11 +22,9 @@ ReactDOM.render(
   <StrictMode>
     <HelmetProvider>
       <AuthProvider>
-        <SidebarProvider>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
-        </SidebarProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
       </AuthProvider>
     </HelmetProvider>
   </StrictMode>,

@@ -1,21 +1,17 @@
 //react
-import { useState } from 'react';
-
-import { Link as RouterLink } from 'react-router-dom';
+import { Box, Button, Card, Container, Stack, Typography } from '@mui/material';
 // @mui
 import { styled, useTheme } from '@mui/material/styles';
-import { Box, Stack, Link, Container, Typography, Button, Card } from '@mui/material';
-import { SentIcon } from 'src/assets';
-// hooks
-import useAuth from 'src/hooks/useAuth';
+import { useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
+import ForgotPasswordForm from 'src/components/auth/ForgotPasswordForm';
+import ClickwableWideLogoLarge from 'src/components/misc/ClickableWideLogoLarge';
 import useResponsive from 'src/hooks/useResponsive';
 // routes
 import { PAGE_PATHS } from 'src/routing/paths';
 // components
 import Page from '../Page';
-import Image from 'src/components/misc/Image';
-import ForgotPasswordForm from 'src/components/auth/ForgotPasswordForm';
-import ClickwableWideLogoLarge from 'src/components/misc/ClickableWideLogoLarge';
+
 
 const MobileStyle = styled(Container)(({ theme }) => ({
   maxWidth: 480,
@@ -43,7 +39,7 @@ type ContentProps = {
 
 //TODO add forgotEmail and signupEmailConfirmation functionality to authentication process
 
-function ForgotPasswordContent( {email, sent, setEmail, setSent} : ContentProps) {
+function ForgotPasswordContent( {sent, setSent} : ContentProps) {
   return (
     <Box sx={{ maxWidth: 480 }} >
       {!sent ? (
@@ -72,17 +68,9 @@ function ForgotPasswordContent( {email, sent, setEmail, setSent} : ContentProps)
         </>
       ) : (
         <Box sx={{ textAlign: 'center' }}>
-          <Typography variant="h3" gutterBottom>
-            성공
-          </Typography>
-          <Typography>
-            확인 이메일 보냈습니다.
-            <br />
-            이메일 없으면,&nbsp;
-            <strong>{email}</strong>
-            과 관현된 계정이 존재하지 않습니다.
-          </Typography>
-
+          <Typography variant="h3" gutterBottom>성공</Typography>
+          <Typography>확인 이메일 보냈습니다.</Typography>
+          <Typography>이메일 못 찾으면, 입력하신 이메일과 관련된 계정이 존재하지 않습니다.</Typography>
           <Button
             size="large"
             variant="contained"
@@ -101,7 +89,6 @@ function ForgotPasswordContent( {email, sent, setEmail, setSent} : ContentProps)
 // ----------------------------------------------------------------------
 
 export default function ForgotPasswordPage() {
-  const { method } = useAuth();
   const isMobile = useResponsive('down', 'tablet'); //TODO why is it taking so long to be repsonsive here?
   const theme = useTheme()
   const [email, setEmail] = useState('');

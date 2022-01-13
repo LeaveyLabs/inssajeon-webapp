@@ -2,12 +2,12 @@
 import { Stack } from '@mui/material';
 // hooks
 import { useEffect, useState } from 'react';
+// database entities
+import { PostEntity } from '../../db/entities/posts/PostEntity';
 // components
 import PostCard from '../post/PostCard';
 import NoPostsCard from './NoPostsCard';
 import PostSkeleton from './PostSkeleton';
-// database entities
-import { PostEntity } from '../../db/entities/posts/PostEntity';
 
 // ----------------------------------------------------------------------
 

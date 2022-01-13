@@ -1,6 +1,5 @@
-import React from 'react'
-import { Skeleton } from '@mui/material';
-import { Box, Container } from '@mui/material';
+import { Box, Container, Skeleton } from '@mui/material';
+import React from 'react';
 
 export default function PostSkeleton() {
   return (
