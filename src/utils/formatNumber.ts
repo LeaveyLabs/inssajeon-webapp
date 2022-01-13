@@ -1,4 +1,6 @@
+import { FormatTextdirectionLToR, LensTwoTone } from '@mui/icons-material';
 import numeral from 'numeral';
+import { OutputFileType } from 'typescript';
 
 // ----------------------------------------------------------------------
 
@@ -23,47 +25,51 @@ export function fData(number: string | number) {
 }
 
 export function fDecimal(number: number) {
+  let formatted: string = "";
   if (number < 1000) return number; 
   else if (number < 10000 ) //천
   {
     let cheon: number = Math.floor(number / 1000)
     let asstring: string = numeral(number).format('0')
     let baek: string = asstring.charAt(asstring.length - 3)
-    return cheon + "." + baek + "천"
+    formatted = cheon + "." + baek + "천"
   }
   else if (number < 10000000 ) //만
   {
     let mahn: number = Math.floor(number/10000)
     let asstring: string = numeral(number).format('0')
     let cheon: string = asstring.charAt(asstring.length - 4)
-    return mahn + "." + cheon + "만"
+    formatted = mahn + "." + cheon + "만"
   }
   else if (number < 100000000 ) //천만
   {
     let cheonman: number = Math.floor(number/10000000)
     let asstring: string = numeral(number).format('0')
     let baekman: string = asstring.charAt(asstring.length - 7)
-    return cheonman + "." + baekman + "천만"
+    formatted = cheonman + "." + baekman + "천만"
   }
   else if (number < 100000000000 ) //억
   {
     let oek: number = Math.floor(number/100000000)
     let asstring: string = numeral(number).format('0')
     let cheonman: string = asstring.charAt(asstring.length - 8)
-    return oek + "." + cheonman + "억"
+    formatted = oek + "." + cheonman + "억"
   }
   else if (number < 1000000000000 ) //천억
   {
     let cheonoek: number = Math.floor(number/100000000000)
     let asstring: string = numeral(number).format('0')
     let baekoek: string = asstring.charAt(asstring.length - 11)
-    return cheonoek + "." + baekoek + "천억"
+    formatted = cheonoek + "." + baekoek + "천억"
   }
   else //if (number < 100000000000 ) //조
   {
     let jo: number = Math.floor(number/1000000000000)
     let asstring: string = numeral(number).format('0')
     let cheonoek: string = asstring.charAt(asstring.length - 12)
-    return jo + "." + cheonoek + "조"
+    formatted = jo + "." + cheonoek + "조"
   }
+  if (formatted.length > 5) {
+    return formatted.slice(0,3) + formatted.slice(-1); //dont display decimals if three digits on left of decimal
+  } else return formatted;
 }

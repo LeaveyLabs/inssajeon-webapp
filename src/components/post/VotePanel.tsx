@@ -19,8 +19,8 @@ export default function VotePanel(/*{ post }: Props*/) {
   //const { user } = useAuth();
   const [isUpvoted, setIsUpvoted] = useState(false);
   const [isDownvoted, setIsDownvoted] = useState(false);
-  const [upvotes, setUpvotes] = useState(10000005);
-  const [downvotes, setDownvotes] = useState(5);
+  const [upvotes, setUpvotes] = useState(0);
+  const [downvotes, setDownvotes] = useState(0);
 
   const handleToggleUpvote = () => {
     if (isUpvoted) { //unupvote
@@ -63,7 +63,7 @@ export default function VotePanel(/*{ post }: Props*/) {
           {isUpvoted ? <ArrowCircleUpTwoToneIcon sx={{ fontSize:35, color: green[500] }}/> : <ArrowCircleUpIcon sx={{}}fontSize="medium" /> }
         </VoteButtonAnimate>
       </Box>
-      <Box sx={{display: 'flex', justifyContent:'center', alignItems:'center', height:40, width:70, }}>
+      <Box sx={{display: 'flex', justifyContent:'center', alignItems:'center', height:40, width:'auto', minWidth:25, marginX:'3px' }}>
         <Typography >
           {fDecimal(upvotes-downvotes)  /*fShortenNumber(likes)*/}
         </Typography>
