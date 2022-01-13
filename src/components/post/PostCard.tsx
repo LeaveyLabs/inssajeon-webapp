@@ -1,25 +1,28 @@
-// @mui
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+//react
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import CircleIcon from '@mui/icons-material/Circle';
 import IosShareIcon from '@mui/icons-material/IosShare';
 import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
 import {
+  Avatar,
   Box, Card, Divider, IconButton, Link, Stack, Typography
 } from '@mui/material';
 import { red } from '@mui/material/colors';
 import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-// utils
-// import { fDate } from '../../../../utils/formatTime';
-// import { fShortenNumber } from '../../../../utils/formatNumber';
-// // components
+// components
 import PostMoreButton from 'src/components/post/PostMoreButton';
 import { PostEntity } from 'src/db/entities/posts/PostEntity';
+//hooks
+import useAuth from 'src/hooks/useAuth';
+import { PAGE_PATHS } from 'src/routing/paths';
+// utils
 import { fDate } from 'src/utils/formatTime';
+import getAvatarColor from 'src/utils/getAvatarColor';
 import DesktopCopyButton from './DesktopCopyButton';
 import VotePanel from './VotePanel';
+import { deepOrange } from '@mui/material/colors';
 
 // ----------------------------------------------------------------------
 
@@ -28,22 +31,43 @@ interface PostCardProps {
 }
 
 export default function PostCard( { post }: PostCardProps ) {
-  //const { user } = useAuth();
-  const [isUpvoted, setIsUpvoted] = useState(false);
-  const [isDownvoted, setIsDownvoted] = useState(false);
-  const [isFavorited, setIsFavorited] = useState(false);
-  const [upvotes, setUpvotes] = useState(100);
-  const [downvotes, setDownvotes] = useState(5);
+  const { authedUser } = useAuth();
+  const [isUpvoted, setIsUpvoted] = useState(authedUser ? post.upvotes.includes(authedUser.nonauth.id) : false);
+  const [isDownvoted, setIsDownvoted] = useState(authedUser ? post.downvotes.includes(authedUser.nonauth.id) : false);
+  const [isFavorited, setIsFavorited] = useState(authedUser?.nonauth.activity.favorites.includes(post.postID));
+  const [isFlagged, setIsFlagged] = useState(authedUser ? post.flags.includes(authedUser.nonauth.id) : false);
+  const [upvotes, setUpvotes] = useState(post.metrics.upvoteCount);
+  const [downvotes, setDownvotes] = useState(post.metrics.downvoteCount);
 
   let canNativeMobileShare = 'canShare' in navigator; //checks if user's device has a native share functionality
   //window.navigator.canShare() //this is the 'proper' way according to mozilla to check if canShare, but im getting errors using this method. use this workaround detailed here instead: https://stackoverflow.com/questions/57345539/navigator-canshare-in-typescript-permissions-denied
 
+  const handleSignupDialog = () => {
+
+  }
+
   const handleToggleFavorited = () => {
-    setIsFavorited(prevIsFavorited => !isFavorited);
+    if (!authedUser) {
+      handleSignupDialog()
+    } else {
+      setIsFavorited(prevIsFavorited => !isFavorited);
+      //TODO firebase call
+    }
+  }
+
+  const handleFlagged = () => {
+    if (!authedUser) {
+      handleSignupDialog()
+    } else if (isFlagged) {
+      //TODO "you already flagged this"
+    } else {
+      setIsFlagged(true);
+      //TODO openFlagDialogue
+    }
   }
 
   //TODO add proper icons (in src/public folder) so that share action on Kakao/kakaostory/naver is accompanied by our logo
-  //TODO add a custom share pop up for devices with width small enough to be mobile which dont qualify for navigator.share (would much rather create a custom share feature than just have them use copy button)
+  //TODO add a custom share popup for devices with width small enough to be mobile which dont qualify for navigator.share (would much rather create a custom share feature than just have them use copy button)
   const handleNativeMobileShare = async () => {
       navigator
       .share({
@@ -60,20 +84,15 @@ export default function PostCard( { post }: PostCardProps ) {
     
   }
 
-  //notes on custom hook for menu
-  //https://github.com/jcoreio/material-ui-popup-state
+  //notes on custom hook for menu: https://github.com/jcoreio/material-ui-popup-state
   return (
     <Card >
       <Box sx={{ px:2, height:60, display:'flex', flexDirection: "row", alignItems:"center", justifyContent:"center", }}>
-        <AccountCircleIcon sx={{mx:1}} />
-        <Link to={`/profile/${post.userProfile.username}`} variant="subtitle1" color="text.primary" component={RouterLink}>
-            {post.userProfile.username}
-          </Link>
+        <Avatar sx={{mx:1, width:30, height:30, bgcolor: getAvatarColor(post.userProfile.username) }} src={post.userProfile.picPath} />
+        <Link to={`${PAGE_PATHS.dashboard.profile}/${post.userProfile.username}`} variant="subtitle1" color="text.primary" component={RouterLink}>{post.userProfile.username}</Link>
         <CircleIcon sx={{ color:'gray',fontSize: 4, ml:2 }}/>
-        <Typography variant="caption" sx={{ mx:2,color: 'text.secondary' }}>
-            {fDate((post.timestamp.toDate()))} {/*2일 전에 fDate(post.createdAt)*/}
-        </Typography>
-        <LocalFireDepartmentIcon sx={{ color: red[500] }}/>
+        <Typography variant="caption" sx={{ mx:2,color: 'text.secondary' }}>{fDate((post.timestamp.toDate()))}</Typography>
+        {upvotes > 0 && <LocalFireDepartmentIcon sx={{ color: red[500] }}/>}
         <Box sx={{ flexGrow: 1 }} />
         <PostMoreButton/>
       </Box>

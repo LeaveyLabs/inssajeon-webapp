@@ -3,8 +3,6 @@ import { Box, Card, Container, Link, Stack, Typography } from '@mui/material';
 import { styled, useTheme } from '@mui/material/styles';
 import { Link as RouterLink } from 'react-router-dom';
 import ClickwableWideLogoLarge from 'src/components/misc/ClickableWideLogoLarge';
-// hooks
-import useAuth from 'src/hooks/useAuth';
 import useResponsive from 'src/hooks/useResponsive';
 // routes
 import { PAGE_PATHS } from 'src/routing/paths';
@@ -54,7 +52,6 @@ function LoginContent() {
 }
 
 export default function LoginPage() {
-  const {  } = useAuth();
   const isMobile = useResponsive('down', 'tablet'); //TODO why is it taking so long to be repsonsive here?
   const theme = useTheme()
 

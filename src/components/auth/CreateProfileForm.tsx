@@ -46,7 +46,7 @@ export default function CreateProfileForm(  ) {
       else {
         try {
           if (authedUser) {
-            await ProfileInteraction.setUsername(authedUser.auth.uid, values.username);
+            await ProfileInteraction.setUsername(authedUser.auth.uid, values.username); //TODO combine these two firebase calls into one
             navigate(PAGE_PATHS.dashboard.home, { replace: true });
           }
           else { //this should never be reached because CreateProfileForm only appears after being logged in

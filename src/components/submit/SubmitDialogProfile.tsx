@@ -23,10 +23,7 @@ export default function SubmitDialogProfile( ) {
   return (
     <Link underline="none" color="inherit">
       <RootStyle>
-        <Avatar
-          src=""
-          alt="Rayan Moran"
-        />
+        <Avatar src="" alt="Rayan Moran"/>
         <Box sx={{ml: 2}}>
           <Typography variant="subtitle1" noWrap>
             {authedUser?.nonauth.profile.username}
