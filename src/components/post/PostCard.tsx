@@ -10,7 +10,6 @@ import {
   Avatar,
   Box, Card, Divider, IconButton, Link, Stack, Typography
 } from '@mui/material';
-import { styled } from '@mui/material';
 // components
 import PostMoreButton from 'src/components/post/PostMoreButton';
 import { PostEntity } from 'src/db/entities/posts/PostEntity';

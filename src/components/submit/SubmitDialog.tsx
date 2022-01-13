@@ -55,9 +55,9 @@ export default function SubmitDialog( {open, handleClose}: SubmitDialogProps ) {
       scroll='paper'
     >
       <DialogTitle sx={{ m: 0, p: 2, display: 'flex', justifyContent: 'center' }} >
-        <Typography variant="h2" >
-          새 단어 정의하기
-        </Typography>
+        <div>
+          <Typography variant="h2" >새 단어 정의하기</Typography> {/*typography within dialog title must be wrapped in a div to avoid error https://github.com/mbrn/material-table/issues/653*/}
+        </div>
         <IconButton 
           aria-label="close"
           onClick={handleClose}
