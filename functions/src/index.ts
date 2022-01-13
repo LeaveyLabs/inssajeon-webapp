@@ -51,12 +51,12 @@ export const onPostUpdate = functions.firestore.document("posts/{postID}")
       await wordOfPost.update({trendscore:
         admin.firestore.FieldValue.increment(currTrendscore)});
 
-      return change.after.ref.set({
+      return change.after.ref.update({
         "metrics.upvoteCount": data.upvotes.length,
         "metrics.downvoteCount": data.downvotes.length,
         "metrics.shareCount": data.shares.length,
         "metrics.trendscore": currTrendscore,
-      }, {merge: true});
+      });
     });
 
 export const onPostCreate = functions.firestore.document("posts/{postID}")
