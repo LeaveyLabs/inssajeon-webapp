@@ -92,11 +92,11 @@ export default function Searchbar(  ) {
   }
   
   let navigate = useNavigate();
+
   const handleKeyDown = (key:string) : void => {
     if (key === 'Enter') {
       if(!searchInput.length) return;
       navigate(`${PAGE_PATHS.dashboard.words}/${searchInput}`);
-      console.log(searchInput);
     }
   }
 
