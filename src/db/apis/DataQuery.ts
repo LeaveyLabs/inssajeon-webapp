@@ -37,8 +37,8 @@ export enum ProfileOrder {
 };
 
 const profileOrderQuery:Array<QueryConstraint> = [
-    orderBy("info.username"),
-    orderBy("info.inssajeom", "desc"),
+    orderBy("profile.username"),
+    orderBy("profile.inssajeom", "desc"),
 ];
 
 /**
