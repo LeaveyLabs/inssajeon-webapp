@@ -1,4 +1,5 @@
 // @mui
+import { useParams } from 'react-router';
 import Feed from 'src/components/feed/Feed';
 //firebase
 import { DataQuery, PostOrder } from '../../db/apis/DataQuery';
@@ -7,9 +8,14 @@ import Page from '../Page';
 // ----------------------------------------------------------------------
 
 export default function WordsPage() {
+
+  const { id } = useParams();
+  console.log(id);
+
   async function getNewPosts() {
     try {
-      return await DataQuery.getAllPosts(PostOrder.Trendscore); //TODO change
+      if (id === undefined) return [];
+      return await DataQuery.searchPostByWord(id, PostOrder.Trendscore);
     } catch (error) {
       console.log(error)
     }
