@@ -42,21 +42,21 @@ export const onPostUpdate = functions.firestore.document("posts/{postID}")
       const authorOfPost = db.doc(`users/${data.userID}`);
       const wordOfPost = db.doc(`words/${data.word}`);
 
-      await authorOfPost.update({"info.inssajeom":
+      await authorOfPost.update({"profile.inssajeom":
         admin.firestore.FieldValue.increment(-prevTrendscore)});
-      await authorOfPost.update({"info.inssajeom":
+      await authorOfPost.update({"profile.inssajeom":
         admin.firestore.FieldValue.increment(currTrendscore)});
       await wordOfPost.update({trendscore:
         admin.firestore.FieldValue.increment(-prevTrendscore)});
       await wordOfPost.update({trendscore:
         admin.firestore.FieldValue.increment(currTrendscore)});
 
-      return change.after.ref.set({
-        upvoteCount: data.upvotes.length,
-        downvoteCount: data.downvotes.length,
-        shareCount: data.shares.length,
-        trendscore: currTrendscore,
-      }, {merge: true});
+      return change.after.ref.update({
+        "metrics.upvoteCount": data.upvotes.length,
+        "metrics.downvoteCount": data.downvotes.length,
+        "metrics.shareCount": data.shares.length,
+        "metrics.trendscore": currTrendscore,
+      });
     });
 
 export const onPostCreate = functions.firestore.document("posts/{postID}")

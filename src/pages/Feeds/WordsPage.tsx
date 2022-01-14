@@ -1,26 +1,36 @@
 // @mui
-import { Container, Typography, Stack } from '@mui/material';
-// hooks
-import { useEffect, useState } from 'react';
-// components
-import Page from '../Page';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import { useParams } from 'react-router';
 import Feed from 'src/components/feed/Feed';
 //firebase
 import { DataQuery, PostOrder } from '../../db/apis/DataQuery';
+// components
+import Page from '../Page';
 // ----------------------------------------------------------------------
 
 export default function WordsPage() {
-  async function getNewPosts() {
+
+  const { id } = useParams();
+
+  const queryGenerator = (id:string|undefined) => async function getNewPosts() {
     try {
-      return await DataQuery.getAllPosts(PostOrder.Trendscore); //TODO change
+      if (id === undefined) return [];
+      return await DataQuery.searchPostByWord(id, PostOrder.Trendscore);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
+
+  let [queryCall, setQueryCall] = useState(() => queryGenerator(id));
+  
+  useEffect(() => {
+    setQueryCall(() => queryGenerator(id));
+  }, [id]);
 
   return (
     <Page title="단어 또는 표현">
-      <Feed getNewPosts={getNewPosts} />
+      <Feed getNewPosts={queryCall} />
     </Page>
   );
 }

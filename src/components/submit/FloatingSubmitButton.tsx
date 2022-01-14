@@ -1,7 +1,7 @@
 
 //mui
 import EditIcon from '@mui/icons-material/Edit';
-import { Box, Fab } from '@mui/material'
+import { Box, Fab } from '@mui/material';
 //components
 
 interface SubmitDialogProps {

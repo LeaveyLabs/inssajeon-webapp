@@ -1,11 +1,47 @@
-import * as React from 'react';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { IconButton } from '@mui/material';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-import { IconButton } from '@mui/material';
+import PopupState, { bindMenu, bindTrigger } from 'material-ui-popup-state';
+import * as React from 'react';
+import { PostEntity } from 'src/db/entities/posts/PostEntity';
+import useAuth from 'src/hooks/useAuth';
 
-export default function PostMoreButton() {
+interface PostMoreButtonProps {
+  post: PostEntity;
+}
+
+export default function PostMoreButton( {post} : PostMoreButtonProps ) {
+  let {authedUser} = useAuth();
+  const [isFlagged, setIsFlagged] = React.useState(authedUser ? post.flags.includes(authedUser.nonauth.id) : false);
+  
+  const handleSignupDialog = () => {
+    
+  }
+
+  const handleFlagPost = () => {
+    if (!authedUser) {
+      handleSignupDialog()
+    } else if (isFlagged) {
+      //TODO "you already flagged this"
+    } else {
+      setIsFlagged(true);
+      //TODO openFlagDialogue
+    }
+  }
+
+  // const handleBlockUser = () => {
+  //   if (!authedUser) {
+  //     handleSignupDialog()
+  //   } else if (isFlagged) {
+  //     //TODO "you already flagged this"
+  //   } else {
+  //     setIsFlagged(true);
+  //     //TODO openFlagDialogue
+  //   }
+  // }
+
+  //notes on custom hook for menu: https://github.com/jcoreio/material-ui-popup-state
   return (
     <PopupState 
       variant="popover" 
@@ -26,8 +62,8 @@ export default function PostMoreButton() {
               vertical: 'top',
               horizontal: 'right',
             }}>
-            <MenuItem onClick={popupState.close}>신고하기</MenuItem>
-            <MenuItem onClick={popupState.close}>이 사용자을 차단하기</MenuItem>
+            <MenuItem onClick={() => {popupState.close(); handleFlagPost(); } }>신고하기</MenuItem>
+            {/* <MenuItem onClick={() => {popupState.close(); handleBlockUser(); } }>이 사용자을 차단하기</MenuItem> */}
           </Menu>
         </React.Fragment>
       )}

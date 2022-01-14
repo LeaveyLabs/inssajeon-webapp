@@ -134,7 +134,7 @@ DataQuery.searchPostByTag = async (tag: string, ordering:PostOrder,
  * @returns Promise
  */
 DataQuery.searchPostByWord = async (word:string, ordering:PostOrder, 
-    lastDoc?:DocumentSnapshot[]) : Promise<Array<WordEntity>> => {
+    lastDoc?:DocumentSnapshot[]) : Promise<Array<PostEntity>> => {
     /*
     Query all posts with an identical tag. 
     */
@@ -153,7 +153,7 @@ DataQuery.searchPostByWord = async (word:string, ordering:PostOrder,
     Call firebase with these query fields.
     */
     const wordQuery = query(postDatabase, ...queryFields);
-    const wordQueryResult = await firebaseEntityQuery<WordEntity>(
+    const wordQueryResult = await firebaseEntityQuery<PostEntity>(
         wordQuery, PostFactory, lastDoc);
     return wordQueryResult;
 };

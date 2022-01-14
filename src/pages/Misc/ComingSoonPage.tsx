@@ -1,7 +1,6 @@
 // @mui
 import { Container, Typography } from '@mui/material';
 // hooks
-
 // components
 import Page from '../Page';
 

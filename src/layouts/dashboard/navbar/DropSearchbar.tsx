@@ -1,17 +1,14 @@
-import { useState } from 'react';
-// @mui
-import { styled } from '@mui/material/styles';
-import { Input, Slide, Button, InputAdornment, ClickAwayListener } from '@mui/material';
-// utils
-import cssStyles from '../../../utils/cssStyles';
 // components
 import SearchIcon from '@mui/icons-material/Search';
+import { Button, ClickAwayListener, Input, InputAdornment, Slide } from '@mui/material';
+// @mui
+import { styled } from '@mui/material/styles';
+import { useState } from 'react';
 import { IconButtonAnimate } from '../../../components/animate';
-
 import {
-  NAVBAR_HEIGHT,
-  SIDEBAR_WIDTH_DESKTOP,
+  NAVBAR_HEIGHT
 } from '../../../config';
+
 
 // ----------------------------------------------------------------------
 

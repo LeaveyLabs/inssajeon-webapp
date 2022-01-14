@@ -1,22 +1,19 @@
+import { Box, Drawer } from '@mui/material';
+// @mui
+import { styled } from '@mui/material/styles';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-// @mui
-import { styled, useTheme } from '@mui/material/styles';
-import { Box, Stack, Drawer, IconButton } from '@mui/material';
-// hooks
-import useResponsive from '../../../hooks/useResponsive';
-import useCollapseSidebar from '../../../hooks/useCollapseSidebar';
-// utils
-import cssStyles from '../../../utils/cssStyles';
 // config
 import { SIDEBAR_WIDTH_DESKTOP, SIDEBAR_WIDTH_MOBILE } from '../../../config';
+// hooks
+import useResponsive from '../../../hooks/useResponsive';
 // components
 import Scrollbar from './Scrollbar';
 import NavSection from './sidebar-nav';
 //
 import SidebarAccount from './SidebarAccount';
-import SidebarFooter from './SidebarFooter';
 import sidebarConfig from './SidebarConfig';
+import SidebarFooter from './SidebarFooter';
 
 // ----------------------------------------------------------------------
 
@@ -37,7 +34,6 @@ type Props = {
 };
 
 export default function Sidebar({ isOpenSidebar, onCloseSidebar }: Props) {
-  const theme = useTheme();
   const { pathname } = useLocation();
   const isDesktop = useResponsive('up', 'desktop');
 

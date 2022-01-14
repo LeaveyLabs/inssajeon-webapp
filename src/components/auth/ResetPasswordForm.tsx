@@ -1,8 +1,7 @@
 import * as Yup from 'yup';
-import { useState } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
 // @mui
-import { Stack, TextField, IconButton, InputAdornment, Alert } from '@mui/material';
+import { Stack, TextField, Alert } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // hooks
 import useAuth from 'src/hooks/useAuth';
@@ -21,7 +20,6 @@ type Props = {
 
 export default function ResetPasswordForm({ onSent, onGetEmail }: Props) {
   const { resetPassword } = useAuth();
-  //const isMountedRef = useIsMountedRef();
 
   const ResetPasswordSchema = Yup.object().shape({
     email: Yup.string().email('Email must be a valid email address').required('Email is required'),

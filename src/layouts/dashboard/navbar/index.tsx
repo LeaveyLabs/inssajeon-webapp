@@ -1,27 +1,18 @@
-import { useState } from 'react';
+import EditIcon from '@mui/icons-material/Edit';
+import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
+import { AppBar, Badge, Container, Fab, IconButton, Toolbar } from '@mui/material';
 // @mui
 import { styled } from '@mui/material/styles';
-import { Container, Box, AppBar, Toolbar, Badge, IconButton, Fab } from '@mui/material';
-import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
-import EditIcon from '@mui/icons-material/Edit';
-
-// hooks
-import useOffSetTop from '../../../hooks/useOffSetTop';
-import useResponsive from '../../../hooks/useResponsive';
-import useCollapseSidebar from '../../../hooks/useCollapseSidebar';
-// utils
-import cssStyles from '../../../utils/cssStyles';
+import ClickwableWideLogo from '../../../components/misc/ClickableWideLogo';
 // config
 import {
-  SIDEBAR_WIDTH_DESKTOP,
-  NAVBAR_HEIGHT,
+  NAVBAR_HEIGHT, SIDEBAR_WIDTH_DESKTOP
 } from '../../../config';
+import useResponsive from '../../../hooks/useResponsive';
 // components
 //
 import Searchbar from './Searchbar';
-import DropSearchbar from './DropSearchbar';
-import ClickwableWideLogo from '../../../components/misc/ClickableWideLogo';
-import AutocompleteSearch from './AutocompleteSearch';
+
 
 // ----------------------------------------------------------------------
 

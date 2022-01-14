@@ -1,28 +1,24 @@
-import * as Yup from 'yup';
-import { useFormik, Form, FormikProvider } from 'formik';
-//react
-import { useState } from 'react';
-import { useNavigate, Link } from "react-router-dom";
+import DeleteIcon from '@mui/icons-material/Delete';
 // @mui
 import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
 import { LoadingButton } from '@mui/lab';
-import { Container, Box, Chip, Stack, Button, TextField, Typography, Autocomplete } from '@mui/material';
+import { Autocomplete, Box, Button, Chip, Container, Stack, TextField, Typography } from '@mui/material';
+import { Timestamp } from "firebase/firestore";
+import { Form, FormikProvider, useFormik } from 'formik';
+import { PersistFormikValues } from 'formik-persist-values';
+//react
+import { useState } from 'react';
+import { useNavigate } from "react-router-dom";
+import { PAGE_PATHS } from 'src/routing/paths';
+//database
+import { v4 as uuidv4 } from "uuid";
+import * as Yup from 'yup';
+import { PostInteraction } from "../../db/apis/PostInteraction";
+import { PostEntity } from "../../db/entities/posts/PostEntity";
 //components
 import SubmitDeleteDialog from './SubmitDeleteDialog';
 import SubmitSuccessDialog from './SubmitSuccessDialog';
-import { PersistFormikValues } from 'formik-persist-values';
-//database
-import { v4 as uuidv4 } from "uuid";
-import { PostEntity } from "../../db/entities/posts/PostEntity"
-import { Timestamp } from "firebase/firestore";
-import { PostInteraction } from "../../db/apis/PostInteraction"
 // ----------------------------------------------------------------------
-
-interface Tag {
-  word: string;
-  trendscore: number;
-}
 
 let FORM_SESSION_STORAGE_ID: string = "submit-form"
 
@@ -116,7 +112,7 @@ export default function SubmitForm( {handleClose} : SubmitFormProps) {
     formik.resetForm();
     sessionStorage.removeItem(FORM_SESSION_STORAGE_ID)
     handleClose();
-    navigate(`/post/${postID}`, { replace: true }); //navigate to that submitted post
+    navigate(`${PAGE_PATHS.dashboard.post}/${postID}`); //navigate to that submitted post
     //TODO: "click to share with friends!" icon
   }
 
@@ -179,7 +175,7 @@ export default function SubmitForm( {handleClose} : SubmitFormProps) {
               minRows={3}
               id="quote"
               type="text"
-              placeholder="여기는 도움이 되는 예문을 쓰세요"
+              placeholder="A: 어쩌고 저쩌고"
               label="인용 또는 예문"
               disabled={formik.isSubmitting}
               {...formik.getFieldProps('quote')}

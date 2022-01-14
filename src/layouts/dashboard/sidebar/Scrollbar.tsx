@@ -1,7 +1,7 @@
-import SimpleBarReact, { Props as ScrollbarProps } from 'simplebar-react';
+import { Box, SxProps } from '@mui/material';
 // @mui
 import { alpha, styled } from '@mui/material/styles';
-import { Box, SxProps } from '@mui/material';
+import SimpleBarReact, { Props as ScrollbarProps } from 'simplebar-react';
 
 // ----------------------------------------------------------------------
 

@@ -21,7 +21,7 @@ const breakpoints = {
     // lg: 1200,
     // xl: 1536
     mobile: 0,
-    tablet: 640,
+    tablet: 600,
     desktop: 1000,
     fullscreen: 1200, //up to 1536 or beyond
   }

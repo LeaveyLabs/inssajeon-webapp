@@ -1,10 +1,11 @@
-import { useState, useEffect, useRef } from 'react';
-// @mui
-import { styled, alpha } from '@mui/material/styles';
-import { useTheme } from '@mui/material/styles';
-import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
-import { ClickAwayListener, Container } from '@mui/material';
+import { ClickAwayListener } from '@mui/material';
+import InputBase from '@mui/material/InputBase';
+// @mui
+import { alpha, styled } from '@mui/material/styles';
+import { useRef, useState } from 'react';
+import { useNavigate } from 'react-router';
+import { PAGE_PATHS } from 'src/routing/paths';
 // components
 //TODO: finish the blur/focus issues with the clear search button
 //TODO: improve the shrink transition onBlur for searchbar.
@@ -74,7 +75,6 @@ const StyledInputBase = styled(InputBase)(({ theme  }) => ({
 }));
 
 export default function Searchbar(  ) {
-  let theme = useTheme()
   let [searchInput, setSearchInput] = useState('');
   let inputRef = useRef<HTMLInputElement>()
 
@@ -90,6 +90,15 @@ export default function Searchbar(  ) {
     console.log(searchInput)
     console.log('clear')
   }
+  
+  let navigate = useNavigate();
+
+  const handleKeyDown = (key:string) : void => {
+    if (key === 'Enter') {
+      if(!searchInput.length) return;
+      navigate(`${PAGE_PATHS.dashboard.words}/${searchInput}`);
+    }
+  }
 
   //*if we dont have the clickaway listener, then if the user taps on close button then taps on home screen, searchbar will not dismiss*/}
   return (
@@ -98,7 +107,7 @@ export default function Searchbar(  ) {
         <SearchIconWrapper>
           <SearchIcon fontSize='large' color='primary'  />
         </SearchIconWrapper>
-        <StyledInputBase type='text' ref={inputRef} autoComplete='off' value={searchInput} onChange={event => setSearchInput(event.target.value)} placeholder="겸색..." id='search-input' />
+        <StyledInputBase type='text' ref={inputRef} autoComplete='off' value={searchInput} onChange={event => setSearchInput(event.target.value)} placeholder="겸색..." id='search-input' onKeyDown={event => handleKeyDown(event.key)}/>
         { searchInput.length !== 0 &&
           <ClearSearchButton handleClear={handleClear}/>
         } 

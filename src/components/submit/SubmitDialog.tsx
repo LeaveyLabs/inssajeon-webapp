@@ -1,20 +1,18 @@
-import * as React from 'react';
-//mui
-import { styled } from '@mui/material/styles';
+import CloseIcon from '@mui/icons-material/Close';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { Divider, IconButton, Typography, useMediaQuery, useTheme } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
+//mui
+import { styled } from '@mui/material/styles';
 import { TransitionProps } from '@mui/material/transitions';
-import { Divider } from '@mui/material';
-import { Typography } from '@mui/material';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-
+import * as React from 'react';
+import SubmitDialogProfile from './SubmitDialogProfile';
 //components
 import SubmitForm from './SubmitForm';
-import { IconButton, useMediaQuery, useTheme } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import SubmitDialogProfile from './SubmitDialogProfile';
+
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -57,9 +55,9 @@ export default function SubmitDialog( {open, handleClose}: SubmitDialogProps ) {
       scroll='paper'
     >
       <DialogTitle sx={{ m: 0, p: 2, display: 'flex', justifyContent: 'center' }} >
-        <Typography variant="h2" >
-          새 단어 정의하기
-        </Typography>
+        <div>
+          <Typography variant="h2" >새 단어 정의하기</Typography> {/*typography within dialog title must be wrapped in a div to avoid error https://github.com/mbrn/material-table/issues/653*/}
+        </div>
         <IconButton 
           aria-label="close"
           onClick={handleClose}

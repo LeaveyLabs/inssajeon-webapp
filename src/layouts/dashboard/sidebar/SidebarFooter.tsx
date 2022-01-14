@@ -1,7 +1,7 @@
 // @mui
-import { Stack, Button, Typography, IconButton, Link } from '@mui/material';
 // assets
 import InstagramIcon from '@mui/icons-material/Instagram';
+import { IconButton, Link, Stack, Typography } from '@mui/material';
 //utils
 import { PAGE_PATHS } from 'src/routing/paths';
 
@@ -16,7 +16,7 @@ export default function SidebarFooter() {
       {/* <Button variant="contained">Documentation</Button> */}
       {/* <Link href="/" underline="hover">click</Link>
       <RouterLink to="/">asdf</RouterLink> */}
-      <a target="_blank" href="https://www.instagram.com/inssajeon/" rel="noopener">
+      <a target="_blank" href="https://www.instagram.com/inssajeon/" rel="noreferrer">
         <IconButton>
           <InstagramIcon />
         </IconButton>

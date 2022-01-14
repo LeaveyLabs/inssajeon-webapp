@@ -1,51 +1,29 @@
+import { ElementType, lazy, Suspense } from 'react';
 import { Navigate, useRoutes } from 'react-router-dom';
-// layouts
-import DashboardLayout from '../layouts/dashboard';
-import PlainLayout from 'src/layouts/PlainLayout';
+import AuthGuard from 'src/guards/AuthGuard';
+import GuestGuard from 'src/guards/GuestGuard';
 import EmptyLayout from 'src/layouts/EmptyLayout';
-// PAGES
-// Feeds
-import HomePage from '../pages/Feeds/HomePage';
-import UsersPage from '../pages/Feeds/UsersPage';
-import ExplorePage from '../pages/Feeds/ExplorePage';
-import WordsPage from '../pages/Feeds/WordsPage';
-import CategoriesPage from '../pages/Feeds/CategoriesPage';
-import PostPage from '../pages/Feeds/PostPage';
-import MyProfilePage from '../pages/Feeds/MyProfilePage';
-import ProfilePage from '../pages/Feeds/ProfilePage';
+import PlainLayout from 'src/layouts/PlainLayout';
+import LoadingPage from 'src/pages/Misc/LoadingPage';
 
-// Misc
-import PageNotFound from '../pages/Misc/PageNotFound';
-
-// FTUX
-
-// Information
-import PrivacyPage from '../pages/Information/PrivacyPage';
-import TermsPage from '../pages/Information/TermsPage';
-import AboutPage from '../pages/Information/AboutPage';
-import FAQPage from '../pages/Information/FAQPage';
-
-// Registration
-import SignupPage from '../pages/Registration/SignupPage';
-import ResetPasswordPage from '../pages/Registration/ResetPasswordPage';
-import ForgotPasswordPage from 'src/pages/Registration/ForgotPasswordPage';
-import LoginPage from '../pages/Registration/LoginPage';
-
-// Charts
-import ChartsPage from '../pages/Charts/ChartsPage';
-
-// Account
-import SettingsPage from '../pages/Account/SettingsPage';
-import ComingSoonPage from '../pages/Misc/ComingSoonPage';
-
+import DashboardLayout from '../layouts/dashboard';
 import { PAGE_PATHS } from './paths';
 
+//guards
+// layouts
+//extra
 // ----------------------------------------------------------------------
 
- //TODO: create private pages
- //currentUser ? <Component {...props} /> : <Redirect to="/login" />
+//loadable is depcreated but gets the job done for a loadingpage
+const Loadable = (Component: ElementType) => (props: any) => {
+  return (
+    <Suspense fallback={<LoadingPage />}>
+      <Component {...props} />
+    </Suspense>
+  );
+};
 
-//notes:
+//useRoutes notes:
 // A route object has the same properties as a <Route> element. 
 // The `children` is just an array of child routes
 
@@ -72,7 +50,7 @@ export default function Router() {
           ]
         },
         { path: 'profile', children: [  //TODO: 'profile' and 'me' must be an unallowed username
-            { path: 'me', element: <MyProfilePage /> }, //**registeredUser only route
+            { path: 'me', element: <AuthGuard><MyProfilePage/></AuthGuard> }, //**registeredUser only route
             { path: ':id', element: <ProfilePage /> }, //TODO auto navigate to 'me' if :id matches registeredUser's id
           ] 
         },
@@ -86,7 +64,7 @@ export default function Router() {
       ],
     },
     //guestUser only routes
-    { path: '/', element:<EmptyLayout/>, children: [
+    { path: '/', element:<GuestGuard><EmptyLayout/></GuestGuard>, children: [
         { path: "*", element: <Navigate to={PAGE_PATHS.auth.signup} replace />, index:true },
         { path: PAGE_PATHS.auth.signup, element: <SignupPage /> },
         { path: PAGE_PATHS.auth.login, element: <LoginPage/> },
@@ -95,7 +73,7 @@ export default function Router() {
       ],
     },
     //registeredUser only routes
-    { path: 'myaccount', children: [
+    { path: 'myaccount', element:<AuthGuard><EmptyLayout/></AuthGuard>, children: [
         { path: "*", element: <Navigate to="settings" replace />, index:true },
         { path: 'settings', element: <PlainLayout/>, children: [
           { path: "*", element: <Navigate to="" replace />, index:true },
@@ -118,3 +96,38 @@ export default function Router() {
     },
   ]);
 }
+
+// PAGES
+// Feeds
+const HomePage = Loadable(lazy(() => import('../pages/Feeds/HomePage')));
+const UsersPage = Loadable(lazy(() => import('../pages/Feeds/UsersPage')));
+//const ExplorePage = Loadable(lazy(() => import('../pages/Feeds/ExplorePage')));
+const WordsPage = Loadable(lazy(() => import('../pages/Feeds/WordsPage')));
+const CategoriesPage = Loadable(lazy(() => import('../pages/Feeds/CategoriesPage')));
+const PostPage = Loadable(lazy(() => import('../pages/Feeds/PostPage')));
+const MyProfilePage = Loadable(lazy(() => import('../pages/Feeds/MyProfilePage')));
+const ProfilePage = Loadable(lazy(() => import('../pages/Feeds/ProfilePage')));
+
+// Misc
+const PageNotFound = Loadable(lazy(() => import('../pages/Misc/PageNotFound')));
+
+// FTUX
+
+// Authentication
+const LoginPage = Loadable(lazy(() => import('../pages/Auth/LoginPage')));
+const SignupPage = Loadable(lazy(() => import('../pages/Auth/SignupPage')));
+const ResetPasswordPage = Loadable(lazy(() => import('../pages/Auth/ResetPasswordPage')));
+const ForgotPasswordPage = Loadable(lazy(() => import('src/pages/Auth/ForgotPasswordPage')));
+
+// Information
+const PrivacyPage = Loadable(lazy(() => import( '../pages/Information/PrivacyPage') ));
+const TermsPage = Loadable(lazy(() => import( '../pages/Information/TermsPage') ));
+const AboutPage = Loadable(lazy(() => import( '../pages/Information/AboutPage') ));
+const FAQPage = Loadable(lazy(() => import( '../pages/Information/FAQPage') ));
+
+// Charts
+//const ChartsPage = Loadable(lazy(() => import( '../pages/Charts/ChartsPage') ));
+
+// Accounto
+const ComingSoonPage = Loadable(lazy(() => import( '../pages/Misc/ComingSoonPage') ));
+const SettingsPage = Loadable(lazy(() => import( '../pages/Account/SettingsPage') ));

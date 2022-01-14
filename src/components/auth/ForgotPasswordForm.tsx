@@ -2,16 +2,17 @@ import * as Yup from 'yup';
 import { useState } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
 // @mui
-import { Stack, TextField, IconButton, InputAdornment, Alert } from '@mui/material';
+import { Stack, TextField } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // hooks
 import useAuth from 'src/hooks/useAuth';
+//component
+import TransitionAlert from './TransitionAlert';
 
 // ----------------------------------------------------------------------
 
 type ForgotPasswordValues = {
   email: string;
-  afterSubmit?: string;
 };
 
 interface Props {
@@ -20,7 +21,7 @@ interface Props {
 
 export default function ForgotPasswordForm({onSent}: Props) {
   const { resetPassword } = useAuth();
-  //const isMountedRef = useIsMountedRef();
+  const [forgotError, setForgotError] = useState('');
 
   const ForgotPasswordSchema = Yup.object().shape({
     email: Yup
@@ -34,21 +35,19 @@ export default function ForgotPasswordForm({onSent}: Props) {
       email: '',
     },
     validationSchema: ForgotPasswordSchema,
-    onSubmit: async (values, { setErrors, setSubmitting }) => {
+    onSubmit: async (values, { resetForm, setFieldValue, setFieldTouched, setSubmitting }) => {
       try {
-        resetPassword?.(values.email);
-        // if (isMountedRef.current) {
-        //   onSent();
-        //   onGetEmail(formik.values.email);
-        //   setSubmitting(false);
-        // }
-      } catch (error) {
-        console.error(error);
-        // if (isMountedRef.current) {
-        //   setSubmitting(false);
-        //   setErrors({ afterSubmit: error.message });
-        // }
+        await resetPassword(values.email);
+        onSent();
+        //TODO navigate to "reset password page"
+      } catch (error: any) {
+        if (error.message) {
+          setForgotError(error.message)
+        }
       }
+      setFieldValue('email', '');
+      setFieldTouched('email', false);
+      setSubmitting(false);
     },
   });
 
@@ -56,7 +55,7 @@ export default function ForgotPasswordForm({onSent}: Props) {
     <FormikProvider value={formik}>
       <Form autoComplete="off" noValidate >
         <Stack spacing={3}>
-          {formik.errors.afterSubmit && <Alert severity="error">{formik.errors.afterSubmit}</Alert>}
+          {forgotError.length>0 && formik.touched.email===false && <TransitionAlert errorMessage={forgotError} onClose={() => setForgotError('')}/>}
 
           <TextField
             fullWidth
