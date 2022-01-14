@@ -2,7 +2,8 @@ import { Container } from '@mui/material';
 // @mui
 import { styled } from '@mui/material/styles';
 import { useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useOutletContext } from 'react-router-dom';
+import SignupDialog from 'src/components/auth/SignupDialog';
 import SubmitDialog from 'src/components/submit/SubmitDialog';
 import useResponsive from 'src/hooks/useResponsive';
 import FloatingSubmitButton from '../../components/submit/FloatingSubmitButton';
@@ -28,29 +29,34 @@ const MainStyle = styled('main')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function DashboardLayout() {
-  //const { isCollapse } = useCollapseSidebar();
   const [open, setOpen] = useState(false);
   const isDesktop = useResponsive('up', 'desktop');
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [signupDialogOpen, setSignupDialogOpen] = useState(false);
+  const [submitDialogOpen, setSubmitDialogOpen] = useState(false);
   
-  const handleDialogOpen = () => {
-    setDialogOpen(true);
-  };
-  const handleDialogClose = () => {
-    setDialogOpen(false);
-  };
+  const handleSubmitDialogOpen = () => { setSubmitDialogOpen(true); };
+  const handleSubmitDialogClose = () => { setSubmitDialogOpen(false); };
+  const handleSignupDialogOpen = () => { setSignupDialogOpen(true); };
+  const handleSignupDialogClose = () => { setSignupDialogOpen(false); };
 
   return (
     <RootStyle>
       <Container maxWidth={'tablet'} >
-        <Navbar onOpenSidebar={() => setOpen(true)} handleDialogOpen={handleDialogOpen} />
+        <Navbar onOpenSidebar={() => setOpen(true)} handleSignupDialogOpen={handleSignupDialogOpen} handleSubmitDialogOpen={handleSubmitDialogOpen} />
         <Sidebar isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} />
         <MainStyle >
-          <Outlet />
+          <Outlet context={handleSignupDialogOpen}/>
         </MainStyle>
-        {!isDesktop && <FloatingSubmitButton handleDialogOpen={handleDialogOpen}/>}
-        <SubmitDialog handleClose={handleDialogClose} open={dialogOpen} />
+        {!isDesktop && <FloatingSubmitButton handleSignupDialogOpen={handleSignupDialogOpen} handleSubmitDialogOpen={handleSubmitDialogOpen}/>}
+        <SubmitDialog handleClose={handleSubmitDialogClose} open={submitDialogOpen} />
+        <SignupDialog handleClose={handleSignupDialogClose} open={signupDialogOpen} />
       </Container>
     </RootStyle>
   );
+}
+
+//custom hook for children within Outlet to have access to handleSignupDialogOpen function
+//reference: https://reactrouter.com/docs/en/v6/api#useoutletcontext
+export function useSignupDialog() {
+  return useOutletContext<VoidFunction>(); 
 }

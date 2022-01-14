@@ -14,6 +14,7 @@ import { fDecimal } from 'src/utils/formatNumber';
 // // components
 import VoteButton from './VoteButton';
 import TransitionAlert from '../auth/TransitionAlert';
+import { useSignupDialog } from 'src/layouts/dashboard';
 
 interface VotePanelProps {
   post: PostEntity;
@@ -27,15 +28,12 @@ export default function VotePanel( {post} : VotePanelProps) {
   const [downvotes, setDownvotes] = useState(post.downvotes.length);
   const [isUpvoted, setIsUpvoted] = useState(authedUser ? post.upvotes.includes(authedUser.nonauth.id) : false);
   const [isDownvoted, setIsDownvoted] = useState(authedUser ? post.downvotes.includes(authedUser.nonauth.id) : false);
-
-  const handleSignupDialog = () => {
-
-  }
-
+  const handleSignupDialogOpen = useSignupDialog();
+  
   const handleToggleUpvote = async () => {
     setIsVoting(true);
     if (!authedUser) {
-      handleSignupDialog()
+      handleSignupDialogOpen()
     } else if (isUpvoted) { //unupvote
       try {
         setIsUpvoted(false);
@@ -75,7 +73,7 @@ export default function VotePanel( {post} : VotePanelProps) {
   const handleToggleDownvote = async () => {
     setIsVoting(true);
     if (!authedUser) {
-      handleSignupDialog()
+      handleSignupDialogOpen()
     } else  if (isDownvoted) { //undownvote
       try {
         setIsDownvoted(false);

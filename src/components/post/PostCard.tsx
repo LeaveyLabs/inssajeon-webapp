@@ -8,7 +8,7 @@ import CircleIcon from '@mui/icons-material/Circle';
 import IosShareIcon from '@mui/icons-material/IosShare';
 import {
   Avatar,
-  Box, Card, Divider, IconButton, Link, Stack, Typography
+  Box, Card, Divider, Link, Stack, Typography
 } from '@mui/material';
 // components
 import PostMoreButton from 'src/components/post/PostMoreButton';
@@ -16,6 +16,7 @@ import { PostEntity } from 'src/db/entities/posts/PostEntity';
 //hooks
 import useAuth from 'src/hooks/useAuth';
 import { PAGE_PATHS } from 'src/routing/paths';
+import { useSignupDialog } from 'src/layouts/dashboard';
 // utils
 import { fDate } from 'src/utils/formatTime';
 import getAvatarColor from 'src/utils/getAvatarColor';
@@ -33,20 +34,17 @@ interface PostCardProps {
 
 export default function PostCard( { post }: PostCardProps ) {
   const { authedUser } = useAuth();
+  const handleSignupDialogOpen = useSignupDialog();
   const [isInteracting, setIsInteracting] = useState(false);
   const [isFavorited, setIsFavorited] = useState(authedUser ? authedUser.nonauth.activity.favorites.includes(post.postID) : false);
 
   let canNativeMobileShare = 'canShare' in navigator; //checks if user's device has a native share functionality
   //window.navigator.canShare() //this is the 'proper' way according to mozilla to check if canShare, but im getting errors using this method. use this workaround detailed here instead: https://stackoverflow.com/questions/57345539/navigator-canshare-in-typescript-permissions-denied
 
-  const handleSignupDialog = () => {
-
-  }
-
   const handleToggleFavorited = async () => {
     setIsInteracting(true);
     if (!authedUser) {
-      handleSignupDialog()
+      handleSignupDialogOpen();
     } else if (isFavorited) {
       try {
         setIsFavorited(prevIsFavorited => !isFavorited);
