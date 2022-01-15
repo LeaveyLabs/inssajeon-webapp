@@ -3,10 +3,10 @@
 import { blue, deepOrange, green, grey, red, yellow } from "@mui/material/colors";
 
 const PRIMARY_NAME = ['A', 'B', 'C', 'D', 'E', '9', '8'];
-const INFO_NAME = ['F', 'G', 'H', 'I', 'J', '1', '2', '3', '0'];
+const INFO_NAME = ['F', 'G', 'H', 'J', '1', '2', '3', '0'];
 const SUCCESS_NAME = ['K', 'L', 'M', 'N', 'O', '4', '5'];
 const WARNING_NAME = ['P', 'Q', 'R', 'S', 'T', 'U', '6', '7'];
-const ERROR_NAME = ['V', 'W', 'X', 'Y', 'Z'];
+const ERROR_NAME = ['V', 'W', 'X', 'I', 'Y', 'Z'];
 
 function getFirstCharacter(name: string) {
   return name.charAt(0).toUpperCase();

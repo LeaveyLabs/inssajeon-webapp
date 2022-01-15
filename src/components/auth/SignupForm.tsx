@@ -2,7 +2,7 @@ import { LoadingButton } from '@mui/lab';
 // @mui
 import { IconButton, InputAdornment, Stack, TextField } from '@mui/material';
 import { Form, FormikProvider, useFormik } from 'formik';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 // hooks
 import useAuth from 'src/hooks/useAuth';
 import * as Yup from 'yup';
@@ -18,12 +18,7 @@ type InitialValues = {
   passwordConfirmation: string,
 };
 
-
-type SignupFormProps = {
-  goToCreateProfile: VoidFunction;
-}
-
-export default function SignupForm( {goToCreateProfile} : SignupFormProps) {
+export default function SignupForm( ) {
   const { signup,  } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
@@ -52,24 +47,29 @@ export default function SignupForm( {goToCreateProfile} : SignupFormProps) {
       passwordConfirmation: '',
     },
     validationSchema: RegisterSchema,
-    onSubmit: async (values, { setSubmitting, resetForm, setFieldValue, setFieldTouched }) => {
+    onSubmit: async (values, { setSubmitting, setFieldValue, setFieldTouched }) => {
+      console.log("is submitting?: " + formik.isSubmitting)
       signup(values.email, values.password)
-      .then(() => {
-        resetForm();
-        goToCreateProfile();
-      })
       .catch((error: any) => {
         setSignupError(error.message)
         setFieldValue('password', '');
         setFieldValue('passwordConfirmation', '');
         setFieldTouched('password', false);
         setFieldTouched('passwordConfirmation', false);
-      })
-      .finally(() => {
         setSubmitting(false);
       })
     }
   })
+
+  useEffect(() => { //resets form when moving away from page
+    return () => {
+      formik.setSubmitting(false);
+      setShowPassword(false);
+      setShowPasswordConfirmation(false);
+      setSignupError('');
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <FormikProvider value={formik}>

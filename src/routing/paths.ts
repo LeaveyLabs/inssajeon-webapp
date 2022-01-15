@@ -13,6 +13,7 @@ export const PAGE_PATHS = {
     signup: '/signup',
     forgot: '/forgot-password',
     reset: '/reset-password', 
+    createProfile: '/create-profile',
   },
   page: {
     comingSoon: '/coming-soon',

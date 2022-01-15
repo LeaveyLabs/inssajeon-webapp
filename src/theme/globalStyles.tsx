@@ -11,6 +11,7 @@ export default function GlobalStyles() {
     <MUIGlobalStyles
       styles={{
         '*': {
+          wordBreak: 'keep-all', //prevents words from being cut split at the edge of a line
           margin: 0,
           padding: 0,
           boxSizing: 'border-box',

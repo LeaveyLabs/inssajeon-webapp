@@ -1,10 +1,10 @@
-import { MAX_QUERY, POST_POSTID_HEADER, POST_TAGS_HEADER, POST_TRENDSCORE_PROPERTY, POST_UPVOTECOUNT_PROPERTY, USER_PROFILE_HEADER, USER_USERID_HEADER } from "../strings/apiConstLibrary";
-import { CollectionReference, DocumentSnapshot, getDocs, limit, orderBy, Query, query, QueryConstraint, startAfter, where } from "firebase/firestore"; 
-import { postDatabase, userDatabase, wordDatabase } from "./dbRefs";
-import { UserEntity, UserFactory } from "../entities/users/UserEntity";
-import { PostEntity, PostFactory } from "../entities/posts/PostEntity";
+import { DocumentSnapshot, getDocs, limit, orderBy, Query, query, QueryConstraint, startAfter, where } from "firebase/firestore";
 import { EntityFactory } from "../entities/jsonFormat";
+import { PostEntity, PostFactory } from "../entities/posts/PostEntity";
+import { UserEntity, UserFactory } from "../entities/users/UserEntity";
 import { WordEntity, WordFactory } from "../entities/words/WordEntity";
+import { MAX_QUERY, POST_POSTID_HEADER, POST_TAGS_HEADER, POST_TRENDSCORE_PROPERTY, POST_UPVOTECOUNT_PROPERTY, USER_PROFILE_HEADER, USER_USERID_HEADER } from "../strings/apiConstLibrary";
+import { postDatabase, userDatabase, wordDatabase } from "./dbRefs";
 
 export const DataQuery = function () {};
 

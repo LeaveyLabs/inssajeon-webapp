@@ -3,6 +3,7 @@ import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 import { AppBar, Badge, Container, Fab, IconButton, Toolbar } from '@mui/material';
 // @mui
 import { styled } from '@mui/material/styles';
+import useAuth from 'src/hooks/useAuth';
 import ClickwableWideLogo from '../../../components/misc/ClickableWideLogo';
 // config
 import {
@@ -33,12 +34,22 @@ const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
 
 type NavbarProps = {
   onOpenSidebar: VoidFunction;
-  handleDialogOpen: VoidFunction
+  handleSubmitDialogOpen: VoidFunction;
+  handleSignupDialogOpen: VoidFunction;
 };
 //TODO: kevin's suggestions: remove shadow from fab button, and tighten navbar to align with width of posts on desktop 
 
-export default function Navbar({ onOpenSidebar, handleDialogOpen }: NavbarProps) {
+export default function Navbar({ onOpenSidebar, handleSubmitDialogOpen, handleSignupDialogOpen }: NavbarProps) {
   const isDesktop = useResponsive('up', 'desktop');
+  const {authedUser} = useAuth();
+
+  let handleFabClick = () => {
+    if (authedUser) {
+      handleSubmitDialogOpen();
+    } else {
+      handleSignupDialogOpen();
+    }
+  }
 
   return (
       <RootStyle >
@@ -54,7 +65,7 @@ export default function Navbar({ onOpenSidebar, handleDialogOpen }: NavbarProps)
               </IconButton>
               )}
             {isDesktop  && (
-              <Fab onClick={handleDialogOpen} size='medium' color="primary" aria-label="입력하기" sx={{position:'absolute', zIndex:1, top:-2, right:10 }}>
+              <Fab onClick={handleFabClick} size='medium' color="primary" aria-label="입력하기" sx={{position:'absolute', zIndex:1, top:-2, right:10 }}>
                 <EditIcon />
               </Fab>
               )}

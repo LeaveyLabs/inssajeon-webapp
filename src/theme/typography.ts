@@ -1,4 +1,4 @@
-import { pxToRem } from '../utils/getFontValue';
+import { pxToRem, responsiveFontSizes } from '../utils/getFontValue';
 
 // ----------------------------------------------------------------------
 
@@ -15,37 +15,37 @@ const typography = {
     lineHeight: 80 / 64,
     fontSize: pxToRem(40),
     letterSpacing: 2,
-    // ...responsiveFontSizes({ mobile: 52, desktop: 64 }),
+    ...responsiveFontSizes({ tablet: 45, desktop: 50 }),
   },
   h2: {
     fontWeight: 700,
     lineHeight: 64 / 48,
     fontSize: pxToRem(32),
-    // ...responsiveFontSizes({ mobile: 40, desktop: 48 }),
+    ...responsiveFontSizes({ tablet:36, desktop: 40 }),
   },
   h3: {
     fontWeight: 700,
     lineHeight: 1.5,
     fontSize: pxToRem(24),
-    // ...responsiveFontSizes({ mobile: 26, desktop: 32 }),
+    ...responsiveFontSizes({ tablet:29, desktop: 32 }),
   },
   h4: {
-    fontWeight: 500,
-    lineHeight: 1.5,
-    fontSize: pxToRem(20),
-    // ...responsiveFontSizes({ mobile: 20, desktop: 24 }),
-  },
-  h5: {
     fontWeight: 700,
     lineHeight: 1.5,
-    fontSize: pxToRem(18),
-    // ...responsiveFontSizes({ mobile: 19, desktop: 20 }),
+    fontSize: pxToRem(20),
+    ...responsiveFontSizes({tablet:22, desktop: 24 }),
+  },
+  h5: {
+    fontWeight: 500,
+    lineHeight: 1.5,
+    fontSize: pxToRem(16),
+    ...responsiveFontSizes({ tablet:18, desktop: 20 }),
   },
   h6: {
     fontWeight: 700,
     lineHeight: 28 / 18,
-    fontSize: pxToRem(17),
-    // ...responsiveFontSizes({ mobile: 18, desktop: 18 }),
+    fontSize: pxToRem(14),
+    ...responsiveFontSizes({ tablet:15, desktop: 16 }),
   },
   subtitle1: {
     fontWeight: 600,

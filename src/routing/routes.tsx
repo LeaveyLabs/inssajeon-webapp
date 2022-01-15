@@ -70,6 +70,7 @@ export default function Router() {
         { path: PAGE_PATHS.auth.login, element: <LoginPage/> },
         { path: PAGE_PATHS.auth.forgot, element: <ForgotPasswordPage/> },
         { path: PAGE_PATHS.auth.reset, element: <ResetPasswordPage/> }, //TODO this can only be accessed from the link firebase sends them
+        { path: PAGE_PATHS.auth.createProfile, element: <CreateProfilePage/> }, //TODO this can only be accessed from the link firebase sends them
       ],
     },
     //registeredUser only routes
@@ -118,6 +119,7 @@ const LoginPage = Loadable(lazy(() => import('../pages/Auth/LoginPage')));
 const SignupPage = Loadable(lazy(() => import('../pages/Auth/SignupPage')));
 const ResetPasswordPage = Loadable(lazy(() => import('../pages/Auth/ResetPasswordPage')));
 const ForgotPasswordPage = Loadable(lazy(() => import('src/pages/Auth/ForgotPasswordPage')));
+const CreateProfilePage = Loadable(lazy(() => import('src/pages/Auth/CreateProfilePage')));
 
 // Information
 const PrivacyPage = Loadable(lazy(() => import( '../pages/Information/PrivacyPage') ));
