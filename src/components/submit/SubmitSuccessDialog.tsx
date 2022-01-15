@@ -32,9 +32,9 @@ export default function SubmitSuccessDialog( {open, handleClose, }: SubmitSucces
         aria-describedby="submit-success-dialog"
       >
         <DialogTitle id="submit-success-dialog">
-          <Typography variant="h5" >
-            게시물이 성공적으로 업로드되었습니다!
-          </Typography>
+          <div>
+            <Typography variant="h5" >게시물이 성공적으로 업로드되었습니다!</Typography> {/*typography within dialog title must be wrapped in a div to avoid error https://github.com/mbrn/material-table/issues/653*/}
+          </div>
         </DialogTitle>
         <Divider variant="middle" />
         {/* <DialogContent>

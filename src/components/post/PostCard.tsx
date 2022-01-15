@@ -6,10 +6,7 @@ import BookmarkIcon from '@mui/icons-material/Bookmark';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import CircleIcon from '@mui/icons-material/Circle';
 import IosShareIcon from '@mui/icons-material/IosShare';
-import {
-  Avatar,
-  Box, Card, Divider, Link, Stack, Typography
-} from '@mui/material';
+import { Avatar, Link, Box, Card, Divider, Stack, Typography } from '@mui/material';
 // components
 import PostMoreButton from 'src/components/post/PostMoreButton';
 import { PostEntity } from 'src/db/entities/posts/PostEntity';
@@ -87,7 +84,7 @@ export default function PostCard( { post }: PostCardProps ) {
   return (
     <Card >
       <Box sx={{ px:2, height:60, display:'flex', flexDirection: "row", alignItems:"center", justifyContent:"center", }}>
-        <Avatar sx={{mx:1, width:30, height:30, bgcolor: getAvatarColor(post.userProfile.username) }} src={post.userProfile.picPath} />
+        <Avatar component={RouterLink} to={`${PAGE_PATHS.dashboard.profile}/${post.userProfile.username}`}  sx={{mx:1, width:30, height:30, bgcolor: getAvatarColor(post.userProfile.username) }} src={post.userProfile.picPath} />
         <Link to={`${PAGE_PATHS.dashboard.profile}/${post.userProfile.username}`} variant="subtitle1" color="text.primary" component={RouterLink}>{post.userProfile.username}</Link>
         <CircleIcon sx={{ color:'gray',fontSize: 4, ml:2 }}/>
         <Typography variant="caption" sx={{ mx:2,color: 'text.secondary' }}>{fDate((post.timestamp.toDate()))}</Typography>
