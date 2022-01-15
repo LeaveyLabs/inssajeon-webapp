@@ -159,12 +159,22 @@ PostInteraction.createPost = async (postID:string, post:any) : Promise<void> => 
     try { PostFactory.fromExportJson(dbSafePost); }
     catch (e) { throw e; }
 
-    try { await setDoc(doc(postDatabase, postID), PostFactory.toExportJson(dbSafePost)); }
-    catch (e) { throw new Error(`Could not add post ${postID} to database.`); }
+    try { 
+        await setDoc(doc(postDatabase, postID), PostFactory.toExportJson(dbSafePost)); 
+    }
+    catch (e) { 
+        throw new Error(`Could not add post ${postID} to database.`); 
+    }
 
-    try { await updateDoc(doc(userDatabase, dbSafePost.userID),
-        {[USER_SUBMISSIONS_PROPERTY]: arrayUnion(postID)}); }
-    catch (e) { console.log(`Could not add post to ${dbSafePost.userID}'s submissions.`); }
+    try { 
+        await updateDoc(doc(userDatabase, dbSafePost.userID),
+        {[USER_SUBMISSIONS_PROPERTY]: arrayUnion(postID)}); 
+    }
+    catch (e) {
+        /* Clean up the post if impossible to add. */
+        await deleteDoc(doc(postDatabase, postID));
+        console.log(`Could not add post to ${dbSafePost.userID}'s submissions.`); 
+    }
 
     const matchWords = await DataQuery.searchWordByWord(dbSafePost.word, WordOrder.Trendscore);
     if(matchWords.length === 0) {
@@ -248,5 +258,5 @@ async function removePostFromWord(word:string) : Promise<void> {
         await updateDoc(doc(wordDatabase, word), 
         {[WORD_NUMBER_OF_POSTS_PROPERTY]: increment(-1)}); 
     }
-    catch (e) { throw new Error(`Could not remove post from word: ${word}`); }
+    catch (e) { console.log(`Could not remove post from word: ${word}`); }
 }
