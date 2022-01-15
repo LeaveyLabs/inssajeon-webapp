@@ -6,6 +6,7 @@ import { ACCOUNT_DEFAULT_SETTINGS, PROFILE_BIO_UPDATE_ERROR, PROFILE_PIC_UPDATE_
 import { userDatabase } from "./dbRefs";
 import { DataQuery } from "./DataQuery";
 import { PostInteraction } from "./PostInteraction";
+import { ImageFactory } from "./ImageFactory";
 
 export const ProfileInteraction = function () {};
 
