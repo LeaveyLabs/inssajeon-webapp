@@ -94,7 +94,8 @@ export const executeInDatabase = async (testFunc:VerifierFunction) : Promise<voi
     /*
     Run the function in this test environment.
     */
-    await testFunc(verifier);
+    try { await testFunc(verifier); }
+    catch { }
     /*
     Delete each set from the database. 
     */
