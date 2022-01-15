@@ -1,18 +1,18 @@
-import * as Yup from 'yup';
-import { useState } from 'react';
-import { useFormik, Form, FormikProvider } from 'formik';
+import { LoadingButton } from '@mui/lab';
 // @mui
 import { Stack, TextField } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import { Form, FormikProvider, useFormik } from 'formik';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ProfileInteraction } from 'src/db/apis/ProfileInteraction';
 // hooks
 import useAuth from 'src/hooks/useAuth';
+import { PAGE_PATHS } from 'src/routing/paths';
+//utils
+import isValidUsername from 'src/utils/isValidUsername';
+import * as Yup from 'yup';
 // components
 import TransitionAlert from './TransitionAlert';
-//utils
-import isValidUsername from 'src/utils/isValidUsername'
-import { ProfileInteraction } from 'src/db/apis/ProfileInteraction';
-import { useNavigate } from 'react-router-dom';
-import { PAGE_PATHS } from 'src/routing/paths';
 //db
 
 // ----------------------------------------------------------------------
@@ -39,20 +39,20 @@ export default function CreateProfileForm(  ) {
     },
     validationSchema: CreateProfileSchema,
     onSubmit: async (values, { setErrors, setSubmitting, resetForm, setFieldValue, setFieldTouched }) => {
-      let isUsernameTaken = await isValidUsername(values.username);
-      if (isUsernameTaken) {
+      if (!await isValidUsername(values.username)) {
         setSignupError("입력하신 이름은 이미 사용중이에요. 다시 골라주세요")
       }
       else {
         try {
           if (authedUser) {
+            // await ProfileInteraction.setPic();
             await ProfileInteraction.setUsername(authedUser.auth.uid, values.username); //TODO combine these two firebase calls into one
-            navigate(PAGE_PATHS.dashboard.home, { replace: true });
+            navigate(PAGE_PATHS.dashboard.home);
           }
-          else { //this should never be reached because CreateProfileForm only appears after being logged in
+          else { //this should never be reached because CreateProfileForm is only accessible for authedUsers with 0 upvotes
             setSignupError("오류가 발생했습니다. 로그인 페이지로 돌아가는 중...")
             setTimeout(() => { 
-              navigate(PAGE_PATHS.auth.login, { replace: true });
+              navigate(PAGE_PATHS.auth.signup);
             }, 3000)
           }
         } catch (error: any) {
@@ -64,6 +64,13 @@ export default function CreateProfileForm(  ) {
       setSubmitting(false);
     }
   })
+
+  useEffect(() => { //resets form when moving away from page
+    return () => {
+      setSignupError('');
+      formik.resetForm();
+    };
+  }, []);
 
   return (
     <FormikProvider value={formik}>
