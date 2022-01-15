@@ -6,6 +6,7 @@ import PopupState, { bindMenu, bindTrigger } from 'material-ui-popup-state';
 import * as React from 'react';
 import { PostEntity } from 'src/db/entities/posts/PostEntity';
 import useAuth from 'src/hooks/useAuth';
+import { useSignupDialog } from 'src/layouts/dashboard';
 
 interface PostMoreButtonProps {
   post: PostEntity;
@@ -14,14 +15,11 @@ interface PostMoreButtonProps {
 export default function PostMoreButton( {post} : PostMoreButtonProps ) {
   let {authedUser} = useAuth();
   const [isFlagged, setIsFlagged] = React.useState(authedUser ? post.flags.includes(authedUser.nonauth.id) : false);
-  
-  const handleSignupDialog = () => {
-    
-  }
+  const handleSignupDialogOpen = useSignupDialog();
 
   const handleFlagPost = () => {
     if (!authedUser) {
-      handleSignupDialog()
+      handleSignupDialogOpen()
     } else if (isFlagged) {
       //TODO "you already flagged this"
     } else {

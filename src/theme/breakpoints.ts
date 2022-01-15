@@ -8,6 +8,7 @@ declare module '@mui/material/styles' {
     xl: false;
     mobile: true; // adds the `mobile` breakpoint
     tablet: true;
+    tabletSlightlySmaller: true;
     desktop: true;
     fullscreen: true;
   }
@@ -21,12 +22,11 @@ const breakpoints = {
     // lg: 1200,
     // xl: 1536
     mobile: 0,
+    tabletSlightlySmaller: 500,
     tablet: 600,
     desktop: 1000,
     fullscreen: 1200, //up to 1536 or beyond
   }
 };
-
-
 
 export default breakpoints;

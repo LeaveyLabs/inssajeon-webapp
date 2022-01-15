@@ -45,12 +45,7 @@ export default function Sidebar({ isOpenSidebar, onCloseSidebar }: Props) {
   }, [pathname]);
 
   const renderContent = (
-    <Scrollbar
-      sx={{
-        height: 1,
-        '& .simplebar-content': { height: 1, display: 'flex', flexDirection: 'column' },
-      }}
-    >
+    <Scrollbar sx={{height: '100%', '& .simplebar-content': { height: 1, display: 'flex', flexDirection: 'column' },}}>
       <SidebarAccount />
       <NavSection navConfig={sidebarConfig} />
       <Box sx={{ flexGrow: 1 }} />
@@ -59,13 +54,7 @@ export default function Sidebar({ isOpenSidebar, onCloseSidebar }: Props) {
   );
 
   return ( 
-    <RootStyle
-      sx={{
-        width: {
-          desktop: SIDEBAR_WIDTH_DESKTOP,
-        },
-      }}
-    >
+    <RootStyle sx={{width: { desktop: SIDEBAR_WIDTH_DESKTOP, },}}>
       {!isDesktop && (
         <Drawer
           anchor={'right'}
@@ -82,13 +71,7 @@ export default function Sidebar({ isOpenSidebar, onCloseSidebar }: Props) {
           anchor={'right'}
           open
           variant="persistent"
-          PaperProps={{
-            sx: {
-              width: SIDEBAR_WIDTH_DESKTOP,
-              //borderLeftStyle: 'dashed',
-              bgcolor: 'background.default',
-            },
-          }}
+          PaperProps={{ sx: { width: SIDEBAR_WIDTH_DESKTOP, /*borderLeftStyle: 'dashed',*/ bgcolor: 'background.default',},}}
         >
           {renderContent}
         </Drawer>

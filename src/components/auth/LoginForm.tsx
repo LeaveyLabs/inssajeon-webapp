@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useFormik, Form, FormikProvider } from 'formik';
 // @mui
@@ -53,12 +53,11 @@ export default function LoginForm() {
       remember: true,
     },
     validationSchema: LoginSchema,
-    onSubmit: async (values, { setFieldValue, setFieldTouched, setSubmitting, resetForm }) => {
+    onSubmit: async (values, { setFieldValue, setFieldTouched, setSubmitting }) => {
       try {
         await login(values.email, values.password);
         await setPersistence(firebaseAuth, values.remember ? browserLocalPersistence : browserSessionPersistence)
-        navigate(PAGE_PATHS.dashboard.home, { replace: true });
-        resetForm();
+        navigate(PAGE_PATHS.dashboard.home);
       } catch (error: any) {
         if (error.message) {
           setLoginError(error.message)
@@ -71,6 +70,15 @@ export default function LoginForm() {
       setSubmitting(false);
     },
   });
+
+  useEffect(() => { //resets form when moving away from page
+    return () => {
+      setLoginError('');
+      setShowPassword(false);
+      formik.resetForm();
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleShowPassword = () => {
     setShowPassword((show) => !show);

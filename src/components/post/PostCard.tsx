@@ -6,16 +6,14 @@ import BookmarkIcon from '@mui/icons-material/Bookmark';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import CircleIcon from '@mui/icons-material/Circle';
 import IosShareIcon from '@mui/icons-material/IosShare';
-import {
-  Avatar,
-  Box, Card, Divider, IconButton, Link, Stack, Typography
-} from '@mui/material';
+import { Avatar, Link, Box, Card, Divider, Stack, Typography } from '@mui/material';
 // components
 import PostMoreButton from 'src/components/post/PostMoreButton';
 import { PostEntity } from 'src/db/entities/posts/PostEntity';
 //hooks
 import useAuth from 'src/hooks/useAuth';
 import { PAGE_PATHS } from 'src/routing/paths';
+import { useSignupDialog } from 'src/layouts/dashboard';
 // utils
 import { fDate } from 'src/utils/formatTime';
 import getAvatarColor from 'src/utils/getAvatarColor';
@@ -33,20 +31,17 @@ interface PostCardProps {
 
 export default function PostCard( { post }: PostCardProps ) {
   const { authedUser } = useAuth();
+  const handleSignupDialogOpen = useSignupDialog();
   const [isInteracting, setIsInteracting] = useState(false);
   const [isFavorited, setIsFavorited] = useState(authedUser ? authedUser.nonauth.activity.favorites.includes(post.postID) : false);
 
   let canNativeMobileShare = 'canShare' in navigator; //checks if user's device has a native share functionality
   //window.navigator.canShare() //this is the 'proper' way according to mozilla to check if canShare, but im getting errors using this method. use this workaround detailed here instead: https://stackoverflow.com/questions/57345539/navigator-canshare-in-typescript-permissions-denied
 
-  const handleSignupDialog = () => {
-
-  }
-
   const handleToggleFavorited = async () => {
     setIsInteracting(true);
     if (!authedUser) {
-      handleSignupDialog()
+      handleSignupDialogOpen();
     } else if (isFavorited) {
       try {
         setIsFavorited(prevIsFavorited => !isFavorited);
@@ -89,7 +84,7 @@ export default function PostCard( { post }: PostCardProps ) {
   return (
     <Card >
       <Box sx={{ px:2, height:60, display:'flex', flexDirection: "row", alignItems:"center", justifyContent:"center", }}>
-        <Avatar sx={{mx:1, width:30, height:30, bgcolor: getAvatarColor(post.userProfile.username) }} src={post.userProfile.picPath} />
+        <Avatar component={RouterLink} to={`${PAGE_PATHS.dashboard.profile}/${post.userProfile.username}`}  sx={{mx:1, width:30, height:30, bgcolor: getAvatarColor(post.userProfile.username) }} src={post.userProfile.picPath} />
         <Link to={`${PAGE_PATHS.dashboard.profile}/${post.userProfile.username}`} variant="subtitle1" color="text.primary" component={RouterLink}>{post.userProfile.username}</Link>
         <CircleIcon sx={{ color:'gray',fontSize: 4, ml:2 }}/>
         <Typography variant="caption" sx={{ mx:2,color: 'text.secondary' }}>{fDate((post.timestamp.toDate()))}</Typography>

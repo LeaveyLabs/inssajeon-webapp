@@ -15,6 +15,7 @@ import { v4 as uuidv4 } from "uuid";
 import * as Yup from 'yup';
 import { PostInteraction } from "../../db/apis/PostInteraction";
 import { PostEntity } from "../../db/entities/posts/PostEntity";
+import useAuth from '../../hooks/useAuth';
 //components
 import SubmitDeleteDialog from './SubmitDeleteDialog';
 import SubmitSuccessDialog from './SubmitSuccessDialog';
@@ -42,7 +43,8 @@ interface SubmitFormProps {
 }
 
 export default function SubmitForm( {handleClose} : SubmitFormProps) {
-  let navigate = useNavigate();
+  const {authedUser} = useAuth();
+  const navigate = useNavigate();
   const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
 
   const NewPostSchema = Yup.object().shape({
@@ -72,39 +74,43 @@ export default function SubmitForm( {handleClose} : SubmitFormProps) {
     },
     validationSchema: NewPostSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => { //if onSubmit is async isSubmitting automotically gets set to false after the async completes
-      try {
-        const post:PostEntity = {
-          postID: postID,
-          userID: "0", //TODO update
-          word: values.word,
-          definition: values.definition,
-          quote: values.quote,
-          timestamp: Timestamp.fromDate(new Date()),
-          tags: values.tags,
-          metrics: {
-            trendscore: 0,
-            upvoteCount: 0,
-            downvoteCount: 0,
-            shareCount: 0,
-            flagCount: 0,
-          }, //TOODO update
-          userProfile: { //TODO update 
-            username: "0",
-            bio: "0",
-            picPath: "0",
-            inssajeom: 0,
-          },
-          upvotes: [],
-          downvotes: [],
-          shares: [],
-          flags: [],
+      if (!authedUser) {
+        handleClose();
+        //TODO display error
+      } else {
+        try {
+          const post:PostEntity = {
+            postID: postID,
+            userID: authedUser.nonauth.id,
+            word: values.word,
+            definition: values.definition,
+            quote: values.quote,
+            timestamp: Timestamp.fromDate(new Date()),
+            tags: values.tags,
+            metrics: {
+              trendscore: 0,
+              upvoteCount: 0,
+              downvoteCount: 0,
+              shareCount: 0,
+              flagCount: 0,
+            }, //TOODO update
+            userProfile: { //TODO update 
+              username: authedUser.nonauth.profile.username,
+              bio: authedUser.nonauth.profile.bio,
+              picPath: authedUser.nonauth.profile.picPath,
+            },
+            upvotes: [],
+            downvotes: [],
+            shares: [],
+            flags: [],
+          }
+          await PostInteraction.createPost(postID, post);    
+          setIsSuccessDialogOpen(true);
+          //setSubmitting(false); i dont think this is needed
+        } catch (error) {
+          console.error(error)
         }
-        await PostInteraction.createPost(postID, post);    
-        setIsSuccessDialogOpen(true);
-        //setSubmitting(false); i dont think this is needed
-      } catch (error) {
-        console.error(error)
-      }
+      } 
     },
   });
 

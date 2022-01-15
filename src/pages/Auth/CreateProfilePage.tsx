@@ -1,12 +1,9 @@
-import { Box, Card, Container, Link, Stack, Typography } from '@mui/material';
+import { Box, Card, Container, Stack, Typography } from '@mui/material';
 // @mui
 import { styled, useTheme } from '@mui/material/styles';
-import { Link as RouterLink } from 'react-router-dom';
+import CreateProfileForm from 'src/components/auth/CreateProfileForm';
 import ClickwableWideLogoLarge from 'src/components/misc/ClickableWideLogoLarge';
 import useResponsive from 'src/hooks/useResponsive';
-// routes
-import { PAGE_PATHS } from 'src/routing/paths';
-import SignupForm from '../../components/auth/SignupForm';
 // components
 import Page from '../Page';
 
@@ -32,29 +29,21 @@ const DesktopStyle = styled(Container)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-function SignupContent() {
+function CreateProfileContent() {
   return (
     <Box >
-      <Stack direction="row" alignItems="center" justifyContent="center" sx={{ mb: 4, }}>
-        <Typography variant="h1" gutterBottom sx={{mb:0}}>인싸되기</Typography>
+      <Stack direction="column" alignItems="center" justifyContent="center" sx={{ mb: 4, }}>
+        <Typography variant="h2" gutterBottom sx={{mb:2}}>이름 짓기</Typography>
+        <Typography sx={{ color: 'text.secondary' }}>인싸전에서 이 이름으로 알려질 거예요.</Typography>
+        <Typography sx={{ color: 'text.secondary' }}>본명, 가명, 별명 다 좋아요.</Typography>
+        <Typography sx={{ color: 'text.secondary' }}>나중에도 바꿀 수 있어요.</Typography>
       </Stack>
-      <SignupForm />
-      <Typography variant="body2" align="center" sx={{ mt: 3 }}>
-        가입하시면, 인싸전의&nbsp;
-        <Link variant="subtitle2" target="_blank" rel="noopener" href={PAGE_PATHS.page.terms}>이용약관</Link>
-        과 {''}
-        <Link variant="subtitle2" target="_blank" rel="noopener" href={PAGE_PATHS.page.privacy}>개인정보취급방침</Link>
-        에 동의하시는 겁니다.
-      </Typography>
-      <Typography variant="body2" align="center" sx={{ mt: 3 }}>
-        계정이 이미 있습니까?{' '}
-        <Link variant="subtitle2" component={RouterLink} to={PAGE_PATHS.auth.login}>로그인하세요</Link>
-      </Typography>
+      <CreateProfileForm />
     </Box>
   )
 }
 
-export default function SignupPage() {
+export default function CreateProfilePage() {
   const isMobile = useResponsive('down', 'tablet'); //TODO why is it taking so long to be repsonsive here?
   const theme = useTheme()
 
@@ -65,14 +54,14 @@ export default function SignupPage() {
         <MobileStyle>
           <ClickwableWideLogoLarge/>
           <Box sx={{flexGrow:1}}/>
-          <SignupContent/>
+          <CreateProfileContent/>
           <Box sx={{flexGrow:1}}/>
         </MobileStyle>
       : //!isMobile
         <DesktopStyle>
           <Card sx={{padding: theme.spacing(3, 3), }}>
             <ClickwableWideLogoLarge sx={{mb:10}}/>
-            <SignupContent/>
+            <CreateProfileContent/>
           </Card>
         </DesktopStyle>
       }

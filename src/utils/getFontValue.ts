@@ -42,10 +42,10 @@ export function pxToRem(value: number) {
   return `${value / 16}rem`;
 }
 
-export function responsiveFontSizes({ mobile, desktop }: { mobile: number; desktop: number }) {
+export function responsiveFontSizes({ tablet, desktop }: { tablet: number; desktop: number }) {
   return {
-    '@media (min-width:0px)': {
-      fontSize: pxToRem(mobile),
+    '@media (min-width:600px)': {
+      fontSize: pxToRem(tablet),
     },
     '@media (min-width:1000px)': {
       fontSize: pxToRem(desktop),
