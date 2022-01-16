@@ -1,7 +1,6 @@
 import { LoadingButton } from '@mui/lab';
 // @mui
 import { Stack, TextField } from '@mui/material';
-import { updateProfile } from 'firebase/auth';
 import { Form, FormikProvider, useFormik } from 'formik';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -29,7 +28,7 @@ export default function CreateProfileForm(  ) {
   const CreateProfileSchema = Yup.object().shape({
     username: Yup
       .string()
-      .min(5, '5글자 이상')
+      .min(3, '3글자 이상')
       .required('필수'),
   });
 
