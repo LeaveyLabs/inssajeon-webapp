@@ -27,6 +27,8 @@ export type AuthContextType = {
   resetPassword: (email: string) => Promise<void>;
   updateEmail: (email: string) => Promise<void>; // why void?
   updatePassword: (password: string) => Promise<void>; // why void?
+  updateProfile: (updatedUsername: string, updatedBio: string, updatedPicPath: string ) => Promise<void>;
+  updateSettings: (updatedUsername: string, updatedBio: string, updatedPicPath: string ) => Promise<void>;
 };
 
 
@@ -121,6 +123,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
       });
   };
 
+  //TODO need to update email on client side too
   const updateEmail = async (email: string) => {
     if (firebaseAuth.currentUser) {
       updateUserEmail(firebaseAuth.currentUser, email);
@@ -129,6 +132,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
+  //TODO need to update password on client side too
   const updatePassword = async (password: string) => {
     if (firebaseAuth.currentUser) {
       updateUserPassword(firebaseAuth.currentUser, password)
@@ -136,6 +140,42 @@ function AuthProvider({ children }: { children: ReactNode }) {
       console.error("Can't update email when no user is signed in!")
     }
   } 
+
+  //TODO combine update username/bio/picPath into one api call to reduce firebase api calls?
+  const updateProfile = async ( updatedUsername: string, updatedBio: string, updatedPicPath: string ) => {
+    if (authedUser) {
+      try {
+        //firebase
+        // await ProfileInteraction.setBio();
+        // await ProfileInteraction.setPic();
+        await ProfileInteraction.setUsername(authedUser.auth.uid, updatedUsername); 
+        
+        //client side
+        setAuthedUser((prevState : AuthedUser | null) => {
+          if (!prevState) {
+            console.error("업데이트 하기 전에 로그인해야 된다.");
+            return prevState;
+          } else {
+            let oldUserNonauth: UserEntity = prevState.nonauth;
+            oldUserNonauth.profile.username = updatedUsername;
+            oldUserNonauth.profile.bio = updatedBio;
+            oldUserNonauth.profile.picPath = updatedPicPath;
+            let updatedUser : AuthedUser = {auth: prevState.auth, nonauth: oldUserNonauth};
+            return updatedUser;
+          }
+        })
+      } catch (error: any) {
+        console.log(error.message);
+      }
+    } else {
+      console.error("업데이트 하기 전에 로그인하야 된다.")
+    }
+  }
+
+  const updateSettings = async () => {
+
+  }
+  
 
   return (
     <AuthContext.Provider
@@ -148,6 +188,8 @@ function AuthProvider({ children }: { children: ReactNode }) {
         resetPassword,
         updateEmail,
         updatePassword,
+        updateProfile,
+        updateSettings,
       }}
     >
       {children} 

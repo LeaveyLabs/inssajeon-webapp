@@ -1,10 +1,10 @@
 import { LoadingButton } from '@mui/lab';
 // @mui
 import { Stack, TextField } from '@mui/material';
+import { updateProfile } from 'firebase/auth';
 import { Form, FormikProvider, useFormik } from 'formik';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ProfileInteraction } from 'src/db/apis/ProfileInteraction';
 // hooks
 import useAuth from 'src/hooks/useAuth';
 import { PAGE_PATHS } from 'src/routing/paths';
@@ -23,7 +23,7 @@ type InitialValues = {
 
 export default function CreateProfileForm(  ) {
   let navigate = useNavigate();
-  const { authedUser } = useAuth();
+  const { authedUser, updateProfile } = useAuth();
   const [signupError, setSignupError] = useState('');
 
   const CreateProfileSchema = Yup.object().shape({
@@ -45,15 +45,14 @@ export default function CreateProfileForm(  ) {
       else {
         try {
           if (authedUser) {
-            // await ProfileInteraction.setPic();
-            await ProfileInteraction.setUsername(authedUser.auth.uid, values.username); //TODO combine these two firebase calls into one
+            updateProfile(values.username, authedUser.nonauth.profile.bio, authedUser.nonauth.profile.picPath);
             navigate(PAGE_PATHS.dashboard.home);
           }
           else { //this should never be reached because CreateProfileForm is only accessible for authedUsers with 0 upvotes
             setSignupError("오류가 발생했습니다. 로그인 페이지로 돌아가는 중...")
             setTimeout(() => { 
               navigate(PAGE_PATHS.auth.signup);
-            }, 3000)
+            }, 2000)
           }
         } catch (error: any) {
           setSignupError(error.message)

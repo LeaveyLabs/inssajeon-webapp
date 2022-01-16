@@ -1,6 +1,7 @@
 // @mui
 import { Avatar, Badge, Box, Button, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PAGE_PATHS } from 'src/routing/paths';
 import useAuth from '../../../hooks/useAuth';
@@ -20,8 +21,12 @@ const RootStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function SidebarAccount( ) {
-  let {authedUser, logout} = useAuth()
-  let navigate = useNavigate()
+  const {authedUser, logout} = useAuth()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    console.log('autheduser change detected')
+  }, [navigate])
 
   let handleLogout = async () => {
     await logout();

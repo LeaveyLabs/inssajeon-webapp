@@ -51,7 +51,7 @@ export default function Feed( { getNewPosts }: Props ) {
         setPosts([...newPosts]);
       }
       if(newPosts === undefined) {
-        throw(new Error("No posts returned from database!"));
+        //TOOD display no posts card
       }
     }
     updatePostFetching();

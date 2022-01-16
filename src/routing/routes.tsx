@@ -49,9 +49,8 @@ export default function Router() {
             { path: ':id', element: <PostPage /> }, //displays that particular post first, followed by top trending posts on inssajeon
           ]
         },
-        { path: 'profile', children: [  //TODO: 'profile' and 'me' must be an unallowed username
-            { path: 'me', element: <AuthGuard><MyProfilePage/></AuthGuard> }, //**registeredUser only route
-            { path: ':id', element: <ProfilePage /> }, //TODO auto navigate to 'me' if :id matches registeredUser's id
+        { path: 'profile', children: [
+            { path: ':id', element: <ProfilePage /> }, 
           ] 
         },
       ],
@@ -106,7 +105,6 @@ const UsersPage = Loadable(lazy(() => import('../pages/Feeds/UsersPage')));
 const WordsPage = Loadable(lazy(() => import('../pages/Feeds/WordsPage')));
 const CategoriesPage = Loadable(lazy(() => import('../pages/Feeds/CategoriesPage')));
 const PostPage = Loadable(lazy(() => import('../pages/Feeds/PostPage')));
-const MyProfilePage = Loadable(lazy(() => import('../pages/Feeds/MyProfilePage')));
 const ProfilePage = Loadable(lazy(() => import('../pages/Feeds/ProfilePage')));
 
 // Misc

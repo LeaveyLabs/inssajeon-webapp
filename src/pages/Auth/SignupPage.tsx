@@ -55,7 +55,7 @@ function SignupContent() {
 }
 
 export default function SignupPage() {
-  const isMobile = useResponsive('down', 'tablet'); //TODO why is it taking so long to be repsonsive here?
+  const isMobile = useResponsive('down', 'tablet'); 
   const theme = useTheme()
 
   //HEIGHT: 100% REALLY CHANGES HOW ITEMS ARE POSITIONED VERTICALLY. FIXED PAGES NEED HEIGHT: 100%.
