@@ -68,7 +68,7 @@ export default function Feed( { getNewPosts }: Props ) {
   //TODO code to handle rendering another 10 posts as user scrolls down (should be able to find this online)
   //TODO look into lists vs stack: is stack really the best way to display posts as you scroll down?
   return (
-    <div>
+    <>
       {isLoading ? 
         <Stack spacing={2}>
           <PostSkeleton/>
@@ -77,21 +77,13 @@ export default function Feed( { getNewPosts }: Props ) {
           <PostSkeleton/>
           <PostSkeleton/>
         </Stack>
-      :
+      : posts ?
         <Stack spacing={2}>
-          {posts !== undefined 
-            ? 
-            posts.map((post: PostEntity) => (
-              <PostCard 
-                key={post.postID} 
-                post={post} 
-                />
-                ))
-            : 
-            <NoPostsCard/>
-          }
+          {posts.map((post: PostEntity) => (<PostCard key={post.postID} post={post} /> ))}
         </Stack>
+      :
+      <NoPostsCard/>
       }
-    </div>
+    </>
   )
 }
