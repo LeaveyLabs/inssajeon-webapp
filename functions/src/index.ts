@@ -2,7 +2,7 @@ import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 
 admin.initializeApp();
-const db = admin.firestore();
+const firestore = admin.firestore();
 
 // Start writing Firebase Functions
 // https://firebase.google.com/docs/functions/typescript
@@ -39,8 +39,8 @@ export const onPostUpdate = functions.firestore.document("posts/{postID}")
           data.downvotes.length, data.shares.length);
       const prevTrendscore = calculateTrendscore(previousData.upvotes.length,
           previousData.downvotes.length, previousData.shares.length);
-      const authorOfPost = db.doc(`users/${data.userID}`);
-      const wordOfPost = db.doc(`words/${data.word}`);
+      const authorOfPost = firestore.doc(`users/${data.userID}`);
+      const wordOfPost = firestore.doc(`words/${data.word}`);
 
       await authorOfPost.update({"metrics.inssajeom":
         admin.firestore.FieldValue.increment(-prevTrendscore)});
@@ -71,11 +71,12 @@ export const onUserUpdate = functions.firestore.document("users/{userID}")
       const data = change.after.data();
       const previousData = change.before.data();
       /* Only handle profile updates - activity is handled in postUpdate */
-      if (data.profile === previousData.profile) return null;
-      /* Update profile information for each submitted post */
-      for (const submissionID of data.activity.submissions) {
-        const submission = db.doc(`posts/${submissionID}`);
-        await submission.update({userProfile: data.profile});
+      if (data.profile !== previousData.profile) {
+        /* Update profile information for each submitted post */
+        for (const submissionID of data.activity.submissions) {
+          const submission = firestore.doc(`posts/${submissionID}`);
+          await submission.update({userProfile: data.profile});
+        }
       }
       return null;
     });

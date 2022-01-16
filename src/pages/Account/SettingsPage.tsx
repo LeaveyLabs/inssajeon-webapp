@@ -60,10 +60,7 @@ function CreateProfileContent() {
   return (
     <Box >
       <Stack direction="column" alignItems="center" justifyContent="center" sx={{ mb: 4, }}>
-        <Typography variant="h2" gutterBottom sx={{mb:2}}>이름 짓기</Typography>
-        <Typography sx={{ color: 'text.secondary' }}>인싸전에서 이 이름으로 알려질 거예요.</Typography>
-        <Typography sx={{ color: 'text.secondary' }}>본명, 가명, 별명 다 좋아요.</Typography>
-        <Typography sx={{ color: 'text.secondary' }}>나중에도 바꿀 수 있어요.</Typography>
+        <Typography variant="h2" gutterBottom sx={{mb:2}}>프로파일 편집</Typography>
       </Stack>
       <EditAccountForm />
     </Box>

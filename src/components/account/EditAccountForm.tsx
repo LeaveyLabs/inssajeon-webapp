@@ -1,6 +1,6 @@
 import { LoadingButton } from '@mui/lab';
 // @mui
-import { Avatar, Button, IconButton, Stack, TextField } from '@mui/material';
+import { Avatar, Button, CircularProgress, IconButton, Stack, TextField, unstable_createMuiStrictModeTheme } from '@mui/material';
 import { Form, FormikProvider, useFormik } from 'formik';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -29,6 +29,9 @@ export default function CreateProfileForm(  ) {
   let navigate = useNavigate();
   const { authedUser } = useAuth();
   const [signupError, setSignupError] = useState('');
+  const [photo, setPhoto] = useState('');
+  /* User is initially loading up the photo */
+  const [photoLoading, setPhotoLoading] = useState(true);
 
   const CreateProfileSchema = Yup.object().shape({
     username: Yup
@@ -37,21 +40,24 @@ export default function CreateProfileForm(  ) {
       .required('필수'),
   });
 
+  const initialUsername = authedUser?.nonauth.profile.username;
+  const intitalBio = authedUser?.nonauth.profile.bio;
+
   const formik = useFormik<InitialValues>({
     initialValues: {
-        username: '',
-        bio: '',
+        username:  initialUsername ? initialUsername : "",
+        bio: intitalBio ? intitalBio : "",
     },
     validationSchema: CreateProfileSchema,
     onSubmit: async (values, { setErrors, setSubmitting, resetForm, setFieldValue, setFieldTouched }) => {
-        if (!await isValidUsername(values.username)) {
-            setSignupError("입력하신 이름은 이미 사용중이에요. 다시 골라주세요")
+        if (!await isValidUsername(values.username) && values.username !== initialUsername) {
+            setSignupError("입력하신 이름은 이미 사용중이에요. 다시 골라주세요");
         }
         else {
             try {
                 if (authedUser) {
-                // await ProfileInteraction.setPic();
-                // await ProfileInteraction.setUsername(authedUser.auth.uid, values.username); //TODO combine these two firebase calls into one
+                    await ProfileInteraction.setBio(authedUser.auth.uid, values.bio);
+                    await ProfileInteraction.setUsername(authedUser.auth.uid, values.username); //TODO combine these two firebase calls into one
                     navigate(PAGE_PATHS.dashboard.home);
                 }
                 else { //this should never be reached because CreateProfileForm is only accessible for authedUsers with 0 upvotes
@@ -70,7 +76,17 @@ export default function CreateProfileForm(  ) {
     })
 
     useEffect(() => { //resets form when moving away from page
-    return () => {
+        async function updatePic() {
+            if(!authedUser || !authedUser.nonauth.profile.picPath) return;
+            try { setPhoto(await ImageFactory.pathToImageURL(
+                authedUser.nonauth.profile.picPath)); }
+            catch {}
+        }
+        /* Load photo */
+        updatePic();
+        setPhotoLoading(false);
+        /* Reset form */
+        return () => {
             setSignupError('');
             formik.resetForm();
         };
@@ -106,7 +122,10 @@ export default function CreateProfileForm(  ) {
             {/* <Avatar sx={{mx:1, width:30, height:30, bgcolor: getAvatarColor(authedUser.nonauth.profile.username) }}> */}
                 
             {/* </Avatar> */}
-            <Button component="label" startIcon={<Avatar></Avatar>}>
+            <Button component="label" startIcon={
+                photoLoading && <CircularProgress /> ||
+                !photoLoading && <Avatar src={photo}></Avatar>
+            }>
                 사진
                 <input name="pic" type="file" accept='image/*' hidden
                     onChange={(e) => {
@@ -120,16 +139,23 @@ export default function CreateProfileForm(  ) {
                         fileReader.onload = async () => {
                             if (fileReader.result == null) return;
                             if (fileReader.readyState === 2) {
-                                /* Acquire all the information of the user  */
+                                /* Stop the rendering the user's image */
+                                setPhotoLoading(true);
+                                /* Acquire all the information of the user */
                                 const users:UserEntity[] = await DataQuery.searchUserByUserID(authedUser.auth.uid);
                                 if (!users.length) return; 
                                 /* Delete initial picture from profile */
-                                await ImageFactory.deleteFromFirebaseStorage(users[0].profile.picPath);
+                                try { await ImageFactory.deleteFromFirebaseStorage(users[0].profile.picPath); } 
+                                catch { }
                                 /* Upload new picture to profile */
                                 const path:string = await ImageFactory.saveToFirebaseStorage(
                                     new Uint8Array(fileReader.result as ArrayBuffer), 
                                     name);
-                                await ProfileInteraction.setPic(authedUser.auth.uid, path);
+                                try { await ProfileInteraction.setPic(authedUser.auth.uid, path); }
+                                catch { }
+                                setPhoto(await ImageFactory.pathToImageURL(path));
+                                /* Render the user's updated image */
+                                setPhotoLoading(false);
                             }
                         };
                         fileReader.readAsArrayBuffer(e.target.files[0]);
