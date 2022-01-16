@@ -42,9 +42,9 @@ export const onPostUpdate = functions.firestore.document("posts/{postID}")
       const authorOfPost = db.doc(`users/${data.userID}`);
       const wordOfPost = db.doc(`words/${data.word}`);
 
-      await authorOfPost.update({"profile.inssajeom":
+      await authorOfPost.update({"metrics.inssajeom":
         admin.firestore.FieldValue.increment(-prevTrendscore)});
-      await authorOfPost.update({"profile.inssajeom":
+      await authorOfPost.update({"metrics.inssajeom":
         admin.firestore.FieldValue.increment(currTrendscore)});
       await wordOfPost.update({trendscore:
         admin.firestore.FieldValue.increment(-prevTrendscore)});
@@ -64,4 +64,18 @@ export const onPostCreate = functions.firestore.document("posts/{postID}")
       return change.ref.set({
         timestamp: admin.firestore.Timestamp.fromDate(new Date()),
       }, {merge: true});
+    });
+
+export const onUserUpdate = functions.firestore.document("users/{userID}")
+    .onUpdate(async (change) => {
+      const data = change.after.data();
+      const previousData = change.before.data();
+      /* Only handle profile updates - activity is handled in postUpdate */
+      if (data.profile === previousData.profile) return null;
+      /* Update profile information for each submitted post */
+      for (const submissionID of data.activity.submissions) {
+        const submission = db.doc(`posts/${submissionID}`);
+        await submission.update({userProfile: data.profile});
+      }
+      return null;
     });
