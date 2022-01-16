@@ -73,7 +73,7 @@ export default function SubmitDialog( {open, handleClose}: SubmitDialogProps ) {
       </DialogTitle>
       <Divider/>
       <DialogContent sx={{ p:3,pb:10 }}>
-        <SubmitDialogProfile />
+        <SubmitDialogProfile handleClose={handleClose} />
         <SubmitForm handleClose={handleClose}/>
       </DialogContent>
     </StyledSubmitDialog>
