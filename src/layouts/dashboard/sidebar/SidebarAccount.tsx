@@ -25,11 +25,7 @@ export default function SidebarAccount( ) {
   const {authedUser, logout} = useAuth()
   const navigate = useNavigate()
   const theme = useTheme();
-
-  useEffect(() => {
-    console.log('autheduser change detected')
-  }, [navigate])
-
+  
   const handleLogout = async () => {
     await logout();
     navigate(PAGE_PATHS.auth.login);
