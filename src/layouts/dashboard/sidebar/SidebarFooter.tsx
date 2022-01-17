@@ -15,9 +15,9 @@ export default function SidebarFooter() {
       </IconButton>
       <div>
         <Typography display='inline' variant="body2" sx={{ color: 'text.secondary'}}>
-          <Link target="_blank" rel="noopener" href={PAGE_PATHS.page.terms}>이용약관</Link>
+          <Link href={PAGE_PATHS.page.terms}>이용약관</Link>
           {' | '}
-          <Link target="_blank" rel="noopener" href={PAGE_PATHS.page.privacy}>개인정보처리방침</Link>
+          <Link href={PAGE_PATHS.page.privacy}>개인정보처리방침</Link>
         </Typography><br/>
         <Typography display='inline' variant="body2" sx={{ color: 'text.secondary'}}>
           @Inssajeon 2022

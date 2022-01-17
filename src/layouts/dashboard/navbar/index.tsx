@@ -65,7 +65,7 @@ export default function Navbar({ onOpenSidebar, handleSubmitDialogOpen, handleSi
               </IconButton>
               )}
             {isDesktop  && (
-              <Fab onClick={handleFabClick} size='medium' color="primary" aria-label="입력하기" sx={{position:'absolute', zIndex:1, top:-2, right:10 }}>
+              <Fab  onClick={handleFabClick} size='medium' color="primary" aria-label="입력하기" sx={{boxShadow: 0,position:'absolute', zIndex:1, top:-2, right:10 }}>
                 <EditIcon />
               </Fab>
               )}

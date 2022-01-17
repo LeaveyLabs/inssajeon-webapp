@@ -82,8 +82,7 @@ export default function Router() {
       ]
     },
     { path: 'charts', element: <DashboardLayout />, children: [
-      { path: "*", element: <Navigate to="" replace />, index:true },
-      { path: '', element: <ComingSoonPage /> },
+      { path: '', element: <ChartsPage /> },
     ]},
     //404
     {
@@ -126,7 +125,7 @@ const AboutPage = Loadable(lazy(() => import( '../pages/Information/AboutPage') 
 const FAQPage = Loadable(lazy(() => import( '../pages/Information/FAQPage') ));
 
 // Charts
-//const ChartsPage = Loadable(lazy(() => import( '../pages/Charts/ChartsPage') ));
+const ChartsPage = Loadable(lazy(() => import( '../pages/Charts/ChartsPage') ));
 
 // Accounto
 const ComingSoonPage = Loadable(lazy(() => import( '../pages/Misc/ComingSoonPage') ));
