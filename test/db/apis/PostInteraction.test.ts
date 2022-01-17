@@ -3,12 +3,13 @@ import { PostInteraction } from "../../../src/db/apis/PostInteraction";
 import { ProfileInteraction } from "../../../src/db/apis/ProfileInteraction";
 import { PostEntity } from "../../../src/db/entities/posts/PostEntity";
 import { UserProfileEntity } from "../../../src/db/entities/users/UserProfileEntity";
-import { createRandomPost, createRandomUserInfo } from "../entities/entityCreation";
+import { createRandomPost, createRandomUserInfo, createRandomUserWithID } from "../entities/entityCreation";
 import { UserEntity } from "../../../src/db/entities/users/UserEntity";
 
 describe("testing PostInteraction", () => {
     it("create a post and then delete it", async () : Promise<void> => {
         const post:PostEntity = createRandomPost();
+        await ProfileInteraction.createAccount(createRandomUserWithID(post.userID).profile, post.userID);
 
         await PostInteraction.createPost(post.postID, post);
         expect((await DataQuery.searchPostByPostID(post.postID)).length).toBe(1);
@@ -19,9 +20,10 @@ describe("testing PostInteraction", () => {
     });
     it("create a post, add it to someone's activity, and then delete it", async () : Promise<void> => {
         const post:PostEntity = createRandomPost();
+        await ProfileInteraction.createAccount(createRandomUserWithID(post.userID).profile, post.userID);
 
         try { await PostInteraction.createPost(post.postID, post); } 
-        catch {}
+        catch (e) { console.log(e) }
         expect((await DataQuery.searchPostByPostID(post.postID)).length).toBe(1);
 
         const info:UserProfileEntity = createRandomUserInfo();

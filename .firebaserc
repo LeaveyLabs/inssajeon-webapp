@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "inssajeon-19dd4"
-  }
+    "default": "inssajeon-19dd4",
+    "test": "inssajeon-test"
+  },
+  "targets": {}
 }

@@ -1,4 +1,4 @@
-import { USER_METRICS_TYPE_ERROR, PROFILE_TYPE_ERROR } from "../../strings/apiConstLibrary";
+import { USER_METRICS_TYPE_ERROR } from "../../strings/apiConstLibrary";
 import { EntityFactory, IDictionary, validatedObject } from "../jsonFormat";
 
 /* Holds user's metrics */

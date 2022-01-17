@@ -3,7 +3,7 @@ import { EntityFactory } from "../entities/jsonFormat";
 import { PostEntity, PostFactory } from "../entities/posts/PostEntity";
 import { UserEntity, UserFactory } from "../entities/users/UserEntity";
 import { WordEntity, WordFactory } from "../entities/words/WordEntity";
-import { MAX_QUERY, POST_POSTID_HEADER, POST_TAGS_HEADER, POST_TRENDSCORE_PROPERTY, POST_UPVOTECOUNT_PROPERTY, USER_PROFILE_HEADER, USER_USERID_HEADER } from "../strings/apiConstLibrary";
+import { MAX_QUERY, POST_DOWNVOTES_PROPERTY, POST_FAVORITES_PROPERTY, POST_POSTID_PROPERTY, POST_SHARES_PROPERTY, POST_TAGS_PROPERTY, POST_TRENDSCORE_PROPERTY, POST_UPVOTECOUNT_PROPERTY, POST_UPVOTES_PROPERTY, POST_USERID_PROPERTY, USER_PROFILE_HEADER, USER_USERID_HEADER } from "../strings/apiConstLibrary";
 import { postDatabase, userDatabase, wordDatabase } from "./dbRefs";
 
 export const DataQuery = function () {};
@@ -108,7 +108,7 @@ DataQuery.searchPostByTag = async (tag: string, ordering:PostOrder,
     Query all posts with an identical tag. 
     */
     const queryFields:Array<QueryConstraint> = [
-        where(POST_TAGS_HEADER, "array-contains", tag)];
+        where(POST_TAGS_PROPERTY, "array-contains", tag)];
     /*
     Order the query and limit the total results.
     Order after the last result if necessary.
@@ -207,11 +207,51 @@ DataQuery.searchPostByPostID = async (id:string) : Promise<Array<PostEntity>> =>
     Query posts with an identical postID.
     Among these, call firebase to return all the valid posts.
     */
-    const postIDQuery = query(postDatabase, where(POST_POSTID_HEADER, "==", id));
+    const postIDQuery = query(postDatabase, where(POST_POSTID_PROPERTY, "==", id));
     const postIDQueryResult = await firebaseEntityQuery<PostEntity>(
         postIDQuery, PostFactory);
     return postIDQueryResult;
 };
+
+export enum PostInteractionType {
+    Submission, 
+    Upvote,
+    Downvote,
+    Share, 
+    Favorite
+}
+/**
+ * @param  {string} id - user id to be searched
+ * @param  {PostInteractionType} i - interaction with the post (submission, upvote, downvote, share, favorite)
+ * @param {PostOrder} o - order in which the posts are returned
+ * @param  {DocumentSnapshot[]} lastDoc?
+ * @returns Promise
+ */
+DataQuery.searchPostByUserID = async (id:string, i:PostInteractionType, o:PostOrder, lastDoc?:DocumentSnapshot[]) 
+    : Promise<Array<PostEntity>> => {
+    const queryFields = [postOrderQuery[o]];
+    switch (i) {
+        case PostInteractionType.Submission:
+            queryFields.push(where(POST_USERID_PROPERTY, "==", id));
+            break;
+        case PostInteractionType.Upvote:
+            queryFields.push(where(POST_UPVOTES_PROPERTY, "array-contains", id));
+            break;
+        case PostInteractionType.Downvote:
+            queryFields.push(where(POST_DOWNVOTES_PROPERTY, "array-contains", id));
+            break;
+        case PostInteractionType.Share:
+            queryFields.push(where(POST_SHARES_PROPERTY, "array-contains", id));
+            break;
+        case PostInteractionType.Favorite:
+            queryFields.push(where(POST_FAVORITES_PROPERTY, "array-contains", id));
+            break;
+    }
+    const postIDQuery = query(postDatabase, ...queryFields);
+    const postIDQueryResult = await firebaseEntityQuery<PostEntity>(
+        postIDQuery, PostFactory);
+    return postIDQueryResult;
+}
 
 /**
  * @param  {UserID} id

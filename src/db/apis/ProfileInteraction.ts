@@ -1,11 +1,12 @@
 import { deleteDoc, doc, setDoc, updateDoc } from "@firebase/firestore";
 import { Timestamp } from "firebase/firestore";
-import { UserProfileEntity } from "../entities/users/UserProfileEntity";
+import { UserProfileEntity, UserProfileFactory } from "../entities/users/UserProfileEntity";
 import { UserEntity, UserFactory } from "../entities/users/UserEntity";
 import { ACCOUNT_DEFAULT_SETTINGS, PROFILE_BIO_UPDATE_ERROR, PROFILE_PIC_UPDATE_ERROR, PROFILE_USERNAME_UPDATE_ERROR, PROFILE_USER_CREATION_ERROR, PROFILE_USER_DELETION_ERROR, USER_BIO_PROPERTY, USER_PIC_PATH_PROPERTY, USER_USERNAME_PROPERTY } from "../strings/apiConstLibrary";
 import { userDatabase } from "./dbRefs";
 import { DataQuery } from "./DataQuery";
 import { PostInteraction } from "./PostInteraction";
+import { ImageFactory } from "./ImageFactory";
 
 export const ProfileInteraction = function () {};
 
@@ -19,7 +20,7 @@ ProfileInteraction.createAccount = async (userInfo:UserProfileEntity,
     customID:string) : Promise<void> => {
     const userFromProfile:UserEntity = {
         id: customID,
-        profile: userInfo,
+        profile: UserProfileFactory.toExportJson(userInfo),
         settings: ACCOUNT_DEFAULT_SETTINGS,
         activity: {
             upvotes: [],
