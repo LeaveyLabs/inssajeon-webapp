@@ -244,7 +244,7 @@ DataQuery.searchPostByUserID = async (id:string, i:PostInteractionType, o:PostOr
             queryFields.push(where(POST_SHARES_PROPERTY, "array-contains", id));
             break;
         case PostInteractionType.Favorite:
-            queryFields.push(where("favorites", "array-contains", id));
+            queryFields.push(where(POST_FAVORITES_PROPERTY, "array-contains", id));
             break;
     }
     queryFields.push(postOrderQuery[o]);
