@@ -22,6 +22,8 @@ import DesktopCopyButton from './DesktopCopyButton';
 import TrendingIcons from './TrendingIcons';
 import UnstyledWhenDisabledIconButton from './UnstyledWhenDisabledIconButton';
 import VotePanel from './VotePanel';
+import { useTheme } from '@mui/material';
+import CustomAvatar from '../experimental/CustomAvatar';
 
 // ----------------------------------------------------------------------
 
@@ -31,6 +33,7 @@ interface PostCardProps {
 
 export default function PostCard( { post }: PostCardProps ) {
   const { authedUser } = useAuth();
+  const theme = useTheme();
   const handleSignupDialogOpen = useSignupDialog();
   const [isInteracting, setIsInteracting] = useState(false);
   const [isFavorited, setIsFavorited] = useState(authedUser ? authedUser.nonauth.activity.favorites.includes(post.postID) : false);
@@ -84,10 +87,12 @@ export default function PostCard( { post }: PostCardProps ) {
   return (
     <Card >
       <Box sx={{ px:2, height:60, display:'flex', flexDirection: "row", alignItems:"center", justifyContent:"center", }}>
-        <Avatar component={RouterLink} to={`${PAGE_PATHS.dashboard.profile}/${post.userProfile.username}`}  sx={{mx:1, width:30, height:30, bgcolor: getAvatarColor(post.userProfile.username) }} src={post.userProfile.picPath} />
-        <Link to={`${PAGE_PATHS.dashboard.profile}/${post.userProfile.username}`} variant="subtitle1" color="text.primary" component={RouterLink}>{post.userProfile.username}</Link>
+        <RouterLink to={`${PAGE_PATHS.dashboard.profile}/${post.userProfile.username}`}>
+          <CustomAvatar sx={{mx:1, width:theme.spacing(3), height:theme.spacing(3) }} id={post.userID} picPath={post.userProfile.picPath} />
+        </RouterLink>
+        <Link sx={{maxWidth:'50%'}} noWrap to={`${PAGE_PATHS.dashboard.profile}/${post.userProfile.username}`} variant="subtitle1" color="text.primary" component={RouterLink}>{post.userProfile.username}</Link>
         <CircleIcon sx={{ color:'gray',fontSize: 4, ml:2 }}/>
-        <Typography variant="caption" sx={{ mx:2,color: 'text.secondary' }}>{fDate((post.timestamp.toDate()))}</Typography>
+        <Typography variant="caption" sx={{flexShrink:0, mx:2,color: 'text.secondary' }}>{fDate((post.timestamp.toDate()))}</Typography>
         <TrendingIcons post={post} />
         <Box sx={{ flexGrow: 1 }} />
         <PostMoreButton post={post} />

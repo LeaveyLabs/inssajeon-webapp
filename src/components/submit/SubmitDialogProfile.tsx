@@ -3,6 +3,7 @@ import { Avatar, Box, Link, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import useAuth from 'src/hooks/useAuth';
 import getAvatarColor from 'src/utils/getAvatarColor';
+import CustomAvatar from '../experimental/CustomAvatar';
 
 // ----------------------------------------------------------------------
 
@@ -28,7 +29,7 @@ export default function SubmitDialogProfile( {handleClose} : SubmitDialogProfile
   return (
     <Link underline="none" color="inherit">
       <RootStyle>
-        <Avatar sx={{bgcolor: getAvatarColor(authedUser?.nonauth.id) }} src={authedUser?.nonauth.profile.picPath} />
+        <CustomAvatar id={authedUser?.nonauth.id} picPath={authedUser?.nonauth.profile.picPath} />
         <Box sx={{ml: 2}}>
           <Typography variant="subtitle1" noWrap>
             {authedUser?.nonauth.profile.username}

@@ -2,9 +2,10 @@ import { Divider, styled, ToggleButton, ToggleButtonGroup, useTheme } from '@mui
 import React, { useState } from 'react';
 import Feed from 'src/components/feed/Feed';
 import MyProfileCard from 'src/components/profile/MyProfileCard';
-import { DataQuery, PostOrder } from 'src/db/apis/DataQuery';
+import { DataQuery, PostInteractionType, PostOrder } from 'src/db/apis/DataQuery';
 import { UserEntity } from 'src/db/entities/users/UserEntity';
 import useAuth from 'src/hooks/useAuth';
+import { convertToObject } from 'typescript';
 import ProfileCard from './ProfileCard';
 
 interface ProfileCardProps {
@@ -37,9 +38,9 @@ export default function ProfileFeed( { profileUser }: ProfileCardProps ) {
   async function getNewPosts() {
     try {
       if (feedSelection === FeedSelection.submissions) {
-        return await DataQuery.getAllPosts(PostOrder.Trendscore); //TODO change
+        return await DataQuery.searchPostByUserID(profileUser.id, PostInteractionType.Submission, PostOrder.Trendscore);
       } else {
-        //return await DataQuery.getPostsFavoritedByUser
+        return await DataQuery.searchPostByUserID(profileUser.id, PostInteractionType.Favorite, PostOrder.Trendscore);
       }
     } catch (error) {
       console.log(error);
@@ -55,7 +56,7 @@ export default function ProfileFeed( { profileUser }: ProfileCardProps ) {
   return (
     <> 
       {authedUser && authedUser.nonauth.profile.username === profileUser.profile.username ?
-        <MyProfileCard />
+        <ProfileCard profileUser={profileUser} /> //TODO consider changing back to myprofilecard
       : 
         <ProfileCard profileUser={profileUser} />
       }
