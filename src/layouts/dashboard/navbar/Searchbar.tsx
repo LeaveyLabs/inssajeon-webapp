@@ -87,16 +87,18 @@ export default function Searchbar(  ) {
     if (inputRef.current) { //a typescript check that the ref is indeed defined
       inputRef.current.focus(); //TODO focus the input on handleClear
     }
-    console.log(searchInput)
-    console.log('clear')
   }
   
   let navigate = useNavigate();
 
-  const handleKeyDown = (key:string) : void => {
-    if (key === 'Enter') {
+  const handleKeyDown = (event : React.KeyboardEvent ) : void => {
+    if (event.key === 'Enter') {
       if(!searchInput.length) return;
+      const target = event.target as HTMLTextAreaElement;
       navigate(`${PAGE_PATHS.dashboard.words}/${searchInput}`);
+      setTimeout(() => {
+        target.blur();
+      }, 10); //TODO idk if this works
     }
   }
 
@@ -107,7 +109,7 @@ export default function Searchbar(  ) {
         <SearchIconWrapper>
           <SearchIcon fontSize='large' color='primary'  />
         </SearchIconWrapper>
-        <StyledInputBase type='text' ref={inputRef} autoComplete='off' value={searchInput} onChange={event => setSearchInput(event.target.value)} placeholder="겸색..." id='search-input' onKeyDown={event => handleKeyDown(event.key)}/>
+        <StyledInputBase type='text' ref={inputRef} autoComplete='off' onBlur={handleBlur} value={searchInput} onChange={event => setSearchInput(event.target.value)} placeholder="겸색..." id='search-input' onKeyDown={event => handleKeyDown(event)}/>
         { searchInput.length !== 0 &&
           <ClearSearchButton handleClear={handleClear}/>
         } 

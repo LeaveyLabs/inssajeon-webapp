@@ -10,5 +10,6 @@ export default async function isValidUsername(username: string) {
   if (usersWithThatName.length > 0) {
     return false;
   }
+
   return true;
 }

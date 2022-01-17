@@ -89,7 +89,7 @@ function ForgotPasswordContent( {sent, setSent} : ContentProps) {
 // ----------------------------------------------------------------------
 
 export default function ForgotPasswordPage() {
-  const isMobile = useResponsive('down', 'tablet'); //TODO why is it taking so long to be repsonsive here?
+  const isMobile = useResponsive('down', 'tablet');
   const theme = useTheme()
   const [email, setEmail] = useState('');
   const [sent, setSent] = useState(false);
