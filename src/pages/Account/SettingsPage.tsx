@@ -28,7 +28,7 @@
 import { Box, Card, Container, Stack, Typography } from '@mui/material';
 // @mui
 import { styled, useTheme } from '@mui/material/styles';
-import EditAccountForm from 'src/components/account/EditAccountForm';
+import EditProfileForm from 'src/components/account/EditProfileForm';
 import ClickwableWideLogoLarge from 'src/components/misc/ClickableWideLogoLarge';
 import useResponsive from 'src/hooks/useResponsive';
 // components
@@ -62,7 +62,7 @@ function CreateProfileContent() {
       <Stack direction="column" alignItems="center" justifyContent="center" sx={{ mb: 4, }}>
         <Typography variant="h2" gutterBottom sx={{mb:2}}>프로파일 편집</Typography>
       </Stack>
-      <EditAccountForm />
+      <EditProfileForm />
     </Box>
   )
 }

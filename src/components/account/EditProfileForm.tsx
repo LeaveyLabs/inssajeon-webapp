@@ -25,7 +25,7 @@ type InitialValues = {
   bio: string;
 };
 
-export default function CreateProfileForm(  ) {
+export default function ModifyProfileForm(  ) {
   let navigate = useNavigate();
   const { authedUser } = useAuth();
   const [signupError, setSignupError] = useState('');
