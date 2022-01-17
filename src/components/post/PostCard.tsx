@@ -43,25 +43,44 @@ export default function PostCard( { post }: PostCardProps ) {
 
   const handleToggleFavorited = async () => {
     setIsInteracting(true);
-    if (!authedUser) {
-      handleSignupDialogOpen();
-    } else if (isFavorited) {
+
+    /* Cannot toggle the favorite button without an authUser */
+    if (!authedUser) handleSignupDialogOpen();
+
+    /* If already favorited ... */
+    else if (isFavorited) {
       try {
-        setIsFavorited(prevIsFavorited => !isFavorited);
-        await PostInteraction.unfavoritePost(authedUser.nonauth.id, post.postID)
-      } catch (error: any) {
-        console.error(error.message);
-        setIsFavorited(prevIsFavorited => !isFavorited);
+        /* Unfavorite the UI element of the post */
+        setIsFavorited(prevIsFavorited => false);
+        /* Remove favorite from the current auth instance */
+        const i = authedUser.nonauth.activity.favorites.indexOf(post.postID);
+        if (i !== -1) authedUser.nonauth.activity.favorites.splice(i, 1);
+        /* Add favorite to the database */
+        await PostInteraction.unfavoritePost(authedUser.nonauth.id, post.postID);
       }
-    } else { //!isFavorited
+      catch (error: any) {
+        console.error(error.message);
+        /* If there's an error, do not change the status of the button.  */
+        setIsFavorited(prevIsFavorited => true);
+      }
+    }
+
+    /* If not favorited yet ... */
+    else {
       try {
-        setIsFavorited(prevIsFavorited => !isFavorited);
+        /* Favorite the UI element of the post */
+        setIsFavorited(prevIsFavorited => true);
+        /* Add favorite to the current auth instance */
+        authedUser.nonauth.activity.favorites.push(post.postID);
+        /* Add favorite to the database */
         await PostInteraction.favoritePost(authedUser.nonauth.id, post.postID)
       } catch (error: any) {
         console.error(error.message);
-        setIsFavorited(prevIsFavorited => !isFavorited);
+        /* If there's an error, do not change the status of the button. */
+        setIsFavorited(prevIsFavorited => false);
       }
     }
+
     setIsInteracting(false);
   }
 
