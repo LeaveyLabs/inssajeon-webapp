@@ -154,6 +154,7 @@ export default function ModifyProfileForm(  ) {
                                 try { await ProfileInteraction.setPic(authedUser.auth.uid, path); }
                                 catch { }
                                 setPhoto(await ImageFactory.pathToImageURL(path));
+                                authedUser.nonauth.profile.picPath = path;
                                 /* Render the user's updated image */
                                 setPhotoLoading(false);
                             }

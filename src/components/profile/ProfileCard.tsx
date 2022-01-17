@@ -2,11 +2,13 @@
 
 //mui
 import SettingsIcon from '@mui/icons-material/Settings';
-import { Box, Divider, Stack, Typography, useTheme } from '@mui/material';
+import { Box, Divider, IconButton, Stack, Typography, useTheme } from '@mui/material';
+import { useNavigate } from 'react-router';
 //entities
 import { UserEntity } from 'src/db/entities/users/UserEntity';
 //hooks
 import useAuth from 'src/hooks/useAuth';
+import { PAGE_PATHS } from 'src/routing/paths';
 import CustomAvatar from '../experimental/CustomAvatar';
 import ProfileMoreButton from './ProfileMoreButton';
 
@@ -20,6 +22,13 @@ interface ProfileCardProps {
 export default function ProfileCard( { profileUser }: ProfileCardProps ) {
   const theme = useTheme();
   const {authedUser} = useAuth();
+  const navigate = useNavigate();
+
+  function goToUserSettings() {
+    if (!authedUser) throw new Error("Cannot access settings page: user not signed in.");
+    console.log(`${PAGE_PATHS.page.myAccount.settings}/${authedUser.nonauth.profile.username}`);
+    navigate(`${PAGE_PATHS.page.myAccount.settings}/${authedUser.nonauth.profile.username}`);
+  }
 
   return (
     < > 
@@ -28,7 +37,9 @@ export default function ProfileCard( { profileUser }: ProfileCardProps ) {
         <Typography variant="h2" sx={{ mx:2,color: 'text.secondary' }}>{profileUser.profile.username}</Typography>
         <Box sx={{ flexGrow: 1 }} />
           {authedUser && authedUser.nonauth.profile.username === profileUser.profile.username ?
-            <SettingsIcon/>
+            <IconButton onClick={goToUserSettings}>
+              <SettingsIcon/>
+            </IconButton>
           :
             <ProfileMoreButton profileUser={profileUser} />
           }
