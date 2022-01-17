@@ -47,6 +47,7 @@ export default function Feed( { getNewPosts }: Props ) {
   useEffect(() => {
     const updatePostFetching = async () => {
       let newPosts: PostEntity[] | undefined = await getNewPosts();
+      // console.log(newPosts);
       if (newPosts !== undefined) {
         setPosts([...newPosts]);
       }

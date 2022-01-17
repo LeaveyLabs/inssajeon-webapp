@@ -1,10 +1,9 @@
 // @mui
-import { Avatar, Badge, Box, Button, Stack, Typography, useTheme } from '@mui/material';
+import { Badge, Box, Button, Stack, Typography, useTheme } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import CustomAvatar from 'src/components/experimental/CustomAvatar';
 import { PAGE_PATHS } from 'src/routing/paths';
-import getAvatarColor from 'src/utils/getAvatarColor';
 import useAuth from '../../../hooks/useAuth';
 
 // ----------------------------------------------------------------------
@@ -40,7 +39,7 @@ export default function SidebarAccount( ) {
           <RootStyle>
             <Box sx={{ml: 1, width: '100%',display:'flex', justifyContent:'flex-start', alignItems:'flex-start' }}>
               <Badge overlap="circular" badgeContent={0} color="error">
-                <Avatar sx={{bgcolor: getAvatarColor(authedUser?.nonauth.id) }} src={authedUser?.nonauth.profile.picPath} />
+                <CustomAvatar id={authedUser?.nonauth.id} picPath={authedUser?.nonauth.profile.picPath} />
               </Badge>
               <Stack spacing={1} sx={{mt:theme.spacing(0.8)}}>
                 <Typography sx={{ml:2}} variant="subtitle1" noWrap>{authedUser.nonauth.profile.username}</Typography>
@@ -53,7 +52,7 @@ export default function SidebarAccount( ) {
           </RootStyle>
           :
             <RootStyle>
-              <Avatar src={""} alt={"guest"}/>
+              <CustomAvatar id={undefined} picPath={undefined} />
               <Box sx={{ml: 2, width: '100%',display:'flex', justifyContent:'space-between' }}>
                 <Button onClick={() => navigate(PAGE_PATHS.auth.signup) }>
                   <Typography variant="h4" noWrap sx={{ color: 'text.secondary' }}>

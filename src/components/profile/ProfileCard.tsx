@@ -2,13 +2,12 @@
 
 //mui
 import SettingsIcon from '@mui/icons-material/Settings';
-import { Avatar, Box, Divider, Stack, Typography, useTheme } from '@mui/material';
+import { Box, Divider, Stack, Typography, useTheme } from '@mui/material';
 //entities
 import { UserEntity } from 'src/db/entities/users/UserEntity';
 //hooks
 import useAuth from 'src/hooks/useAuth';
-//utils
-import getAvatarColor from 'src/utils/getAvatarColor';
+import CustomAvatar from '../experimental/CustomAvatar';
 import ProfileMoreButton from './ProfileMoreButton';
 
 
@@ -25,8 +24,7 @@ export default function ProfileCard( { profileUser }: ProfileCardProps ) {
   return (
     < > 
       <Box sx={{ height:'auto', display:'flex', flexDirection: "row", alignItems:"center", justifyContent:"center", }}>
-        <Avatar sx={{mx:1, width:theme.spacing(10), height:theme.spacing(10), bgcolor: getAvatarColor(profileUser.profile.username) }} src={profileUser.profile.picPath} />
-        {/* <Link to={`${PAGE_PATHS.dashboard.profile}/${post.userProfile.username}`} variant="subtitle1" color="text.primary" component={RouterLink}>{post.userProfile.username}</Link> */}
+        <CustomAvatar sx={{mx:1, width:theme.spacing(10), height:theme.spacing(10) }} id={profileUser.id} picPath={profileUser.profile.picPath} />
         <Typography variant="h2" sx={{ mx:2,color: 'text.secondary' }}>{profileUser.profile.username}</Typography>
         <Box sx={{ flexGrow: 1 }} />
           {authedUser && authedUser.nonauth.profile.username === profileUser.profile.username ?
