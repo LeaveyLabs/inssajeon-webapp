@@ -103,6 +103,7 @@ export default function SubmitForm( {handleClose} : SubmitFormProps) {
             downvotes: [],
             shares: [],
             flags: [],
+            favorites: [],
           }
           await PostInteraction.createPost(postID, post);    
           setIsSuccessDialogOpen(true);
