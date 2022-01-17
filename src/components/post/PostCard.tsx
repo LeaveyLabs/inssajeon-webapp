@@ -88,11 +88,11 @@ export default function PostCard( { post }: PostCardProps ) {
     <Card >
       <Box sx={{ px:2, height:60, display:'flex', flexDirection: "row", alignItems:"center", justifyContent:"center", }}>
         <RouterLink to={`${PAGE_PATHS.dashboard.profile}/${post.userProfile.username}`}>
-          <CustomAvatar sx={{mx:1, width:theme.spacing(3), height:theme.spacing(3) }} id={authedUser?.nonauth.id} picPath={authedUser?.nonauth.profile.picPath} />
+          <CustomAvatar sx={{mx:1, width:theme.spacing(3), height:theme.spacing(3) }} id={post.userID} picPath={post.userProfile.picPath} />
         </RouterLink>
-        <Link to={`${PAGE_PATHS.dashboard.profile}/${post.userProfile.username}`} variant="subtitle1" color="text.primary" component={RouterLink}>{post.userProfile.username}</Link>
+        <Link sx={{maxWidth:'50%'}} noWrap to={`${PAGE_PATHS.dashboard.profile}/${post.userProfile.username}`} variant="subtitle1" color="text.primary" component={RouterLink}>{post.userProfile.username}</Link>
         <CircleIcon sx={{ color:'gray',fontSize: 4, ml:2 }}/>
-        <Typography variant="caption" sx={{ mx:2,color: 'text.secondary' }}>{fDate((post.timestamp.toDate()))}</Typography>
+        <Typography variant="caption" sx={{flexShrink:0, mx:2,color: 'text.secondary' }}>{fDate((post.timestamp.toDate()))}</Typography>
         <TrendingIcons post={post} />
         <Box sx={{ flexGrow: 1 }} />
         <PostMoreButton post={post} />
