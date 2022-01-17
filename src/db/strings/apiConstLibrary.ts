@@ -79,7 +79,7 @@ export const USER_BIO_PROPERTY = "profile.bio";
 export const USER_PIC_PATH_PROPERTY = "profile.picPath";
 export const USER_UPVOTES_PROPERTY = "activity.upvotes";
 export const USER_DOWNVOTES_PROPERTY = "activity.downvotes";
-export const USER_FAVORITES_PROPERTY = "activity.downvotes";
+export const USER_FAVORITES_PROPERTY = "activity.favorites";
 export const USER_SUBMISSIONS_PROPERTY = "activity.submissions";
 
 export const WORD_DIR = "words";
