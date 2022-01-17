@@ -1,9 +1,10 @@
 // @mui
-import { Avatar, Badge, Box, Button, Typography } from '@mui/material';
+import { Avatar, Badge, Box, Button, Stack, Typography, useTheme } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PAGE_PATHS } from 'src/routing/paths';
+import getAvatarColor from 'src/utils/getAvatarColor';
 import useAuth from '../../../hooks/useAuth';
 
 // ----------------------------------------------------------------------
@@ -23,28 +24,32 @@ const RootStyle = styled('div')(({ theme }) => ({
 export default function SidebarAccount( ) {
   const {authedUser, logout} = useAuth()
   const navigate = useNavigate()
-
-  useEffect(() => {
-    console.log('autheduser change detected')
-  }, [navigate])
-
-  let handleLogout = async () => {
+  const theme = useTheme();
+  
+  const handleLogout = async () => {
     await logout();
-    //navigate(PAGE_PATHS.auth.login);
+    navigate(PAGE_PATHS.auth.login);
   }
+  const handleGoToProfile = async () => {
+    navigate(`${PAGE_PATHS.dashboard.profile}/${authedUser?.nonauth.profile.username}`);
+  }
+  
   return (
     <Box sx={{pt: 3, pb: 2, px: 2.5,flexShrink: 0, }}>
         {authedUser ? 
           <RootStyle>
-            <Box sx={{ml: 2, width: '100%',display:'flex', justifyContent:'space-between' }}>
+            <Box sx={{ml: 1, width: '100%',display:'flex', justifyContent:'flex-start', alignItems:'flex-start' }}>
               <Badge overlap="circular" badgeContent={0} color="error">
-                <Avatar src={authedUser.nonauth.profile.picPath} alt={authedUser.nonauth.profile.username}/>
+                <Avatar sx={{bgcolor: getAvatarColor(authedUser?.nonauth.id) }} src={authedUser?.nonauth.profile.picPath} />
               </Badge>
-              <Typography sx={{ml:2}} variant="subtitle1" noWrap>{authedUser.nonauth.profile.username}</Typography>
+              <Stack spacing={1} sx={{mt:theme.spacing(0.8)}}>
+                <Typography sx={{ml:2}} variant="subtitle1" noWrap>{authedUser.nonauth.profile.username}</Typography>
+                {/* <Typography sx={{ml:2}} variant="body2" >{authedUser.nonauth.metrics.inssajeom} 인싸점</Typography> */}
+                <Button onClick={handleGoToProfile}>
+                  <Typography variant="body2"  sx={{ color: 'text.secondary' }}>내 프로필</Typography>  
+                </Button>
+              </Stack>
             </Box>
-            <Button onClick={handleLogout}>
-              <Typography variant="body2"  sx={{ color: 'text.secondary' }}>내 프로필</Typography>  
-            </Button>
           </RootStyle>
           :
             <RootStyle>

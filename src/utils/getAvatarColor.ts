@@ -12,7 +12,8 @@ function getFirstCharacter(name: string) {
   return name.charAt(0).toUpperCase();
 }
 
-export default function getAvatarColor(name: string) {
+export default function getAvatarColor(name: string | undefined) {
+  if (name === undefined) return grey[200];
   if (PRIMARY_NAME.includes(getFirstCharacter(name))) return deepOrange[200];
   if (INFO_NAME.includes(getFirstCharacter(name))) return blue[200];
   if (SUCCESS_NAME.includes(getFirstCharacter(name))) return green[200];

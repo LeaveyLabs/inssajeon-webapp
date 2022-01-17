@@ -2,6 +2,7 @@
 import { Avatar, Box, Link, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import useAuth from 'src/hooks/useAuth';
+import getAvatarColor from 'src/utils/getAvatarColor';
 
 // ----------------------------------------------------------------------
 
@@ -15,15 +16,19 @@ const RootStyle = styled('div')(({ theme }) => ({
   //backgroundColor: theme.palette.grey[500_12],
 }));
 
+interface SubmitDialogProfileProps {
+  handleClose: VoidFunction
+}
+
 // ----------------------------------------------------------------------
 
-export default function SubmitDialogProfile( ) {
+export default function SubmitDialogProfile( {handleClose} : SubmitDialogProfileProps  ) {
   let {authedUser} = useAuth()
 
   return (
     <Link underline="none" color="inherit">
       <RootStyle>
-        <Avatar src="" alt="Rayan Moran"/>
+        <Avatar sx={{bgcolor: getAvatarColor(authedUser?.nonauth.id) }} src={authedUser?.nonauth.profile.picPath} />
         <Box sx={{ml: 2}}>
           <Typography variant="subtitle1" noWrap>
             {authedUser?.nonauth.profile.username}
