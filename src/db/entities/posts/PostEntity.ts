@@ -19,6 +19,7 @@ export interface PostEntity extends IDictionary<Object> {
     downvotes: Array<string>;
     shares: Array<string>;
     flags: Array<string>;
+    favorites: Array<string>
 }
 
 export const PostFactory:EntityFactory = function () {};
@@ -48,6 +49,7 @@ PostFactory.toExportJson = (post:PostEntity) : Object => {
         downvotes: StringListFactory.toExportJson(post.downvotes),
         shares: StringListFactory.toExportJson(post.shares),
         flags: StringListFactory.toExportJson(post.flags),
+        favorites: StringListFactory.toExportJson(post.favorites),
     };
 
     return validatedObject(o, POST_TYPE_ERROR);
@@ -79,6 +81,7 @@ PostFactory.fromExportJson = (json:any) : PostEntity => {
         downvotes: StringListFactory.fromExportJson(json.downvotes),
         shares: StringListFactory.fromExportJson(json.shares),
         flags: StringListFactory.fromExportJson(json.flags),
+        favorites: StringListFactory.fromExportJson(json.favorites),
     };
     return validatedObject(post, POST_TYPE_ERROR) as PostEntity;
 };

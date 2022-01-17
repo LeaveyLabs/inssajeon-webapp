@@ -154,6 +154,7 @@ PostInteraction.createPost = async (postID:string, post:any) : Promise<void> => 
         downvotes: [],
         shares: [],
         flags: [],
+        favorites: [],
     };
 
     try { PostFactory.fromExportJson(dbSafePost); }

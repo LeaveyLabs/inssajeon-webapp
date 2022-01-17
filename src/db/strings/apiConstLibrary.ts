@@ -42,13 +42,10 @@ export const PROFILE_PIC_UPDATE_ERROR = "Error in updating picture path.";
 // export const WORD_TRENDSCORE_HEADER = "trendscore";
 export const WORD_TYPE_ERROR = "Incorrect formatting of Word data."
 
-export const POST_POSTID_HEADER = "postID";
-// export const POST_USERID_HEADER = "userID";
 // export const POST_WORD_HEADER = "word";
 // export const POST_DEFINITION_HEADER = "definition";
 // export const POST_QUOTE_HEADER = "quote";
 // export const POST_TIMESTAMP_HEADER = "timestamp";
-export const POST_TAGS_HEADER = "tags";
 // export const POST_USERPROFILE_HEADER = "userProfile";
 // export const POST_TRENDSCORE_HEADER = "trendscore";
 // export const POST_TRENDSCORES_HEADER = "trendscores"; CLIENT CANNOT ACCESS THIS
@@ -64,10 +61,14 @@ export const TAG_TYPE_ERROR = "Incorrect formatting of Tag data.";
 export const TAGSET_TYPE_ERROR = "Incorrect formatting of TagSet data.";
 
 export const POST_DIR = "posts";
+export const POST_POSTID_PROPERTY = "postID";
+export const POST_USERID_PROPERTY = "userID";
+export const POST_TAGS_PROPERTY = "tags";
 export const POST_UPVOTES_PROPERTY = "upvotes";
 export const POST_DOWNVOTES_PROPERTY = "downvotes";
 export const POST_FLAGS_PROPERTY = "flags";
 export const POST_SHARES_PROPERTY = "shares";
+export const POST_FAVORITES_PROPERTY = "favorites";
 export const POST_TRENDSCORE_PROPERTY = "metrics.trendscore";
 export const POST_UPVOTECOUNT_PROPERTY = "metrics.upvoteCount";
 
