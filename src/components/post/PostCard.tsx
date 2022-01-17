@@ -1,27 +1,27 @@
 //react
-import { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
 //mui
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import CircleIcon from '@mui/icons-material/Circle';
 import IosShareIcon from '@mui/icons-material/IosShare';
-import { Avatar, Link, Box, Card, Divider, Stack, Typography } from '@mui/material';
+import { Avatar, Box, Card, Divider, Link, Stack, Typography } from '@mui/material';
+import { useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 // components
 import PostMoreButton from 'src/components/post/PostMoreButton';
+import { PostInteraction } from 'src/db/apis/PostInteraction';
 import { PostEntity } from 'src/db/entities/posts/PostEntity';
 //hooks
 import useAuth from 'src/hooks/useAuth';
-import { PAGE_PATHS } from 'src/routing/paths';
 import { useSignupDialog } from 'src/layouts/dashboard';
+import { PAGE_PATHS } from 'src/routing/paths';
 // utils
 import { fDate } from 'src/utils/formatTime';
 import getAvatarColor from 'src/utils/getAvatarColor';
 import DesktopCopyButton from './DesktopCopyButton';
-import VotePanel from './VotePanel';
 import TrendingIcons from './TrendingIcons';
-import { PostInteraction } from 'src/db/apis/PostInteraction';
 import UnstyledWhenDisabledIconButton from './UnstyledWhenDisabledIconButton';
+import VotePanel from './VotePanel';
 
 // ----------------------------------------------------------------------
 
