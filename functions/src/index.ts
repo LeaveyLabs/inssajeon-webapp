@@ -18,6 +18,20 @@ function calculateTrendscore(upvotes:number,
   return upvotes + shares - downvotes;
 }
 
+// /**
+//  * @param  {string} property
+//  * @param  {Object} defaultValue
+//  */
+// async function addPropertyToAllPosts(property:string, defaultValue:unknown) {
+//   const posts = await firestore.collection("posts").get();
+//   const batch = firestore.batch();
+//   posts.docs.forEach((doc) => {
+//     console.log(doc.data());
+//     batch.update(doc.ref, {[property]: defaultValue});
+//   });
+//   await batch.commit();
+// }
+
 export const helloWorld = functions.https.onRequest((request, response) => {
   functions.logger.info("Hello logs!", {structuredData: true});
   response.send("Hello from Firebase!");

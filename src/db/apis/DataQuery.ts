@@ -1,4 +1,4 @@
-import { DocumentSnapshot, getDocs, limit, orderBy, Query, query, QueryConstraint, startAfter, where } from "firebase/firestore";
+import { DocumentSnapshot, getDoc, getDocs, limit, orderBy, Query, query, QueryConstraint, startAfter, where } from "firebase/firestore";
 import { EntityFactory } from "../entities/jsonFormat";
 import { PostEntity, PostFactory } from "../entities/posts/PostEntity";
 import { UserEntity, UserFactory } from "../entities/users/UserEntity";
@@ -229,10 +229,10 @@ export enum PostInteractionType {
  */
 DataQuery.searchPostByUserID = async (id:string, i:PostInteractionType, o:PostOrder, lastDoc?:DocumentSnapshot[]) 
     : Promise<Array<PostEntity>> => {
-    const queryFields = [postOrderQuery[o]];
+    const queryFields = [];
     switch (i) {
         case PostInteractionType.Submission:
-            queryFields.push(where(POST_USERID_PROPERTY, "==", id));
+            queryFields.push(where("userID", "==", id));
             break;
         case PostInteractionType.Upvote:
             queryFields.push(where(POST_UPVOTES_PROPERTY, "array-contains", id));
@@ -247,6 +247,8 @@ DataQuery.searchPostByUserID = async (id:string, i:PostInteractionType, o:PostOr
             queryFields.push(where(POST_FAVORITES_PROPERTY, "array-contains", id));
             break;
     }
+    queryFields.push(postOrderQuery[o]);
+    queryFields.push(limit(MAX_QUERY));
     const postIDQuery = query(postDatabase, ...queryFields);
     const postIDQueryResult = await firebaseEntityQuery<PostEntity>(
         postIDQuery, PostFactory);

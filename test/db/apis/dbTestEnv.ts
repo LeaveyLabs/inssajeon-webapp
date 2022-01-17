@@ -95,17 +95,19 @@ export const executeInDatabase = async (testFunc:VerifierFunction) : Promise<voi
     Run the function in this test environment.
     */
     try { await testFunc(verifier); }
-    catch { }
-    /*
-    Delete each set from the database. 
-    */
-    for(const user of userList) {
-        await deleteDoc(doc(userDatabase, user.id));
+    finally {
+        /*
+        Delete each set from the database. 
+        */
+        for(const user of userList) {
+            await deleteDoc(doc(userDatabase, user.id));
+        }
+        for(const post of postList) {
+            await deleteDoc(doc(postDatabase, post.postID));
+        }
+        for(const word of wordList) {
+            await deleteDoc(doc(wordDatabase, word.wordString));
+        }
     }
-    for(const post of postList) {
-        await deleteDoc(doc(postDatabase, post.postID));
-    }
-    for(const word of wordList) {
-        await deleteDoc(doc(wordDatabase, word.wordString));
-    }
+    
 };
