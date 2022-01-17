@@ -56,7 +56,7 @@ export default function ProfileFeed( { profileUser }: ProfileCardProps ) {
   return (
     <> 
       {authedUser && authedUser.nonauth.profile.username === profileUser.profile.username ?
-        <MyProfileCard />
+        <ProfileCard profileUser={profileUser} /> //TODO consider changing back to myprofilecard
       : 
         <ProfileCard profileUser={profileUser} />
       }
