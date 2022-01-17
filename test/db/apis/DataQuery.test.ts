@@ -1,5 +1,5 @@
-import { DocumentSnapshot, getDocs } from "firebase/firestore"; 
-import { DataQuery, PostOrder, ProfileOrder, WordOrder } from "../../../src/db/apis/DataQuery";
+import { DocumentSnapshot, getDocs, Timestamp } from "firebase/firestore"; 
+import { DataQuery, PostInteractionType, PostOrder, ProfileOrder, WordOrder } from "../../../src/db/apis/DataQuery";
 import { executeInDatabase, Verifier } from "./dbTestEnv";
 import { PostEntity, PostFactory } from "../../../src/db/entities/posts/PostEntity";
 import { WordEntity } from "../../../src/db/entities/words/WordEntity";
@@ -145,14 +145,13 @@ describe("testing DataQuery", () => {
     it("every uploaded postID in a post can be queried successfully", async () : Promise<void> => {
         await executeInDatabase(async (verifier:Verifier) : Promise<void> => {
             const postIDSet = new Set<string>();
-            const postIDMap = new Map<string, Set<PostEntity>>();
+            const postIDMap = new Map<string, PostEntity>();
             verifier.posts.forEach((post) => {
                 /*
                 Map each postID to all the posts attached to it. 
                 Have a list of all the postIDs we want to search.
                 */
-                if(postIDMap.has(post.postID)) (postIDMap.get(post.postID) as Set<PostEntity>).add(post);
-                else postIDMap.set(post.postID, new Set([post]));
+                postIDMap.set(post.postID, post);
                 postIDSet.add(post.postID);
             });
             const postIDList = Array.from(postIDSet);
@@ -163,8 +162,8 @@ describe("testing DataQuery", () => {
             for(const postID of postIDList) {
                 const queryResult = await DataQuery.searchPostByPostID(postID);
                 expect(queryResult.length).toBeGreaterThan(0);
-                const queryResultSet = new Set(queryResult);
-                expect(queryResultSet).toStrictEqual(postIDMap.get(postID));
+                const post = postIDMap.get(postID);
+                expect(queryResult[0]).toStrictEqual(postIDMap.get(postID));
             }
         });
     }, 30000);
