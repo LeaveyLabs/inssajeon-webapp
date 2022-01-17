@@ -42,6 +42,7 @@
     "@mui/icons-material": "^5.2.4",
     "@mui/lab": "^5.0.0-alpha.61",
     "@mui/material": "^5.2.3",
+    "apexcharts": "^3.33.0",
     "change-case": "^4.1.2",
     "date-fns": "^2.27.0",
     "dotenv": "^10.0.0",
