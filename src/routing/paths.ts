@@ -27,7 +27,7 @@ export const PAGE_PATHS = {
     //where to put these below? decide later
     myAccount: {
       home: path(ROOTS_MYACCOUNT, ''),
-      settings: path(ROOTS_MYACCOUNT, 'settings'),
+      settings: path(ROOTS_MYACCOUNT, '/settings'),
     }
   },
   dashboard: {

@@ -21,7 +21,7 @@ export default function CustomAvatar( {id, picPath, sx} : CustomAvatarProps ) {
     async function updatePic() {
       if (picPath) {
         try {
-          setPhoto(await ImageFactory.pathToImageURL(picPath)); 
+          setPhoto(await ImageFactory.pathToImageURL(picPath));
         } catch {
           console.error("cant find pic");
         }
@@ -31,7 +31,7 @@ export default function CustomAvatar( {id, picPath, sx} : CustomAvatarProps ) {
     updatePic();
     // setPhotoLoading(false);
 // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [picPath]);
 
   if (id && picPath) {
     return (

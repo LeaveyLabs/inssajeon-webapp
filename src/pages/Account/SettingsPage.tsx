@@ -25,7 +25,7 @@
 //   );
 // }
 
-import { Box, Card, Container, Stack, Typography } from '@mui/material';
+import { Box, Button, Card, Container, Divider, Grid, Stack, Typography } from '@mui/material';
 // @mui
 import { styled, useTheme } from '@mui/material/styles';
 import EditProfileForm from 'src/components/account/EditProfileForm';
@@ -47,7 +47,7 @@ const MobileStyle = styled(Container)(({ theme }) => ({
 }));
 
 const DesktopStyle = styled(Container)(({ theme }) => ({
-  maxWidth: 520,
+  maxWidth: 800,
   height: '100%',
   display: 'flex',
   flexDirection: 'column',
@@ -56,14 +56,32 @@ const DesktopStyle = styled(Container)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-function CreateProfileContent() {
+function ProfileSettingsContent() {
   return (
-    <Box >
-      <Stack direction="column" alignItems="center" justifyContent="center" sx={{ mb: 4, }}>
-        <Typography variant="h2" gutterBottom sx={{mb:2}}>프로파일 편집</Typography>
-      </Stack>
+    <Stack direction="column" alignItems="center" justifyContent="center" sx={{ mb: 2, }}>
+      <Typography variant="h2" gutterBottom sx={{mb:2}}>프로파일 편집</Typography>
       <EditProfileForm />
-    </Box>
+    </Stack>
+  )
+}
+
+function SettingsControls() {
+  return (
+    <Stack direction="column" alignItems="center" 
+      justifyContent="center" sx={{mb: 2}}>
+      <Button fullWidth
+              size="large"
+              variant="outlined"
+              sx={{ mb: 2, }}>
+        프로파일
+      </Button>
+      <Button fullWidth
+              size="large"
+              variant="outlined"
+              sx={{ mb: 2, }}>
+        계정
+      </Button>
+    </Stack>
   )
 }
 
@@ -76,16 +94,19 @@ export default function CreateProfilePage() {
     <Page sx={{height:'100%'}} title="로그인"> 
       {isMobile ?
         <MobileStyle>
-          <ClickwableWideLogoLarge/>
           <Box sx={{flexGrow:1}}/>
-          <CreateProfileContent/>
+            <ProfileSettingsContent/>
           <Box sx={{flexGrow:1}}/>
         </MobileStyle>
       : //!isMobile
         <DesktopStyle>
-          <Card sx={{padding: theme.spacing(3, 3), }}>
-            <ClickwableWideLogoLarge sx={{mb:10}}/>
-            <CreateProfileContent/>
+          <Card sx={{padding: theme.spacing(3, 3)}}>
+            <Box>
+              <SettingsControls/>
+            </Box>
+            <Box>
+              <ProfileSettingsContent/>
+            </Box>
           </Card>
         </DesktopStyle>
       }

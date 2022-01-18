@@ -12,19 +12,19 @@ import Page from '../Page';
 // ----------------------------------------------------------------------
 
 export default function ProfilePage() {
-  const params = useParams();
-  const profileUsername = params.id;
+  const { id } = useParams();
+  // const profileUsername = params.id;
   const [isLoading, setIsLoading] = useState(true);
   const [profileUser, setProfileUser] = useState<UserEntity | null >(null);
 
   useEffect(() => {
     async function fetchProfile() {
       try {
-        let response = await DataQuery.searchUserByUserProfile({username: profileUsername}, ProfileOrder.Alphabetical);
+        let response = await DataQuery.searchUserByUserProfile({username: id}, ProfileOrder.Alphabetical);
         if (response.length > 0) {
           setProfileUser(response[0]);
           setIsLoading(false);
-        } 
+        }
       } catch {
         console.error("프로필 검색하는 데 오류가 발생했다");
       } finally {
@@ -32,10 +32,10 @@ export default function ProfilePage() {
       }
     }
     fetchProfile()
-  }, [])
+  }, [id])
 
   return (
-    <Page title={profileUsername}>
+    <Page title={id}>
       {isLoading ? 
         <ProfileSkeleton/>
       : profileUser ?
