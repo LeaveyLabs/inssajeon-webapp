@@ -49,7 +49,7 @@ ProfileInteraction.createAccount = async (userInfo:UserProfileEntity,
  * @returns void
  * @decription delete a user's profile from the database
  */
-ProfileInteraction.deleteProfile = async (userID:string) : Promise<void> => {
+ProfileInteraction.deleteAccount = async (userID:string) : Promise<void> => {
     const user:UserEntity = (await DataQuery.searchUserByUserID(userID))[0];
     /*
     Delete all votes and submissions by this user. 
