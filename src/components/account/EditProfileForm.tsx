@@ -1,3 +1,4 @@
+import { styled, useTheme } from '@mui/material/styles';
 import { LoadingButton } from '@mui/lab';
 // @mui
 import { Avatar, Button, CircularProgress, IconButton, Stack, TextField, unstable_createMuiStrictModeTheme } from '@mui/material';
@@ -16,6 +17,7 @@ import isValidUsername from 'src/utils/isValidUsername';
 import * as Yup from 'yup';
 // components
 import TransitionAlert from '../auth/TransitionAlert';
+import CustomAvatar from '../experimental/CustomAvatar';
 //db
 
 // ----------------------------------------------------------------------
@@ -28,6 +30,7 @@ type InitialValues = {
 export default function ModifyProfileForm(  ) {
   let navigate = useNavigate();
   const { authedUser } = useAuth();
+  const theme = useTheme();
   const [signupError, setSignupError] = useState('');
   const [photo, setPhoto] = useState('');
   /* User is initially loading up the photo */
@@ -99,34 +102,14 @@ export default function ModifyProfileForm(  ) {
         <Stack spacing={3}> 
             {signupError.length>0 && /*TODO make transitionAlert not dependent on "touched" to dismiss*/ formik.touched.username===false && <TransitionAlert errorMessage={signupError} onClose={() => setSignupError('')}/>}
 
-            <TextField
-                fullWidth
-                id="username"
-                autoComplete="username"
-                label="이름"
-                {...formik.getFieldProps('username')}
-                error={Boolean(formik.touched.username && formik.errors.username)}
-                helperText={formik.touched.username && formik.errors.username}
-            />
-
-            <TextField
-                fullWidth
-                id="bio"
-                autoComplete="bio"
-                label="소개"
-                {...formik.getFieldProps('bio')}
-                error={Boolean(formik.touched.bio && formik.errors.bio)}
-                helperText={formik.touched.bio && formik.errors.bio}
-            />
-            
-            {/* <Avatar sx={{mx:1, width:30, height:30, bgcolor: getAvatarColor(authedUser.nonauth.profile.username) }}> */}
-                
-            {/* </Avatar> */}
             <Button component="label" startIcon={
-                photoLoading && <CircularProgress /> ||
-                !photoLoading && <Avatar src={photo}></Avatar>
+                photoLoading && <CircularProgress/> ||
+                !photoLoading && authedUser && <CustomAvatar 
+                    id={authedUser.nonauth.id}
+                    picPath={authedUser.nonauth.profile.picPath}
+                    sx={{mx:1, width:theme.spacing(10), height:theme.spacing(10)}}
+                />
             }>
-                사진
                 <input name="pic" type="file" accept='image/*' hidden
                     onChange={(e) => {
                         if (!authedUser) return;
@@ -163,6 +146,26 @@ export default function ModifyProfileForm(  ) {
                     }}
                 />
             </Button>
+
+            <TextField
+                fullWidth
+                id="username"
+                autoComplete="username"
+                label="이름"
+                {...formik.getFieldProps('username')}
+                error={Boolean(formik.touched.username && formik.errors.username)}
+                helperText={formik.touched.username && formik.errors.username}
+            />
+
+            <TextField
+                fullWidth
+                id="bio"
+                autoComplete="bio"
+                label="소개"
+                {...formik.getFieldProps('bio')}
+                error={Boolean(formik.touched.bio && formik.errors.bio)}
+                helperText={formik.touched.bio && formik.errors.bio}
+            />
             
             <LoadingButton
                 fullWidth

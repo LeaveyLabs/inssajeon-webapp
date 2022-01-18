@@ -26,7 +26,6 @@ export default function ProfileCard( { profileUser }: ProfileCardProps ) {
 
   function goToUserSettings() {
     if (!authedUser) throw new Error("Cannot access settings page: user not signed in.");
-    console.log(`${PAGE_PATHS.page.myAccount.settings}/${authedUser.nonauth.profile.username}`);
     navigate(`${PAGE_PATHS.page.myAccount.settings}/${authedUser.nonauth.profile.username}`);
   }
 
@@ -48,7 +47,7 @@ export default function ProfileCard( { profileUser }: ProfileCardProps ) {
         <Typography variant="subtitle2" sx={{ mx:2, }}>{profileUser.profile.bio}</Typography>
       </Box>
       <Divider variant="fullWidth" />
-      <Stack  alignItems="center" direction='row' spacing={3} sx={{ p: 3}}   divider={<Divider orientation="vertical" flexItem />}> 
+      <Stack  alignItems="center" direction='row' spacing={3} sx={{p: 3}}   divider={<Divider orientation="vertical" flexItem />}> 
         <div>
         <Typography variant="subtitle1">{profileUser.activity.submissions.length}</Typography>
         <Typography variant="subtitle1">게시물</Typography>
