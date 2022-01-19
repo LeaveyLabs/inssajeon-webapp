@@ -17,6 +17,7 @@ import ProfileMoreButton from './ProfileMoreButton';
 
 interface ProfileCardProps {
   profileUser: UserEntity;
+  // setIsLoaded: VoidFunction;
 }
 
 export default function ProfileCard( { profileUser }: ProfileCardProps ) {
