@@ -1,92 +1,55 @@
-//react
-import { Box, Button, Container, Typography } from '@mui/material';
+import { Box, Button, Card, Container, Divider, Grid, Stack, Typography } from '@mui/material';
 // @mui
-import { styled } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import { SentIcon } from 'src/assets';
-import ResetPasswordForm from 'src/components/auth/ResetPasswordForm';
-// routes
-import { PAGE_PATHS } from 'src/routing/paths';
+import useResponsive from 'src/hooks/useResponsive';
 // components
 import Page from '../Page';
-
+import ResetPasswordForm from 'src/components/auth/ResetPasswordForm';
 
 // ----------------------------------------------------------------------
+//
 
-const RootStyle = styled('div')(({ theme }) => ({
+const MobileStyle = styled(Container)(({ theme }) => ({
+  maxWidth: 480,
+  padding: theme.spacing(3, 3),
+  height: '100%',
   display: 'flex',
-  minHeight: '100%',
-  alignItems: 'center',
+  flexDirection: 'column',
   justifyContent: 'center',
-  padding: theme.spacing(12, 0),
+}));
+
+const DesktopStyle = styled(Container)(({ theme }) => ({
+  maxWidth: 800,
+  height: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
 }));
 
 // ----------------------------------------------------------------------
 
-export default function ResetPasswordPage() {
-  const [email, setEmail] = useState('');
-  const [sent, setSent] = useState(false);
-
+function ResetPasswordContent() {
   return (
-    <Page title="Reset Password" sx={{ height: 1 }}>
-      <RootStyle>
-        <Container>
-          <Box sx={{ maxWidth: 480, mx: 'auto' }}>
-            {!sent ? (
-              <>
-                <Typography variant="h3" paragraph>
-                  Forgot your password?
-                </Typography>
-                <Typography sx={{ color: 'text.secondary', mb: 5 }}>
-                  Please enter the email address associated with your account and We will email you
-                  a link to reset your password.
-                </Typography>
+    <Stack direction="column" alignItems="center" justifyContent="center" sx={{ mb: 2, }}>
+      <Typography variant="h2" gutterBottom sx={{mb:2}}>비밀번호 재설정</Typography>
+      <ResetPasswordForm />
+    </Stack>
+  )
+}
 
-                <ResetPasswordForm
-                  onSent={() => setSent(true)}
-                  onGetEmail={(value) => setEmail(value)}
-                />
+export default function CreateResetPasswordPage() {
+  const isMobile = useResponsive('down', 'tablet'); //TODO why is it taking so long to be repsonsive here?
+  const theme = useTheme();
 
-                <Button
-                  fullWidth
-                  size="large"
-                  component={RouterLink}
-                  to={PAGE_PATHS.auth.login}
-                  sx={{ mt: 1 }}
-                >
-                  Back
-                </Button>
-              </>
-            ) : (
-              <Box sx={{ textAlign: 'center' }}>
-                <SentIcon sx={{ mb: 5, mx: 'auto', height: 160 }} />
-
-                <Typography variant="h3" gutterBottom>
-                  Request sent successfully
-                </Typography>
-                <Typography>
-                  We have sent a confirmation email to &nbsp;
-                  <strong>{email}</strong>
-                  <br />
-                  Please check your email.
-                </Typography>
-
-                <Button
-                  size="large"
-                  variant="contained"
-                  component={RouterLink}
-                  to={PAGE_PATHS.auth.login}
-                  sx={{ mt: 5 }}
-                >
-                  Back
-                </Button>
-              </Box>
-            )}
-          </Box>
-        </Container>
-      </RootStyle>
+  //HEIGHT: 100% REALLY CHANGES HOW ITEMS ARE POSITIONED VERTICALLY. FIXED PAGES NEED HEIGHT: 100%.
+  return (
+    <Page sx={{height:'100%'}} title="비밀번호 재설정"> 
+      <DesktopStyle>
+        <Card sx={{padding: theme.spacing(3, 3)}}>
+          <ResetPasswordContent/>
+        </Card>
+      </DesktopStyle>
     </Page>
   );
 }
-
