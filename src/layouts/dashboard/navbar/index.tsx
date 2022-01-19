@@ -58,9 +58,9 @@ export default function Navbar({ onOpenSidebar, handleSubmitDialogOpen, handleSi
             <ClickwableWideLogo sx={{position:'absolute', top:0, left:10, zIndex:1,}} />
             <Searchbar />
             {!isDesktop  && (
-              <IconButton onClick={onOpenSidebar} sx={{position:'absolute', zIndex:1, top:-2, right:10, color: 'text.primary' }}>
-                <Badge overlap="circular" badgeContent={2} color="error">
-                  <MenuRoundedIcon fontSize='large' />
+              <IconButton onClick={onOpenSidebar} sx={{position:'absolute', zIndex:1, top:-2, right:10, color: 'primary' }}>
+                <Badge overlap="circular" badgeContent={0} color="error">
+                  <MenuRoundedIcon  fontSize='large' />
                 </Badge> 
               </IconButton>
               )}
