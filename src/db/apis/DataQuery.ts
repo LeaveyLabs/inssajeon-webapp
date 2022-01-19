@@ -251,7 +251,7 @@ DataQuery.searchPostByUserID = async (id:string, i:PostInteractionType, o:PostOr
     queryFields.push(limit(MAX_QUERY));
     const postIDQuery = query(postDatabase, ...queryFields);
     const postIDQueryResult = await firebaseEntityQuery<PostEntity>(
-        postIDQuery, PostFactory);
+        postIDQuery, PostFactory, lastDoc);
     return postIDQueryResult;
 }
 
