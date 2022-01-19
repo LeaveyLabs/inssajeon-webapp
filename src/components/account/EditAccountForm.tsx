@@ -30,23 +30,24 @@ type InitialValues = {
 
 export default function ModifyAccountForm(  ) {
     let navigate = useNavigate();
-    const { authedUser, logout } = useAuth();
+    const { authedUser, logout, deleteAccount } = useAuth();
     const [frequency, setFrequency] = useState(authedUser ? authedUser.nonauth.settings.emailFrequency : 0);
     const [deleteMessage, setDeleteMessage] = useState(false);
     /* Ensure that the email frequency is valid */
     const validFrequencies = [0, 1, 7];
     if(validFrequencies.indexOf(frequency.valueOf()) == -1) setFrequency(0);
 
-    async function logOut() {
+    async function startLogOut() {
         if (!authedUser) return;
         logout();
         navigate(PAGE_PATHS.dashboard.home);
     }
 
-    async function deleteAccount() {
+    async function startDeleteAccount() {
         if (!authedUser) return;
         await ProfileInteraction.deleteAccount(authedUser.nonauth.id);
-        logOut();
+        deleteAccount();
+        startLogOut();
     }
 
     return (
@@ -77,7 +78,7 @@ export default function ModifyAccountForm(  ) {
                         variant="contained"
                         onClick={() => {
                             setDeleteMessage(false);
-                            deleteAccount();
+                            startDeleteAccount();
                         }}
                         >
                     예, 그레도 삭제 해주새요.
@@ -89,7 +90,7 @@ export default function ModifyAccountForm(  ) {
                 fullWidth
                 size="large"
                 variant="contained"
-                onClick={logOut}
+                onClick={startLogOut}
             >
                 로그아오트
             </Button>
