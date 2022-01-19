@@ -1,5 +1,5 @@
 /* eslint-disable import/no-duplicates */
-import { createUserWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signOut, updateEmail as updateUserEmail, updatePassword as updateUserPassword, User, UserCredential } from "firebase/auth";
+import { confirmPasswordReset, createUserWithEmailAndPassword, deleteUser, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signOut, updateEmail as updateUserEmail, updatePassword as updateUserPassword, User, UserCredential } from "firebase/auth";
 import { createContext, ReactNode, useEffect, useState } from 'react';
 //db
 import { DataQuery } from 'src/db/apis/DataQuery';
@@ -23,8 +23,10 @@ export type AuthContextType = {
   authedUser: AuthedUser | null;
   login: (email: string, password: string) => Promise<UserCredential>;
   signup: (email: string, password: string) => Promise<UserCredential>;
+  deleteAccount: () => Promise<void>;
   logout: () => Promise<void>;
-  resetPassword: (email: string) => Promise<void>;
+  sendResetEmail: (email: string) => Promise<void>;
+  confirmResetPassword: (code: string, newPassword: string) => Promise<void>;
   updateEmail: (email: string) => Promise<void>; // why void?
   updatePassword: (password: string) => Promise<void>; // why void?
   updateProfile: (updatedUsername: string, updatedBio: string, updatedPicPath: string ) => Promise<void>;
@@ -109,7 +111,13 @@ function AuthProvider({ children }: { children: ReactNode }) {
     return signOut(firebaseAuth);
   };
 
-  const resetPassword = async (email: string) => {
+  const deleteAccount = async () => {
+    if(!firebaseAuth) return;
+    if(!firebaseAuth.currentUser) return;
+    await deleteUser(firebaseAuth.currentUser);
+  }
+
+  const sendResetEmail = async (email: string) => {
     return sendPasswordResetEmail(firebaseAuth, email)
       .catch((error) => {
         const errorCode = error.code;
@@ -122,6 +130,22 @@ function AuthProvider({ children }: { children: ReactNode }) {
         }
       });
   };
+
+  const confirmResetPassword = async (code: string, newPassword: string) => {
+    return confirmPasswordReset(firebaseAuth, code, newPassword)
+      .catch((error) => {
+        const errorCode = error.code;
+        if (errorCode === 'auth/expired-action-code') {
+          throw(new Error("링크가 만료되었습니다."));
+        } else if (errorCode === 'auth/invalid-action-code') {
+          throw(new Error('링크가 만료되었습니다.'));
+        } else if (errorCode === 'auth/user-disabled') {
+          throw(new Error('링크가 만료되었습니다.'));
+        } else if (errorCode === 'auth/user-not-found') {
+          throw(new Error('계정 찾을수 없었습니다.'));
+        }
+      });
+  }
 
   //TODO need to update email on client side too
   const updateEmail = async (email: string) => {
@@ -185,11 +209,13 @@ function AuthProvider({ children }: { children: ReactNode }) {
         login,
         signup,
         logout,
-        resetPassword,
+        sendResetEmail,
+        confirmResetPassword,
         updateEmail,
         updatePassword,
         updateProfile,
         updateSettings,
+        deleteAccount,
       }}
     >
       {children} 

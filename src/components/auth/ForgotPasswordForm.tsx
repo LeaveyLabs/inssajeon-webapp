@@ -20,7 +20,7 @@ interface Props {
 };
 
 export default function ForgotPasswordForm({onSent}: Props) {
-  const { resetPassword } = useAuth();
+  const { sendResetEmail } = useAuth();
   const [forgotError, setForgotError] = useState('');
 
   const ForgotPasswordSchema = Yup.object().shape({
@@ -37,7 +37,7 @@ export default function ForgotPasswordForm({onSent}: Props) {
     validationSchema: ForgotPasswordSchema,
     onSubmit: async (values, { resetForm, setFieldValue, setFieldTouched, setSubmitting }) => {
       try {
-        await resetPassword(values.email);
+        await sendResetEmail(values.email);
         onSent();
         //TODO navigate to "reset password page"
       } catch (error: any) {
