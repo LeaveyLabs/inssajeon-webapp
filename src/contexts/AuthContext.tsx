@@ -1,5 +1,5 @@
 /* eslint-disable import/no-duplicates */
-import { createUserWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signOut, updateEmail as updateUserEmail, updatePassword as updateUserPassword, User, UserCredential } from "firebase/auth";
+import { createUserWithEmailAndPassword, deleteUser, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signOut, updateEmail as updateUserEmail, updatePassword as updateUserPassword, User, UserCredential } from "firebase/auth";
 import { createContext, ReactNode, useEffect, useState } from 'react';
 //db
 import { DataQuery } from 'src/db/apis/DataQuery';
@@ -23,6 +23,7 @@ export type AuthContextType = {
   authedUser: AuthedUser | null;
   login: (email: string, password: string) => Promise<UserCredential>;
   signup: (email: string, password: string) => Promise<UserCredential>;
+  deleteAccount: () => Promise<void>;
   logout: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
   updateEmail: (email: string) => Promise<void>; // why void?
@@ -109,6 +110,12 @@ function AuthProvider({ children }: { children: ReactNode }) {
     return signOut(firebaseAuth);
   };
 
+  const deleteAccount = async () => {
+    if(!firebaseAuth) return;
+    if(!firebaseAuth.currentUser) return;
+    await deleteUser(firebaseAuth.currentUser);
+  }
+
   const resetPassword = async (email: string) => {
     return sendPasswordResetEmail(firebaseAuth, email)
       .catch((error) => {
@@ -190,6 +197,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
         updatePassword,
         updateProfile,
         updateSettings,
+        deleteAccount,
       }}
     >
       {children} 
