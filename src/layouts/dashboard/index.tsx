@@ -40,8 +40,8 @@ export default function DashboardLayout() {
   const handleSignupDialogClose = () => { setSignupDialogOpen(false); };
 
   return (
-    <RootStyle>
-      <Container maxWidth={'tablet'} >
+    <RootStyle sx={{backgroundColor: 'green', minHeight:'100%'}} >
+      <Container sx={{height:'100%', backgroundColor:'black'}} maxWidth={'tablet'} >
         <Navbar onOpenSidebar={() => setOpen(true)} handleSignupDialogOpen={handleSignupDialogOpen} handleSubmitDialogOpen={handleSubmitDialogOpen} />
         <Sidebar isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} />
         <MainStyle >
@@ -51,6 +51,7 @@ export default function DashboardLayout() {
         <SubmitDialog handleClose={handleSubmitDialogClose} open={submitDialogOpen} />
         <SignupDialog handleClose={handleSignupDialogClose} open={signupDialogOpen} />
       </Container>
+
     </RootStyle>
   );
 }

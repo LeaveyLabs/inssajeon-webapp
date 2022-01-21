@@ -11,8 +11,6 @@ import Page from '../Page';
 
 const queryGenerator = (id:string|undefined) => async function getNewPosts(lastPage: any) {
   try {
-    console.log("id: " + id + "last page: ")
-    console.log(lastPage)
     if (id === undefined) return [];
     return await DataQuery.searchPostByWord(id, PostOrder.Trendscore, lastPage);
   } catch (error) {

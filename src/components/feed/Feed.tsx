@@ -3,6 +3,7 @@ import { Stack } from '@mui/material';
 import { DocumentData, DocumentSnapshot } from 'firebase/firestore';
 // hooks
 import { useEffect, useState } from 'react';
+//https://www.npmjs.com/package/react-infinite-scroll-component
 import InfiniteScroll from "react-infinite-scroll-component";
 import { usePrevious } from 'src/hooks/usePrevious';
 // database entities
@@ -44,6 +45,7 @@ export default function Feed( { getNewPosts }: Props ) {
     try {
       let referenceToLastPage = lastPage;
       const newPosts : PostEntity[] | undefined = await getNewPosts(referenceToLastPage); //referenceToLastPage is modified appropriately in getNewPosts
+      console.log("ref to last page");console.log(referenceToLastPage);
       setLastPage(referenceToLastPage);
       if (newPosts && newPosts.length > 0) {
         if(loadedPosts.length > 0) {
@@ -115,13 +117,12 @@ export default function Feed( { getNewPosts }: Props ) {
     setRenderedPosts([]);
     setIsLoading(true);
     setHasMore(true);
-    //after setLastPage is finished executing, loadPosts will be called
     setLastPage([]);
   }, [getNewPosts])
 
-  //problem: what about when lastPage is 0 because no results?
+  //when lastPage is reset to 0, load more posts
   useUpdateEffect(() => {
-    //only load posts when lastPage is reset to emptyArray and not when lastPage is normally incremented
+    console.log('useupdateeffect on last page')
     if (lastPage.length === 0) {
       loadPosts();
     }
