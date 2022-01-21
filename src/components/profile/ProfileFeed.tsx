@@ -13,8 +13,8 @@ interface ProfileCardProps {
 }
 
 enum FeedSelection {
-  submissions = 'recent',
-  favorites = 'favorites',
+  submission = PostInteractionType.Submission,
+  favorite = PostInteractionType.Favorite,
 }
 
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
@@ -29,11 +29,21 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   },
 }));
 
+const queryGenerator = (profileID: string, feedSelection: FeedSelection) => async function getNewPosts(lastPage: any) {
+  try {
+    if (feedSelection === FeedSelection.submission) {
+      return await DataQuery.searchPostByUserID(profileID, PostInteractionType.Submission, PostOrder.Trendscore, lastPage);
+    } else {
+      return await DataQuery.searchPostByUserID(profileID, PostInteractionType.Favorite, PostOrder.Trendscore, lastPage);
+    }
+  } catch (error) {
+    console.log(error)
+  }
+};
 
 export default function ProfileFeed( { profileUser }: ProfileCardProps ) {
-  const {authedUser} = useAuth();
-  const theme = useTheme();
-  const [feedSelection, setFeedSelection] = useState<FeedSelection>(FeedSelection.submissions)
+  const [feedSelection, setFeedSelection] = useState<FeedSelection>(FeedSelection.submission)
+  let [feedSelectionQueryCall, setFeedSelectionQueryCall] = useState(() => queryGenerator(profileUser.id, feedSelection));
 
   async function getNewPosts() {
     try {
@@ -52,6 +62,10 @@ export default function ProfileFeed( { profileUser }: ProfileCardProps ) {
       setFeedSelection(newFeedSelection);
     }
   };
+  //when feed selec
+  useUpdateEffect(() => {
+    setFeedSelectionQueryCall(() => queryGenerator(profileUser.id, feedSelection));
+  }, [feedSelection]);
 
   return (
     <> 
@@ -62,8 +76,8 @@ export default function ProfileFeed( { profileUser }: ProfileCardProps ) {
       }
       <Divider variant="fullWidth" />
       <StyledToggleButtonGroup fullWidth value={feedSelection} exclusive onChange={handleFeedSelectionToggle}>
-        <ToggleButton disableRipple value={FeedSelection.submissions}>게시물</ToggleButton>
-        <ToggleButton disableRipple value={FeedSelection.favorites}>저장됨</ToggleButton>
+        <ToggleButton disableRipple value={FeedSelection.submission}>게시물</ToggleButton>
+        <ToggleButton disableRipple value={FeedSelection.favorite}>저장됨</ToggleButton>
       </StyledToggleButtonGroup>
       {/* <Divider sx={{mb:theme.spacing(2)}} variant="fullWidth" /> */}
       <Feed getNewPosts={getNewPosts} />

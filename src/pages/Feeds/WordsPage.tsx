@@ -9,6 +9,15 @@ import { DataQuery, PostOrder } from '../../db/apis/DataQuery';
 import Page from '../Page';
 // ----------------------------------------------------------------------
 
+const queryGenerator = (id:string|undefined) => async function getNewPosts(lastPage: any) {
+  try {
+    if (id === undefined) return [];
+    return await DataQuery.searchPostByWord(id, PostOrder.Trendscore, lastPage);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export default function WordsPage() {
 
   const { id } = useParams();

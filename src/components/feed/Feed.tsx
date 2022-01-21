@@ -2,6 +2,9 @@
 import { Stack } from '@mui/material';
 // hooks
 import { useEffect, useState } from 'react';
+//https://www.npmjs.com/package/react-infinite-scroll-component
+import InfiniteScroll from "react-infinite-scroll-component";
+import { usePrevious } from 'src/hooks/usePrevious';
 // database entities
 import { PostEntity } from '../../db/entities/posts/PostEntity';
 // components
@@ -21,14 +24,15 @@ export default function Feed( { getNewPosts }: Props ) {
 
   async function fetchPosts() {
     try {
-      let newPosts: PostEntity[] | undefined = await getNewPosts();
-      setIsLoading(false)
-      if (newPosts !== undefined) {
-        if(posts !== undefined ) {
-          setPosts( [...posts, ...newPosts] );
-        }
-        else {
-          setPosts([...newPosts]);
+      let referenceToLastPage = lastPage;
+      const newPosts : PostEntity[] | undefined = await getNewPosts(referenceToLastPage); //referenceToLastPage is modified appropriately in getNewPosts
+      console.log("ref to last page");console.log(referenceToLastPage);
+      setLastPage(referenceToLastPage);
+      if (newPosts && newPosts.length > 0) {
+        if(loadedPosts.length > 0) {
+          setLoadedPosts( [...loadedPosts, ...newPosts] );
+        } else {
+          setLoadedPosts([...newPosts]);
         }
       }
       if(newPosts === undefined) {
@@ -41,19 +45,25 @@ export default function Feed( { getNewPosts }: Props ) {
   }
 
   useEffect(() => {
-    fetchPosts();
-  }, []); //TODO call useEffect to query more posts whenever almost all posts have been rendered
+    loadPosts();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
-  useEffect(() => {
-    const updatePostFetching = async () => {
-      let newPosts: PostEntity[] | undefined = await getNewPosts();
-      // console.log(newPosts);
-      if (newPosts !== undefined) {
-        setPosts([...newPosts]);
-      }
-      if(newPosts === undefined) {
-        //TOOD display no posts card
-      }
+  //if user was already on this page and is now searching for a new word
+  useUpdateEffect(() => {
+    //reset all data
+    setLoadedPosts([]);
+    setRenderedPosts([]);
+    setIsLoading(true);
+    setHasMore(true);
+    setLastPage([]);
+  }, [getNewPosts])
+
+  //when lastPage is reset to 0, load more posts
+  useUpdateEffect(() => {
+    console.log('useupdateeffect on last page')
+    if (lastPage.length === 0) {
+      loadPosts();
     }
     updatePostFetching();
   }, [getNewPosts])
