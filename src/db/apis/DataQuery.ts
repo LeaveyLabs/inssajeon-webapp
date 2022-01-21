@@ -249,6 +249,9 @@ DataQuery.searchPostByUserID = async (id:string, i:PostInteractionType, o:PostOr
     }
     queryFields.push(postOrderQuery[o]);
     queryFields.push(limit(MAX_QUERY));
+    if(lastDoc !== undefined && lastDoc.length > 0) {
+        queryFields.push(startAfter(lastDoc[lastDoc.length-1]));
+    }
     const postIDQuery = query(postDatabase, ...queryFields);
     const postIDQueryResult = await firebaseEntityQuery<PostEntity>(
         postIDQuery, PostFactory, lastDoc);
