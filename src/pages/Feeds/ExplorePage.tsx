@@ -7,16 +7,16 @@ import Page from '../Page';
 // ----------------------------------------------------------------------
 
 export default function ExplorePage() {
-  async function getNewPosts() {
+  async function getNewPosts(lastPage: any ) {
     try {
-      return await DataQuery.getAllPosts(PostOrder.Trendscore); //TODO change
+      return await DataQuery.getAllPosts(PostOrder.Trendscore, lastPage); //TODO change
     } catch (error) {
       console.log(error)
     }
   }
 
   return (
-    <Page title="explore?????? wut">
+    <Page title="법주별">
       <Feed getNewPosts={getNewPosts} />
     </Page>
   );

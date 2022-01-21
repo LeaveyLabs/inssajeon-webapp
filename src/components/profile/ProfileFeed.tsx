@@ -1,11 +1,10 @@
 import { Divider, styled, ToggleButton, ToggleButtonGroup, useTheme } from '@mui/material';
 import React, { useState } from 'react';
 import Feed from 'src/components/feed/Feed';
-import MyProfileCard from 'src/components/profile/MyProfileCard';
 import { DataQuery, PostInteractionType, PostOrder } from 'src/db/apis/DataQuery';
 import { UserEntity } from 'src/db/entities/users/UserEntity';
 import useAuth from 'src/hooks/useAuth';
-import { convertToObject } from 'typescript';
+import { useUpdateEffect } from 'src/hooks/useUpdateEffect';
 import ProfileCard from './ProfileCard';
 
 interface ProfileCardProps {
@@ -13,8 +12,8 @@ interface ProfileCardProps {
 }
 
 enum FeedSelection {
-  submissions = 'recent',
-  favorites = 'favorites',
+  submission = PostInteractionType.Submission,
+  favorite = PostInteractionType.Favorite,
 }
 
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
@@ -29,44 +28,43 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   },
 }));
 
+const queryGenerator = (profileID: string, feedSelection: FeedSelection) => async function getNewPosts(lastPage: any) {
+  try {
+    if (feedSelection === FeedSelection.submission) {
+      return await DataQuery.searchPostByUserID(profileID, PostInteractionType.Submission, PostOrder.Trendscore, lastPage);
+    } else {
+      return await DataQuery.searchPostByUserID(profileID, PostInteractionType.Favorite, PostOrder.Trendscore, lastPage);
+    }
+  } catch (error) {
+    console.log(error)
+  }
+};
 
 export default function ProfileFeed( { profileUser }: ProfileCardProps ) {
-  const {authedUser} = useAuth();
-  const theme = useTheme();
-  const [feedSelection, setFeedSelection] = useState<FeedSelection>(FeedSelection.submissions)
-
-  async function getNewPosts() {
-    try {
-      if (feedSelection === FeedSelection.submissions) {
-        return await DataQuery.searchPostByUserID(profileUser.id, PostInteractionType.Submission, PostOrder.Trendscore);
-      } else {
-        return await DataQuery.searchPostByUserID(profileUser.id, PostInteractionType.Favorite, PostOrder.Trendscore);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  const [feedSelection, setFeedSelection] = useState<FeedSelection>(FeedSelection.submission)
+  let [feedSelectionQueryCall, setFeedSelectionQueryCall] = useState(() => queryGenerator(profileUser.id, feedSelection));
 
   const handleFeedSelectionToggle = (event: React.MouseEvent<HTMLElement>, newFeedSelection: FeedSelection | null) => {
     if (newFeedSelection !== null) {
       setFeedSelection(newFeedSelection);
     }
   };
+  
+  //when feed selec
+  useUpdateEffect(() => {
+    setFeedSelectionQueryCall(() => queryGenerator(profileUser.id, feedSelection));
+  }, [feedSelection]);
 
   return (
     <> 
-      {authedUser && authedUser.nonauth.profile.username === profileUser.profile.username ?
-        <ProfileCard profileUser={profileUser} /> //TODO consider changing back to myprofilecard
-      : 
-        <ProfileCard profileUser={profileUser} />
-      }
+      <ProfileCard profileUser={profileUser} />
       <Divider variant="fullWidth" />
       <StyledToggleButtonGroup fullWidth value={feedSelection} exclusive onChange={handleFeedSelectionToggle}>
-        <ToggleButton disableRipple value={FeedSelection.submissions}>게시물</ToggleButton>
-        <ToggleButton disableRipple value={FeedSelection.favorites}>저장됨</ToggleButton>
+        <ToggleButton disableRipple value={FeedSelection.submission}>게시물</ToggleButton>
+        <ToggleButton disableRipple value={FeedSelection.favorite}>저장됨</ToggleButton>
       </StyledToggleButtonGroup>
       {/* <Divider sx={{mb:theme.spacing(2)}} variant="fullWidth" /> */}
-      <Feed getNewPosts={getNewPosts} />
+      <Feed getNewPosts={feedSelectionQueryCall} />
     </>
   )
 }
