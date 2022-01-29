@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { deleteDoc, doc, setDoc } from "firebase/firestore"; 
 import { createRandomPostWithID, createRandomUser, createRandomUserWithID } from "../entities/entityCreation";
 import { TagEntity } from "../../../src/db/entities/tags/TagEntity";
-import { postDatabase, userDatabase, wordDatabase } from "../../../src/db/apis/dbRefs";
+import { postDatabase, tagDatabase, userDatabase, wordDatabase } from "../../../src/db/apis/dbRefs";
 
 export interface Verifier {
     users: Set<UserEntity>,
@@ -91,6 +91,9 @@ export const executeInDatabase = async (testFunc:VerifierFunction) : Promise<voi
     for(const word of wordList) {
         await setDoc(doc(wordDatabase, word.wordString), word);
     }
+    for(const tag of tagList) {
+        await setDoc(doc(tagDatabase, tag.tagString), tag);
+    }
     /*
     Run the function in this test environment.
     */
@@ -107,6 +110,9 @@ export const executeInDatabase = async (testFunc:VerifierFunction) : Promise<voi
         }
         for(const word of wordList) {
             await deleteDoc(doc(wordDatabase, word.wordString));
+        }
+        for(const tag of tagList) {
+            await deleteDoc(doc(tagDatabase, tag.tagString));
         }
     }
     

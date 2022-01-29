@@ -1,10 +1,11 @@
 import { arrayRemove, arrayUnion, deleteDoc, doc, Timestamp, increment, setDoc, updateDoc } from "firebase/firestore";
 import { PostEntity, PostFactory } from "../entities/posts/PostEntity";
 import { WordEntity } from "../entities/words/WordEntity";
-import { DataQuery, WordOrder } from "./DataQuery";
-import { postDatabase, userDatabase, wordDatabase } from "./dbRefs";
+import { DataQuery, TagOrder, WordOrder } from "./DataQuery";
+import { postDatabase, tagDatabase, userDatabase, wordDatabase } from "./dbRefs";
 import { USER_UPVOTES_PROPERTY, USER_DOWNVOTES_PROPERTY, 
-    POST_UPVOTES_PROPERTY, POST_DOWNVOTES_PROPERTY, WORD_NUMBER_OF_POSTS_PROPERTY, USER_SUBMISSIONS_PROPERTY, USER_FAVORITES_PROPERTY, POST_SHARES_PROPERTY, POST_FLAGS_PROPERTY, POST_FAVORITES_PROPERTY, } from "../strings/apiConstLibrary";
+    POST_UPVOTES_PROPERTY, POST_DOWNVOTES_PROPERTY, WORD_NUMBER_OF_POSTS_PROPERTY, USER_SUBMISSIONS_PROPERTY, USER_FAVORITES_PROPERTY, POST_SHARES_PROPERTY, POST_FLAGS_PROPERTY, POST_FAVORITES_PROPERTY, TAG_NUMBER_OF_POSTS_PROPERTY, } from "../strings/apiConstLibrary";
+import { TagEntity } from "../entities/tags/TagEntity";
 
 export const PostInteraction = function () {};
 
@@ -185,10 +186,11 @@ PostInteraction.createPost = async (postID:string, post:any) : Promise<void> => 
         console.log(`Could not add post to ${dbSafePost.userID}'s submissions.`); 
     }
 
+    /* Initialize or update all the necessary Words */
     const matchWords = await DataQuery.searchWordByWord(dbSafePost.word, WordOrder.Trendscore);
     if(matchWords.length === 0) {
         const newWord:WordEntity = {
-            wordString: post.word,
+            wordString: dbSafePost.word,
             numberOfPosts: 1,
             trendscore: 0,
         };
@@ -196,6 +198,22 @@ PostInteraction.createPost = async (postID:string, post:any) : Promise<void> => 
     }
     else {
         await addPostToWord(dbSafePost.word);
+    }
+
+    /* Initialize or update all the necessary Tags */
+    for(const tag of dbSafePost.tags) {
+        const matchTags = await DataQuery.searchTagByTag(tag, TagOrder.Trendscore);
+        if(matchTags.length == 0) {
+            const newTag:TagEntity = {
+                tagString: tag,
+                numberOfPosts: 1,
+                trendscore: 0,
+            }
+            await setDoc(doc(tagDatabase, tag), newTag);
+        }
+        else {
+            await addPostToTag(tag);
+        }
     }
 }
 
@@ -220,6 +238,12 @@ PostInteraction.removePost = async (postID:string) : Promise<void> => {
         await removePostFromUser(upvoterID, postID);
     }
 
+    /* For every tag on the post */
+    for(const tagString of post.tags) {
+        /* Remove post from the tag database */
+        await removePostFromTag(tagString);
+    }
+
     /* Delete post from the database */
     try { await deleteDoc(doc(postDatabase, postID)); }
     catch (e) { throw new Error(`Could not remove post ${postID} to database.`); }
@@ -242,6 +266,32 @@ async function removePostFromUser(userID:string, postID:string) : Promise<void> 
         }); 
     }
     catch(e) { console.log(`Could not remove post from ${userID}'s activity`); }
+}
+
+/**
+ * @param  {string} tag
+ * @returns Promise
+ * @description increments a word's count of posts
+ */
+ async function addPostToTag(tag:string) : Promise<void> {
+    try { 
+        await updateDoc(doc(tagDatabase, tag), 
+        {[TAG_NUMBER_OF_POSTS_PROPERTY]: increment(1)}); 
+    }
+    catch (e) { throw new Error(`Could not add post to tag: ${tag}`); }
+}
+
+/**
+ * @param  {string} tag
+ * @returns Promise
+ * @description decrements a word's count of posts
+ */
+ async function removePostFromTag(tag:string) : Promise<void> {
+    try { 
+        await updateDoc(doc(tagDatabase, tag), 
+        {[TAG_NUMBER_OF_POSTS_PROPERTY]: increment(-1)}); 
+    }
+    catch (e) { throw new Error(`Could not remove post from tag: ${tag}`); }
 }
 
 /**
