@@ -7,16 +7,17 @@ import Page from '../Page';
 // ----------------------------------------------------------------------
 
 export default function CategoriesPage() {
-  async function getNewPosts() {
+  async function getNewPosts(lastPage: any ) {
     try {
-      return await DataQuery.getAllPosts(PostOrder.Trendscore); //TODO change
+      return await DataQuery.getAllPosts(PostOrder.Trendscore, lastPage); //TODO change
     } catch (error) {
       console.log(error)
     }
   }
 
+  //TODO change page title
   return (
-    <Page title="cateogires?????? wut">
+    <Page title="범주별"> 
       <Feed getNewPosts={getNewPosts} />
     </Page>
   );

@@ -7,9 +7,9 @@ import Page from '../Page';
 // ----------------------------------------------------------------------
 
 export default function UsersPage() {
-  async function getNewPosts() {
+  async function getNewPosts(lastPage: any ) {
     try {
-      return await DataQuery.getAllPosts(PostOrder.Trendscore); //TODO change
+      return await DataQuery.getAllPosts(PostOrder.Trendscore, lastPage); //TODO change
     } catch (error) {
       console.log(error)
     }
