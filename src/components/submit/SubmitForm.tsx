@@ -46,6 +46,7 @@ export default function SubmitForm( {handleClose} : SubmitFormProps) {
   const {authedUser} = useAuth();
   const navigate = useNavigate();
   const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
+  const [postID] = useState<string>(uuidv4().slice(24))
 
   const NewPostSchema = Yup.object().shape({
     word: Yup
@@ -62,8 +63,6 @@ export default function SubmitForm( {handleClose} : SubmitFormProps) {
       .min(3, "적어도 3개")
       .max(7, "최대 7개"),
   });
-
-  let postID:string = uuidv4().slice(24);
 
   const formik = useFormik<NewPostFormValues>({ //<NewPostFormValues is necessary for typescript
     initialValues: {
