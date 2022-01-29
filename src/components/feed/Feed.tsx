@@ -155,7 +155,7 @@ export default function Feed( { getNewPosts }: Props ) {
       : !isLoading &&
         <NoPostsCard/>
       } 
-      {isLoading && 
+      {isLoading && renderedPosts.length === 0 && 
         <Stack spacing={2}>
           <PostSkeleton/>
           <PostSkeleton/>
