@@ -3,8 +3,9 @@ import { EntityFactory } from "../entities/jsonFormat";
 import { PostEntity, PostFactory } from "../entities/posts/PostEntity";
 import { UserEntity, UserFactory } from "../entities/users/UserEntity";
 import { WordEntity, WordFactory } from "../entities/words/WordEntity";
+import { TagEntity, TagFactory } from "../entities/tags/TagEntity";
 import { MAX_QUERY, POST_DOWNVOTES_PROPERTY, POST_FAVORITES_PROPERTY, POST_POSTID_PROPERTY, POST_SHARES_PROPERTY, POST_TAGS_PROPERTY, POST_TRENDSCORE_PROPERTY, POST_UPVOTECOUNT_PROPERTY, POST_UPVOTES_PROPERTY, POST_USERID_PROPERTY, USER_PROFILE_HEADER, USER_USERID_HEADER } from "../strings/apiConstLibrary";
-import { postDatabase, userDatabase, wordDatabase } from "./dbRefs";
+import { postDatabase, tagDatabase, userDatabase, wordDatabase } from "./dbRefs";
 
 export const DataQuery = function () {};
 
@@ -196,6 +197,46 @@ DataQuery.searchWordByWord = async (word:string, ordering:WordOrder,
     const wordQueryResult = await firebaseEntityQuery<WordEntity>(
         wordQuery, WordFactory, lastDoc);
     return wordQueryResult;
+};
+
+export enum TagOrder {
+    Trendscore, 
+    NumberOfPosts,
+}
+
+const tagOrderQuery:Array<QueryConstraint> = [
+    orderBy("trendscore", "desc"),
+    orderBy("numberOfPosts", "desc"),
+];
+
+/**
+ * @param  {string} tag
+ * @param  {tagOrder} ordering
+ * @param  {DocumentSnapshot[]} lastDoc?
+ * @returns Promise
+ */
+ DataQuery.searchTagByTag = async (tag:string, ordering:TagOrder, 
+    lastDoc?:DocumentSnapshot[]) : Promise<Array<TagEntity>> => {
+    /*
+    Query all posts with an identical tag. 
+    */
+    const queryFields:Array<QueryConstraint> = [
+        where("tagString", "==", tag)];
+    /*
+    Order the query and limit the total results.
+    */
+    queryFields.push(tagOrderQuery[ordering]);
+    queryFields.push(limit(MAX_QUERY));
+    if(lastDoc !== undefined && lastDoc.length > 0) {
+        queryFields.push(startAfter(lastDoc[lastDoc.length-1]));
+    }
+    /*
+    Call firebase with these query fields.
+    */
+    const tagQuery = query(tagDatabase, ...queryFields);
+    const tagQueryResult = await firebaseEntityQuery<TagEntity>(
+        tagQuery, TagFactory, lastDoc);
+    return tagQueryResult;
 };
 
 /**

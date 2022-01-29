@@ -13,7 +13,7 @@ describe("testing ProfileInteraction", () => {
         expect((await DataQuery
             .searchUserByUserProfile(profileToUpload, ProfileOrder.Alphabetical))
             .length).toBe(1);
-        await ProfileInteraction.deleteProfile(profileToUpload.username);
+        await ProfileInteraction.deleteAccount(profileToUpload.username);
         expect((await DataQuery
             .searchUserByUserProfile(profileToUpload, ProfileOrder.Alphabetical))
             .length).toBe(0);
@@ -45,6 +45,6 @@ describe("testing ProfileInteraction", () => {
         expect((await DataQuery
             .searchUserByUserProfile(newProfile, ProfileOrder.Alphabetical))
             .length).toBe(1);
-        await ProfileInteraction.deleteProfile(profileToUpload.username);
+        await ProfileInteraction.deleteAccount(profileToUpload.username);
     });
 });

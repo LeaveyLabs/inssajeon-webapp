@@ -32,6 +32,42 @@ function calculateTrendscore(upvotes:number,
 //   await batch.commit();
 // }
 
+// export const syncTags = functions.https.onRequest(async (request, response) => {
+//   /* Query every post in the database */
+//   const posts = await firestore.collection("posts").get();
+//   const postsArr:FirebaseFirestore.DocumentData[] = [];
+//   posts.forEach((post) => postsArr.push(post.data()));
+//   /* For every post */
+//   for (const post of postsArr) {
+//     if (post && post.tags) {
+//       /* For every tag of every post */
+//       for (const tag of post.tags) {
+//         /* Get the reference to the tag database*/
+//         const tagRef = firestore.doc(`tags/${tag}`);
+//         const tagEntity = await tagRef.get();
+//         /* Calculate current trendscore */
+//         const currTrendscore = calculateTrendscore(post.metrics.upvoteCount,
+//             post.metrics.downvoteCount, post.metrics.shareCount);
+//         /* Create a new Tag entity if it doesn't exist yet */
+//         if (!tagEntity.exists) {
+//           tagRef.set({
+//             tagString: tag,
+//             trendscore: currTrendscore,
+//             numberOfPosts: 1,
+//           });
+//         /* Otherwise, update the existing one! */
+//         } else {
+//           tagRef.update({
+//             "trendscore": admin.firestore.FieldValue.increment(currTrendscore),
+//             "numberOfPosts": admin.firestore.FieldValue.increment(1),
+//           });
+//         }
+//       }
+//     }
+//   }
+//   console.log(posts);
+// });
+
 export const helloWorld = functions.https.onRequest((request, response) => {
   functions.logger.info("Hello logs!", {structuredData: true});
   response.send("Hello from Firebase!");
@@ -77,6 +113,13 @@ export const onPostCreate = functions.firestore.document("posts/{postID}")
     .onCreate(async (change) => {
       return change.ref.set({
         timestamp: admin.firestore.Timestamp.fromDate(new Date()),
+        metrics: {
+          upvoteCount: 0,
+          flagCount: 0,
+          downvoteCount: 0,
+          shareCount: 0,
+          trendscore: 0,
+        },
       }, {merge: true});
     });
 

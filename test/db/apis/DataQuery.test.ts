@@ -1,10 +1,11 @@
 import { DocumentSnapshot, getDocs, Timestamp } from "firebase/firestore"; 
-import { DataQuery, PostInteractionType, PostOrder, ProfileOrder, WordOrder } from "../../../src/db/apis/DataQuery";
+import { DataQuery, PostInteractionType, PostOrder, ProfileOrder, TagOrder, WordOrder } from "../../../src/db/apis/DataQuery";
 import { executeInDatabase, Verifier } from "./dbTestEnv";
 import { PostEntity, PostFactory } from "../../../src/db/entities/posts/PostEntity";
 import { WordEntity } from "../../../src/db/entities/words/WordEntity";
 import { UserEntity } from "../../../src/db/entities/users/UserEntity";
 import { userDatabase } from "../../../src/db/apis/dbRefs";
+import { TagEntity } from "../../../src/db/entities/tags/TagEntity";
 
 describe("testing DataQuery", () => {
     it("checking if firebase is initialized", async () => {
@@ -58,7 +59,7 @@ describe("testing DataQuery", () => {
         expect(queryResult[queryResult.length-1]).toEqual(PostFactory.fromExportJson(lastDoc[0].data()));
     });
    }, 30000),
-   /* DataQuery.searchTag */
+   /* DataQuery.searchPostByTag */
    it("every uploaded tag can be queried successfully", async () : Promise<void> => {
         await executeInDatabase(async (verifier:Verifier) : Promise<void> => {
             const tagSet = new Set<string>();
@@ -82,8 +83,17 @@ describe("testing DataQuery", () => {
             for(const tagString of tagList) {
                 const queryResult = await DataQuery.searchPostByTag(tagString, PostOrder.Trendscore);
                 expect(queryResult.length).toBeGreaterThan(0);
+
                 const queryResultSet = new Set(queryResult);
-                expect(queryResultSet).toStrictEqual(tagMap.get(tagString));
+                const realPostSet = tagMap.get(tagString);
+                
+                const queryPostIDs:string[] = [];
+                const realPostIDs:string[] = [];
+                
+                if(queryResultSet) queryResultSet.forEach((post) => queryPostIDs.push(post.postID));
+                if(realPostSet) realPostSet.forEach((post) => realPostIDs.push(post.postID));
+                
+                expect(queryPostIDs).toStrictEqual(realPostIDs);
             }
         });
     }, 30000);
@@ -109,8 +119,17 @@ describe("testing DataQuery", () => {
             for(const word of wordList) {
                 const queryResult = await DataQuery.searchPostByWord(word, PostOrder.Trendscore);
                 expect(queryResult.length).toBeGreaterThan(0);
+
                 const queryResultSet = new Set(queryResult);
-                expect(queryResultSet).toStrictEqual(wordMap.get(word));
+                const realPostSet = wordMap.get(word);
+
+                const queryPostIDs:string[] = [];
+                const realPostIDs:string[] = [];
+                
+                if(queryResultSet) queryResultSet.forEach((post) => queryPostIDs.push(post.postID));
+                if(realPostSet) realPostSet.forEach((post) => realPostIDs.push(post.postID));
+                
+                expect(queryPostIDs).toStrictEqual(realPostIDs);
             }
         });
     }, 30000);
@@ -163,7 +182,8 @@ describe("testing DataQuery", () => {
                 const queryResult = await DataQuery.searchPostByPostID(postID);
                 expect(queryResult.length).toBeGreaterThan(0);
                 const post = postIDMap.get(postID);
-                expect(queryResult[0]).toStrictEqual(postIDMap.get(postID));
+                if (!post) continue;
+                expect(queryResult[0].postID).toStrictEqual(post.postID);
             }
         });
     }, 30000);
@@ -191,6 +211,33 @@ describe("testing DataQuery", () => {
                 expect(queryResult.length).toBeGreaterThan(0);
                 const queryResultSet = new Set(queryResult);
                 expect(queryResultSet).toStrictEqual(userIDMap.get(userID));
+            }
+        });
+    }, 30000);
+    /* DataQuery.searchTagByTag */
+    it("every uploaded TagEntity can be queried successfully", async () : Promise<void> => {
+        await executeInDatabase(async (verifier:Verifier) : Promise<void> => {
+            const tagStringSet = new Set<string>();
+            const tagEntityMap = new Map<string, Set<TagEntity>>();
+            verifier.tags.forEach((tag) => {
+                /*
+                Map each tagString to all the users attached to it. 
+                Have a list of all the tagStrings we want to search.
+                */
+                if(tagEntityMap.has(tag.tagString)) (tagEntityMap.get(tag.tagString) as Set<TagEntity>).add(tag);
+                else tagEntityMap.set(tag.tagString, new Set([tag]));
+                tagStringSet.add(tag.tagString);
+            });
+            const tagStringList = Array.from(tagStringSet);
+            /*
+            For each tagString uploaded, search for its associated tags in the database. 
+            If it exists, then expect the result to be equal to the one on the database.
+            */
+            for(const tagString of tagStringList) {
+                const queryResult = await DataQuery.searchTagByTag(tagString, TagOrder.Trendscore);
+                expect(queryResult.length).toBeGreaterThan(0);
+                const queryResultSet = new Set(queryResult);
+                expect(queryResultSet).toStrictEqual(tagEntityMap.get(tagString));
             }
         });
     }, 30000);
