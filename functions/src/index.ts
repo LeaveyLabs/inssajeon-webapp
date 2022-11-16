@@ -32,7 +32,7 @@ function calculateTrendscore(upvotes:number,
 //   await batch.commit();
 // }
 
-// export const syncTags = functions.https.onRequest(async (request, response) => {
+// export const syncTags=functions.https.onRequest(async (request,response) =>{
 //   /* Query every post in the database */
 //   const posts = await firestore.collection("posts").get();
 //   const postsArr:FirebaseFirestore.DocumentData[] = [];
@@ -58,7 +58,7 @@ function calculateTrendscore(upvotes:number,
 //         /* Otherwise, update the existing one! */
 //         } else {
 //           tagRef.update({
-//             "trendscore": admin.firestore.FieldValue.increment(currTrendscore),
+//          "trendscore": admin.firestore.FieldValue.increment(currTrendscore),
 //             "numberOfPosts": admin.firestore.FieldValue.increment(1),
 //           });
 //         }
