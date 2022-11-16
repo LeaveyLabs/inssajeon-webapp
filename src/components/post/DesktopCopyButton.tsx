@@ -54,11 +54,11 @@ export default function DesktopCopyButton(props: {isDisabled: Boolean, postID: s
     <CopyToClipboard text={`https://inssajeon.com/post/${props.postID}`} onCopy={onCopyText}>
       <LightTooltip placement="top" TransitionComponent={Zoom} onClose={handleTooltipClose} title={copyText} leaveDelay={200}>
         {!isCopied ?
-        <UnstyledWhenDisabledIconButton disabled={Boolean(isInteracting || props.isDisabled)} sx={{mr:1}}>
+        <UnstyledWhenDisabledIconButton disabled={Boolean(isInteracting || props.isDisabled)}>
           <ContentCopy  fontSize="small" />
         </UnstyledWhenDisabledIconButton>
         :
-        <UnstyledWhenDisabledIconButton disabled={Boolean(isInteracting || props.isDisabled)} sx={{mr:1}} >
+        <UnstyledWhenDisabledIconButton disabled={Boolean(isInteracting || props.isDisabled)}>
           <ContentCopy color="success" fontSize="small" />
         </UnstyledWhenDisabledIconButton>
         }

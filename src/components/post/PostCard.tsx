@@ -16,7 +16,6 @@ import { PostEntity } from 'src/db/entities/posts/PostEntity';
 import useAuth from 'src/hooks/useAuth';
 import { useSignupDialog } from 'src/layouts/dashboard';
 import { PAGE_PATHS } from 'src/routing/paths';
-import theme from 'src/theme';
 // utils
 import { fDate } from 'src/utils/formatTime';
 import CustomAvatar from '../experimental/CustomAvatar';
@@ -37,7 +36,13 @@ interface PostCardProps {
 }
 
 const StyledCard = styled(Card)(({ theme }) => ({
-  marginBottom: theme.spacing(2),
+  marginBottom: theme.spacing(4),
+  '&.MuiCard-root': {
+    boxShadow: theme.shadows[5],
+  },
+    width: '97%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
 }));
 
 export default function PostCard( { post, postCardType }: PostCardProps ) {
@@ -52,6 +57,11 @@ export default function PostCard( { post, postCardType }: PostCardProps ) {
 
   const floatToTopCSS = {
     backgroundColor: alpha(theme.palette.primary.main, 0.15),
+  }
+
+  const flexbreak = {
+    flexBasis: '100%',
+    height: 0,
   }
 
   const handleToggleFavorited = async () => {
@@ -120,22 +130,33 @@ export default function PostCard( { post, postCardType }: PostCardProps ) {
     <StyledCard sx={postCardType === PostCardType.floatToTop ? floatToTopCSS : {} } >
       <Box sx={{ px:2, height:60, display:'flex', flexDirection: "row", alignItems:"center", justifyContent:"center", }}>
         <RouterLink to={`${PAGE_PATHS.dashboard.profile}/${post.userProfile.username}`}>
-          <CustomAvatar sx={{mx:1, width:theme.spacing(3), height:theme.spacing(3) }} id={post.userID} picPath={post.userProfile.picPath} />
+          <CustomAvatar sx={{mr:1, width:theme.spacing(3), height:theme.spacing(3) }} id={post.userID} picPath={post.userProfile.picPath} />
         </RouterLink>
-        <Link sx={{maxWidth:'50%'}} noWrap to={`${PAGE_PATHS.dashboard.profile}/${post.userProfile.username}`} variant="subtitle1" color="primary" component={RouterLink}>{post.userProfile.username}</Link>
+        <Link sx={{maxWidth:'80%'}} noWrap to={`${PAGE_PATHS.dashboard.profile}/${post.userProfile.username}`} variant="subtitle2" color="text.primary" component={RouterLink}>{post.userProfile.username}</Link>
         <CircleIcon sx={{ color:'gray',fontSize: 4, ml:2 }}/>
         <Typography variant="caption" sx={{flexShrink:0, mx:2,color: 'text.secondary' }}>{fDate((post.timestamp.toDate()))}</Typography>
         <TrendingIcons post={post} />
         <Box sx={{ flexGrow: 1 }} />
         <PostMoreButton post={post} />
       </Box>
-      <Divider variant="middle" />
-      <Stack  spacing={3} sx={{ p: 3, whiteSpace: 'pre-line'}}> {/*whitespace: pre-line generates newline for firebase strings*/}
-        <Typography variant="h1">{post.word}</Typography>
-        <Typography variant="body1">{post.definition}</Typography>
-        <Typography variant="body3">{post.quote}</Typography>
+      <Divider variant="fullWidth" />
+      <Stack spacing={4} sx={{ p: 3, mb:theme.spacing(4), whiteSpace: 'pre-line'}}> {/*whitespace: pre-line generates newline for firebase strings*/}
+        <Typography sx={{ wordWrap:'break-word', wordBreak: 'keep-all'}} variant="h1">{post.word}</Typography>
+        <Typography sx={{ wordWrap:'break-word', wordBreak: 'keep-all'}} variant="body1">{post.definition}</Typography>
+        <Typography sx={{ wordWrap:'break-word', wordBreak: 'keep-all'}} variant="body3">{post.quote}</Typography>
       </Stack>
-      <Box sx={{ p:2, height:60, display:'flex', flexDirection: "row", alignItems:"center", justifyContent:"center", }}>
+      <Box sx={{ pr:theme.spacing(3.5), pb:theme.spacing(2), height:'auto', display:'flex', flexDirection: "row", alignItems:"center", justifyContent:"center", }}>
+        <Box sx={{ flexGrow: 1 }} />
+        <Box sx={{ flexWrap: 'nowrap', maxWidth:'60%', height:'auto', display:'flex', flexDirection: "row", alignItems:"center", justifyContent:"center", }}>
+          {post.tags.map((tag: String, i, arr) => { 
+            return <Typography sx={{ml:theme.spacing(1)}}  noWrap  variant="body2">{`#${tag}  `} </Typography>
+          })}
+        </Box>
+      </Box>
+      <Divider variant="fullWidth" />
+
+      <Box sx={{ px:2, height:60, display:'flex',  flexDirection: "row", alignItems:"center", justifyContent:"center", }}>
+        {/* <Box sx={{flexBasis: '100%', height: 0, margin: 0, border: 0}} /> this code was trying to set a break in flexbox. couldnt get it to work */} 
         <VotePanel post={post}/>
         <Box sx={{ flexGrow: 1 }} />
         <UnstyledWhenDisabledIconButton disabled={isInteracting} onClick={handleToggleFavorited}>

@@ -1,5 +1,5 @@
 import SearchIcon from '@mui/icons-material/Search';
-import { ClickAwayListener } from '@mui/material';
+import { ClickAwayListener, useTheme } from '@mui/material';
 import InputBase from '@mui/material/InputBase';
 // @mui
 import { alpha, styled } from '@mui/material/styles';
@@ -76,7 +76,8 @@ const StyledInputBase = styled(InputBase)(({ theme  }) => ({
 
 export default function Searchbar(  ) {
   let [searchInput, setSearchInput] = useState('');
-  let inputRef = useRef<HTMLInputElement>()
+  let inputRef = useRef<HTMLInputElement>();
+  let theme = useTheme();
 
   let handleBlur = () => {
     setSearchInput('')
@@ -106,8 +107,8 @@ export default function Searchbar(  ) {
   return (
     <ClickAwayListener onClickAway={handleBlur}> 
       <Search >
-        <SearchIconWrapper>
-          <SearchIcon fontSize='large' color='primary'  />
+        <SearchIconWrapper >
+          <SearchIcon fontSize='large' sx={{color: '#6B7B88'}} />
         </SearchIconWrapper>
         <StyledInputBase type='text' ref={inputRef} autoComplete='off' onBlur={handleBlur} value={searchInput} onChange={event => setSearchInput(event.target.value)} placeholder="겸색..." id='search-input' onKeyDown={event => handleKeyDown(event)}/>
         { searchInput.length !== 0 &&
