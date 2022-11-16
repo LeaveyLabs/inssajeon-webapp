@@ -14,7 +14,7 @@ module.exports = {
   ],
   parser: "@typescript-eslint/parser",
   parserOptions: {
-    project: ["tsconfig.json", "tsconfig.dev.json"],
+    project: ["tsconfig.json", "tsconfig.dev.json", "inssajeon-webapp/tsconfig.json", "inssajeon-webapp/tsconfig.dev.json"],
     tsconfigRootDir: __dirname,
     sourceType: "module",
   },
@@ -26,6 +26,7 @@ module.exports = {
     "import",
   ],
   rules: {
+    "max-len": ["error", {"code": 200}],
     "quotes": ["error", "double"],
     "import/no-unresolved": 0,
   },
